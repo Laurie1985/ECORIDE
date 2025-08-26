@@ -1,0 +1,56 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecoride-php
+    restart: always
+    ports:
+      - "8080:80" # Accéder à l'application via le port 8080
+    volumes:
+      - .:/var/www/html #permet de synchroniser le code source sans refaire un build
+    depends_on:
+      - db
+      - mongodb
+    environment:
+      - DB_HOST= db
+      - DB_name=${DB_name}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - MONGO_HOST=mongodb
+      - MONGO_PORT=27017
+      - MONGO_DATABASE=${MONGO_DATABASE}
+
+  db:
+    image: mysql:8.0
+    container_name: ecoride-db
+    restart: always
+    ports:
+      - "3307:3306" # Accéder à la base de données via le port 3307
+    environment:
+      MYSQL_DATABASE: ${DB_name}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    volumes:
+      - db_data:/var/lib/mysql
+      - .sql/ecoride.sql:/docker-entrypoint-initdb.d/init.sql
+
+  mongodb:
+    image: mongo:7.0
+    container_name: ecordide-mongodb
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: ${MONGO_DATABASE}
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init:/docker-entrypoint-initdb.d
+
+volumes:
+  db_data:
+  mongodb_data:
