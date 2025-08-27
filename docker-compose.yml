@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   app:
     build:
@@ -38,8 +37,8 @@ services:
       - .sql/ecoride.sql:/docker-entrypoint-initdb.d/init.sql
 
   mongodb:
-    image: mongo:7.0
-    container_name: ecordide-mongodb
+    image: mongo:6.0
+    container_name: ecoride-mongodb
     restart: always
     ports:
       - "27017:27017"
