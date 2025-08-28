@@ -1,4 +1,4 @@
--- Active: 1744105202078@@127.0.0.1@3306
+-- Active: 1756370426129@@127.0.0.1@3307@ecoride_db
 -- Active: 1744105202078@@127.0.0.1@3306
 CREATE DATABASE IF NOT EXISTS `ecoride_db` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -21,9 +21,9 @@ CREATE TABLE IF NOT EXISTS `users` (
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `appreciation_nb` INT DEFAULT 0,
     CONSTRAINT chk_credits CHECK (credits >= 0),
-    CONSTRAINT chk_note CHECK (
-        note >= 0
-        AND note <= 5
+    CONSTRAINT chk_rating CHECK (
+        rating >= 0
+        AND rating <= 5
     )
 );
 
@@ -132,7 +132,8 @@ CREATE TABLE IF NOT EXISTS `reservation` (
 
 CREATE TABLE IF NOT EXISTS `transactions` (
     `transaction_id` INT AUTO_INCREMENT PRIMARY KEY,
-    `reservation_id` INT NOT NULL,
+    `user_id` INT NOT NULL,
+    `reservation_id` INT NULL,
     `amount` INT NOT NULL,
     `transaction_type` ENUM('credit', 'debit') NOT NULL,
     `description` TEXT,
@@ -156,7 +157,7 @@ VALUES ('Toyota'),
     ('Honda'),
     ('Peugeot'),
     ('Renault'),
-    ('Citroën'),
+    ('Citroën '),
     ('BMW'),
     ('Mercedes-Benz'),
     ('Volkswagen'),
