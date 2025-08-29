@@ -15,20 +15,17 @@ class Database extends PDO
     {
         $dsn = 'mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_NAME']; //Connexion à la base de données avec les variables d'environnement
         parent::__construct($dsn, $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);       //Appel du constructeur parent de la class pdo avec les informations de connexion
-        $this->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);     //Définition du mode de récupération des données par défaut dans un tableau associatif
+        $this->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);     //Définition du mode de récupération des données par défaut à FETCH_ASSOC (tableau associatif)
         $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);          //Définition du mode de gestion des erreurs pour lancer des exceptions
     }
 
     // Méthode statique pour obtenir l'instance unique de PDO en utilisant le pattern Singleton
     public static function getInstance(): PDO
     {
-        //On vérifie si l'instance n'existe pas encore
         if (self::$instance === null) {
             try {
-                //Si elle n'existe pas, on la crée en appelant le constructeur privé
                 self::$instance = new self();
             } catch (PDOException $e) {
-                //En cas d'erreur de connexion, on affiche un message d'erreur
                 die('Erreur de connexion à la base de données: ' . $e->getMessage());
             }
         }
