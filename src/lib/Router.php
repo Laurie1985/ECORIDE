@@ -1,7 +1,6 @@
 <?php
 namespace App\lib;
 
-use Exception;
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
 
@@ -24,7 +23,7 @@ class Router
         // Page d'accueil
         $r->addRoute('GET', '/', [\App\Controllers\HomeController::class, 'index']);
 
-        // Authentification
+        /*// Authentification
         $r->addRoute('GET', '/login', [\App\Controllers\AuthController::class, 'showLogin']);
         $r->addRoute('POST', '/login', [\App\Controllers\AuthController::class, 'login']);
         $r->addRoute('GET', '/register', [\App\Controllers\AuthController::class, 'showRegister']);
@@ -54,7 +53,7 @@ class Router
         $r->addRoute('GET', '/vehicles', [\App\Controllers\VehicleController::class, 'index']);
         $r->addRoute('GET', '/vehicles/add', [\App\Controllers\VehicleController::class, 'showAdd']);
         $r->addRoute('POST', '/vehicles/add', [\App\Controllers\VehicleController::class, 'add']);
-        $r->addRoute('DELETE', '/vehicles/{id:\d+}', [\App\Controllers\VehicleController::class, 'delete']);
+        $r->addRoute('DELETE', '/vehicles/{id:\d+}', [\App\Controllers\VehicleController::class, 'delete']);*/
     }
 
     public function dispatch()
@@ -96,7 +95,7 @@ class Router
 
         // Vérification que la classe du contrôleur existe
         if (! class_exists($controllerClass)) {
-            throw new Exception("Controller class not found: {$controllerClass}");
+            throw new \Exception("Controller class not found: {$controllerClass}");
         }
 
         // Instanciation du contrôleur
@@ -104,7 +103,7 @@ class Router
 
         // Vérification que la méthode existe dans le contrôleur
         if (! method_exists($controller, $method)) {
-            throw new Exception("Method {$method} not found in {$controllerClass}");
+            throw new \Exception("Method {$method} not found in {$controllerClass}");
         }
 
         // Appel de la méthode avec les paramètres

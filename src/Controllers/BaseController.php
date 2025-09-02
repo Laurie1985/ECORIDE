@@ -27,7 +27,7 @@ abstract class BaseController
         $content = ob_get_clean(); // Récupère le contenu du tampon et nettoie le tampon de sortie
 
         // Inclusion du layout principal
-        $layoutFile = $rootDir . 'Views/layout.php';
+        $layoutFile = $rootDir . '/Views/layout.php';
         if (file_exists($layoutFile)) {
             require_once $layoutFile;
         } else {

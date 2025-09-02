@@ -30,6 +30,12 @@ WORKDIR /var/www/html
 # Création des répertoires de stockage et de logs avec les permissions appropriées
 RUN mkdir -p storage/logs public && chown -R www-data:www-data /var/www/html
 
+# Copier le reste de l'application
+COPY . .
+
+# Changer les permissions des fichiers pour Apache
+RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
+
 # Exposer le port 80 pour Apache
 EXPOSE 80
 
