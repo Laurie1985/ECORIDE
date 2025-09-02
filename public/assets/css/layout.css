@@ -1,0 +1,265 @@
+/*CSS global de l'application*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+}
+
+:root {
+    /*textes sur fond clair, boutons et quelques fonds*/
+    --vert-foret: #435955;
+    /*fond de quelques sections, hover*/
+    --vert: #768C70;
+    /* barre de recherche, boutons secondaires*/
+    --bleu: #84A9BF;
+    /*textes sur fond sombre, fonds clairs*/
+    --gris: #F2F2F0;
+    --font-family-title: 'Quicksand', sans-serif;
+    --font-family-text: 'Open sans', sans-serif;
+}
+
+h1,
+h2,
+h3 {
+    text-wrap: balance;
+}
+
+/* Desktop : Styles pour les titres et les paragraphes */
+h1 {
+    font-family: var(--font-family-title);
+    font-weight: 700;
+    /* bold */
+    font-style: normal;
+    font-size: 2.5rem;
+    /* 40px */
+    color: var(--gris);
+    margin-bottom: 1rem;
+    /* 16px */
+}
+
+h2 {
+    font-family: var(--font-family-title);
+    font-weight: 700;
+    /* bold */
+    font-style: normal;
+    font-size: 2rem;
+    /* 32px */
+    margin-bottom: 1rem;
+    /* 16px */
+}
+
+h3 {
+    font-family: var(--font-family-title);
+    font-weight: 600;
+    /* semi-bold */
+    font-style: normal;
+    font-size: 1.5rem;
+    /* 24px */
+    margin-bottom: 1rem;
+    /* 16px */
+}
+
+h4 {
+    font-family: var(--font-family-title);
+    font-weight: 600;
+    /* semi-bold */
+    font-style: normal;
+    font-size: 1.25rem;
+    /* 20px */
+    margin-bottom: 1rem;
+    /* 16px */
+}
+
+p {
+    font-family: var(--font-family-text);
+    font-weight: 400;
+    /* regular */
+    font-style: normal;
+    font-size: 1rem;
+    /* 16px */
+    /*line-height: 1.5;
+    /* 24px */
+    margin-bottom: 1rem;
+    /* 16px */
+}
+
+.btn {
+    display: inline-block;
+    /* 12px 24px */
+    padding: 0.5rem 1.5rem;
+    font-family: var(--font-family-title);
+    font-weight: 500;
+    /* 16px */
+    font-size: 1rem;
+    color: var(--gris);
+    background-color: var(--vert-foret);
+    border: none;
+    border-radius: 0.5rem;
+    /* 8px */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: var(--vert);
+    color: var(--gris);
+
+}
+
+/* Mobile : Styles pour les titres et les paragraphes */
+@media (max-width: 768px) {
+    h1 {
+        /* 24px */
+        font-size: 1.5rem;
+    }
+
+    h2 {
+        /* 20px */
+        font-size: 1.25rem;
+    }
+
+    h3 {
+        /* 18px */
+        font-size: 1.125rem;
+    }
+
+    p {
+        /* 16px */
+        font-size: 1rem;
+        /* 20px */
+        line-height: 1.4;
+
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        /* 14px */
+        font-size: 0.875rem;
+        border-radius: 0.5rem;
+    }
+}
+
+/* Styles pour le header et la navbar */
+header {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navbar {
+    background-color: var(--gris);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 2rem;
+}
+
+.navbar-brand {
+    margin: 0;
+    padding: 0;
+}
+
+.navbar-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.logo {
+    max-width: 50%;
+    height: auto;
+}
+
+.nav-item {
+    padding: 0 0.5rem;
+    margin-right: 2rem;
+    color: var(--vert-foret);
+    font-family: var(--font-family-title);
+    font-weight: 500;
+    font-size: 1rem;
+
+}
+
+.nav-item:hover {
+    background-color: var(--vert);
+    color: var(--vert-foret);
+    border-radius: 0.5rem;
+    transition: background-color 0.6s ease;
+}
+
+.navbar-toggler {
+    border: none;
+    background-color: var(--vert);
+    border-radius: 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .navbar-nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-item {
+        margin: 0.5rem 0;
+        font-size: 0.875rem;
+    }
+
+    .logo {
+        max-width: 40%;
+    }
+
+}
+
+/* Styles pour le footer */
+footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--vert-foret);
+    color: var(--gris);
+}
+
+.link {
+    color: var(--gris);
+    text-decoration: none;
+    margin-right: 1rem;
+    font-size: 0.875rem;
+    font-family: var(--font-family-text);
+    font-weight: 400;
+}
+
+.footer-copy {
+    font-size: 0.875rem;
+    font-family: var(--font-family-text);
+    font-weight: 400;
+}
+
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+    }
+}
+
+/* Styles pour les modals */
+.modal-content {
+    font-family: var(--font-family-text);
+    background-color: var(--gris);
+    color: var(--vert-foret);
+    padding: 1rem 2rem;
+}
+
+.mise-a-jour {
+    font-style: italic;
+    font-size: 0.875rem;
+    margin-top: 1rem;
+    color: var(--vert-foret);
+}
