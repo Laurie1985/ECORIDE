@@ -1,0 +1,165 @@
+body {
+    background-color: var(--gris);
+}
+
+/*Section hero*/
+.hero {
+    background-image: url('/assets/images/accueilBanniere.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 40vh;
+    /* ou 500px selon vos besoins */
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+}
+
+/* Overlay sombre pour améliorer la lisibilité du texte */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    /* Overlay semi-transparent */
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    /* Au-dessus de l'overlay */
+}
+
+h1.hero-title {
+    color: var(--gris);
+}
+
+@media (max-width: 768px) {
+    .hero {
+        height: 15vh;
+    }
+
+    h1.hero-title {
+        padding: 1rem;
+    }
+}
+
+/*Section Recherche trajet*/
+.search-form {
+    padding: 1rem;
+    text-align: center;
+    background-color: var(--bleu);
+    border-radius: 0.5rem;
+    width: 60%;
+    justify-self: center;
+    position: relative;
+    z-index: 2;
+    top: -2rem;
+}
+
+h3 {
+    color: var(--vert-foret);
+    margin-bottom: 2rem;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+
+}
+
+.inputs-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    column-gap: 2rem;
+
+}
+
+input.form-control {
+    background-color: var(--gris);
+    color: var(--vert-foret);
+    border-radius: 0.25rem;
+    text-align: center;
+    font-family: var(--font-family-text);
+    font-size: 1rem;
+    font-weight: 400;
+    border: none;
+    width: 200px;
+    height: 40px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .search-form {
+        width: 90%;
+        padding: 1rem;
+        top: -1rem;
+    }
+
+    .inputs-group {
+        flex-direction: column;
+        row-gap: 1rem;
+        column-gap: 0;
+    }
+}
+
+/*Section Présentation, mission et dernière section*/
+
+.presentation,
+.mission,
+.section {
+    margin-left: 5rem;
+    margin-right: 5rem;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    column-gap: 4rem;
+}
+
+.presentation-image img,
+.mission-image img,
+.section-image img {
+    width: 500px;
+    height: 300px;
+    border-radius: 0.5rem;
+}
+
+/*Section Valeurs*/
+.valeurs {
+    background-color: var(--vert-foret);
+    margin: 0;
+    padding: 0;
+}
+
+.valeurs h2,
+.valeurs p {
+    color: var(--gris);
+    text-align: center;
+    padding: 1rem;
+}
+
+.valeurs h3 {
+    color: var(--gris);
+    margin-top: 1rem;
+    margin-bottom: 0;
+}
+
+
+.ecology-image img,
+.social-image img,
+.security-image img {
+    width: 100px;
+}

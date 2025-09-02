@@ -9,6 +9,9 @@
     <link rel="stylesheet" href="https://use.typekit.net/evb6gin.css">
     <link rel="stylesheet" href="https://use.typekit.net/evb6gin.css">
     <link rel="stylesheet" href="./assets/css/layout.css">
+    <?php if (isset($cssFile)): ?>
+        <link rel="stylesheet" href="/assets/css/<?php echo $cssFile ?>.css">
+    <?php endif; ?>
 </head>
 <body>
     <header>
@@ -43,7 +46,7 @@
     </header>
 
 
-    <main class="container">
+    <main>
         <!-- START MAIN -->
         <?php echo $content ?? '' ?>
         <!-- END MAIN -->
@@ -56,7 +59,7 @@
                 <p>Pour nous contacter : contact@ecoride.com</p>
             </div>
             <div class="footer-bottom d-flex align-items-center">
-                <a href="#" data-bs-toggle="modal" data-bs-target="#mentionsLegalesModal" class="link"><strong>Mentions légales.</strong></a>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#mentionsLegalesModal" class="link">Mentions légales.</a>
                 <div class="footer-copy">
                     &copy; 2025 Ecoride | Tous droits réservés. Laurie Berthon
                 </div>

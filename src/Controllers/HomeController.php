@@ -6,7 +6,8 @@ class HomeController extends BaseController
     public function index()
     {
         $data = [
-            'title' => 'EcoRide - Accueil',
+            'title'   => 'Ecoride - Accueil',
+            'cssFile' => 'home',
         ];
 
         $this->render('home/index', $data);

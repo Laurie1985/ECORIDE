@@ -44,6 +44,7 @@ h2 {
     /* bold */
     font-style: normal;
     font-size: 2rem;
+    color: var(--vert-foret);
     /* 32px */
     margin-bottom: 1rem;
     /* 16px */
@@ -56,6 +57,7 @@ h3 {
     font-style: normal;
     font-size: 1.5rem;
     /* 24px */
+    color: var(--vert-foret);
     margin-bottom: 1rem;
     /* 16px */
 }
@@ -78,7 +80,8 @@ p {
     font-style: normal;
     font-size: 1rem;
     /* 16px */
-    /*line-height: 1.5;
+    color: var(--vert-foret);
+    line-height: 1.5;
     /* 24px */
     margin-bottom: 1rem;
     /* 16px */
@@ -236,6 +239,10 @@ footer {
     font-size: 0.875rem;
     font-family: var(--font-family-text);
     font-weight: 400;
+}
+
+.footer-contact p {
+    color: var(--gris);
 }
 
 @media (max-width: 768px) {
