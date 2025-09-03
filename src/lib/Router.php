@@ -30,7 +30,7 @@ class Router
         $r->addRoute('POST', '/register', [\App\Controllers\AuthController::class, 'register']);
         $r->addRoute('POST', '/logout', [\App\Controllers\AuthController::class, 'logout']);
 
-        /*// Covoiturages
+        // Covoiturages
         $r->addRoute('GET', '/carpools', [\App\Controllers\CarpoolController::class, 'index']);
         $r->addRoute('GET', '/carpools/search', [\App\Controllers\CarpoolController::class, 'search']);
         $r->addRoute('GET', '/carpools/create', [\App\Controllers\CarpoolController::class, 'showCreate']);
@@ -45,15 +45,21 @@ class Router
         $r->addRoute('POST', '/reservations/{id:\d+}/confirm', [\App\Controllers\ReservationController::class, 'confirm']);
 
         // Profil utilisateur
+        $r->addRoute('GET', '/dashboard', [\App\Controllers\UserController::class, 'dashboard']);
         $r->addRoute('GET', '/profile', [\App\Controllers\UserController::class, 'profile']);
         $r->addRoute('POST', '/profile/update', [\App\Controllers\UserController::class, 'updateProfile']);
-        $r->addRoute('GET', '/dashboard', [\App\Controllers\UserController::class, 'dashboard']);
+        $r->addRoute('POST', '/profile/role', [\App\Controllers\UserController::class, 'updateRole']);
+        $r->addRoute('GET', '/vehicles', [\App\Controllers\UserController::class, 'vehicles']);
+        $r->addRoute('POST', '/vehicles/add', [\App\Controllers\UserController::class, 'addVehicle']);
+        $r->addRoute('GET', '/preferences', [\App\Controllers\UserController::class, 'preferences']);
+        $r->addRoute('POST', '/preferences/update', [\App\Controllers\UserController::class, 'updatePreferences']);
+        $r->addRoute('GET', '/history', [\App\Controllers\UserController::class, 'history']);
 
         // Véhicules
         $r->addRoute('GET', '/vehicles', [\App\Controllers\VehicleController::class, 'index']);
         $r->addRoute('GET', '/vehicles/add', [\App\Controllers\VehicleController::class, 'showAdd']);
         $r->addRoute('POST', '/vehicles/add', [\App\Controllers\VehicleController::class, 'add']);
-        $r->addRoute('DELETE', '/vehicles/{id:\d+}', [\App\Controllers\VehicleController::class, 'delete']);*/
+        $r->addRoute('DELETE', '/vehicles/{id:\d+}', [\App\Controllers\VehicleController::class, 'delete']);
     }
 
     public function dispatch()
