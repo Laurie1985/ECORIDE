@@ -99,7 +99,7 @@ class Vehicle extends BaseModel
             $errors[] = 'La plaque d\'immatriculation est obligatoire et ne peut dépasser 20 caractères';
         }
 
-        // Vérification unicité plaque
+        // Vérification que la plaque n'existe pas
         $excludeId = $data['vehicle_id'] ?? null;
         if (! empty($data['registration_number']) && self::isRegistrationNumberTaken($data['registration_number'], $excludeId)) {
             $errors[] = 'Cette plaque d\'immatriculation est déjà enregistrée';
