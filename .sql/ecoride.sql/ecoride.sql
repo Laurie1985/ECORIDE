@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `roles` (
 );
 
 CREATE TABLE IF NOT EXISTS `user_roles` (
-    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `user_role_id` INT AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT NOT NULL,
     `role_id` INT NOT NULL,
     `user_role` ENUM('driver', 'passenger', 'both'),

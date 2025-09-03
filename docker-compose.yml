@@ -13,7 +13,7 @@ services:
       - db
       - mongodb
     environment:
-      - DB_HOST= db
+      - DB_HOST=db
       - DB_name=${DB_name}
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}

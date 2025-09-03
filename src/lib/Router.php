@@ -23,14 +23,14 @@ class Router
         // Page d'accueil
         $r->addRoute('GET', '/', [\App\Controllers\HomeController::class, 'index']);
 
-        /*// Authentification
+        // Authentification
         $r->addRoute('GET', '/login', [\App\Controllers\AuthController::class, 'showLogin']);
         $r->addRoute('POST', '/login', [\App\Controllers\AuthController::class, 'login']);
         $r->addRoute('GET', '/register', [\App\Controllers\AuthController::class, 'showRegister']);
         $r->addRoute('POST', '/register', [\App\Controllers\AuthController::class, 'register']);
         $r->addRoute('POST', '/logout', [\App\Controllers\AuthController::class, 'logout']);
 
-        // Covoiturages
+        /*// Covoiturages
         $r->addRoute('GET', '/carpools', [\App\Controllers\CarpoolController::class, 'index']);
         $r->addRoute('GET', '/carpools/search', [\App\Controllers\CarpoolController::class, 'search']);
         $r->addRoute('GET', '/carpools/create', [\App\Controllers\CarpoolController::class, 'showCreate']);
