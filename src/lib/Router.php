@@ -18,48 +18,124 @@ class Router
 
     private function defineRoutes(RouteCollector $r)
     {
-        // Routes principales de l'application
+        // ==================== PAGES PRINCIPALES ====================
 
         // Page d'accueil
         $r->addRoute('GET', '/', [\App\Controllers\HomeController::class, 'index']);
+        $r->addRoute('GET', '/contact', [\App\Controllers\HomeController::class, 'contact']);
+        $r->addRoute('POST', '/contact', [\App\Controllers\HomeController::class, 'sendContact']);
 
-        // Authentification
+        // ==================== AUTHENTIFICATION ====================
+
         $r->addRoute('GET', '/login', [\App\Controllers\AuthController::class, 'showLogin']);
         $r->addRoute('POST', '/login', [\App\Controllers\AuthController::class, 'login']);
         $r->addRoute('GET', '/register', [\App\Controllers\AuthController::class, 'showRegister']);
         $r->addRoute('POST', '/register', [\App\Controllers\AuthController::class, 'register']);
         $r->addRoute('POST', '/logout', [\App\Controllers\AuthController::class, 'logout']);
 
-        // Covoiturages
-        $r->addRoute('GET', '/carpools', [\App\Controllers\CarpoolController::class, 'index']);
-        $r->addRoute('GET', '/carpools/search', [\App\Controllers\CarpoolController::class, 'search']);
-        $r->addRoute('GET', '/carpools/create', [\App\Controllers\CarpoolController::class, 'showCreate']);
-        $r->addRoute('POST', '/carpools/create', [\App\Controllers\CarpoolController::class, 'create']);
-        $r->addRoute('GET', '/carpools/{id:\d+}', [\App\Controllers\CarpoolController::class, 'show']);
-        $r->addRoute('POST', '/carpools/{id:\d+}/book', [\App\Controllers\CarpoolController::class, 'book']);
+        // ==================== COVOITURAGES ====================
 
-        // Réservations
-        $r->addRoute('GET', '/reservations', [\App\Controllers\ReservationController::class, 'index']);
-        $r->addRoute('GET', '/reservations/{id:\d+}', [\App\Controllers\ReservationController::class, 'show']);
-        $r->addRoute('POST', '/reservations/{id:\d+}/cancel', [\App\Controllers\ReservationController::class, 'cancel']);
-        $r->addRoute('POST', '/reservations/{id:\d+}/confirm', [\App\Controllers\ReservationController::class, 'confirm']);
+        // Pages principales
+        $r->addRoute('GET', '/carpools', [\App\Controllers\CarpoolController::class, 'index']);
+        $r->addRoute('GET', '/carpools/{id:\d+}', [\App\Controllers\CarpoolController::class, 'show']);
+
+        // API pour JavaScript (recherche et filtres)
+        $r->addRoute('GET', '/api/carpools/search', [\App\Controllers\CarpoolController::class, 'apiSearch']);
+
+        // Réservation
+        $r->addRoute('POST', '/carpools/{id:\d+}/book', [\App\Controllers\CarpoolController::class, 'bookCarpool']);
+
+        // ==================== ESPACE UTILISATEUR ====================
+
+        // Tableau de bord principal
+        $r->addRoute('GET', '/dashboard', [\App\Controllers\UserController::class, 'dashboard']);
 
         // Profil utilisateur
-        $r->addRoute('GET', '/dashboard', [\App\Controllers\UserController::class, 'dashboard']);
         $r->addRoute('GET', '/profile', [\App\Controllers\UserController::class, 'profile']);
         $r->addRoute('POST', '/profile/update', [\App\Controllers\UserController::class, 'updateProfile']);
         $r->addRoute('POST', '/profile/role', [\App\Controllers\UserController::class, 'updateRole']);
-        $r->addRoute('GET', '/vehicles', [\App\Controllers\UserController::class, 'vehicles']);
-        $r->addRoute('POST', '/vehicles/add', [\App\Controllers\UserController::class, 'addVehicle']);
-        $r->addRoute('GET', '/preferences', [\App\Controllers\UserController::class, 'preferences']);
-        $r->addRoute('POST', '/preferences/update', [\App\Controllers\UserController::class, 'updatePreferences']);
+
+        // Historique
         $r->addRoute('GET', '/history', [\App\Controllers\UserController::class, 'history']);
 
-        // Véhicules
+        // Préférences conducteur
+        $r->addRoute('GET', '/preferences', [\App\Controllers\UserController::class, 'preferences']);
+        $r->addRoute('POST', '/preferences/update', [\App\Controllers\UserController::class, 'updatePreferences']);
+
+        // ==================== VÉHICULES ====================
+
         $r->addRoute('GET', '/vehicles', [\App\Controllers\VehicleController::class, 'index']);
-        $r->addRoute('GET', '/vehicles/add', [\App\Controllers\VehicleController::class, 'showAdd']);
-        $r->addRoute('POST', '/vehicles/add', [\App\Controllers\VehicleController::class, 'add']);
-        $r->addRoute('DELETE', '/vehicles/{id:\d+}', [\App\Controllers\VehicleController::class, 'delete']);
+        $r->addRoute('POST', '/vehicles/create', [\App\Controllers\VehicleController::class, 'create']);
+        $r->addRoute('GET', '/vehicles/{id:\d+}/edit', [\App\Controllers\VehicleController::class, 'showEdit']);
+        $r->addRoute('POST', '/vehicles/{id:\d+}/update', [\App\Controllers\VehicleController::class, 'update']);
+        $r->addRoute('POST', '/vehicles/{id:\d+}/delete', [\App\Controllers\VehicleController::class, 'delete']);
+
+        // ==================== COVOITURAGES CONDUCTEUR ====================
+
+        // Créer un covoiturage
+        $r->addRoute('GET', '/carpools/create', [\App\Controllers\CarpoolController::class, 'showCreate']);
+        $r->addRoute('POST', '/carpools/create', [\App\Controllers\CarpoolController::class, 'create']);
+
+        // Mes covoiturages conducteur
+        $r->addRoute('GET', '/my-carpools', [\App\Controllers\CarpoolController::class, 'myCarpools']);
+
+        // Gestion des trajets
+        $r->addRoute('POST', '/carpools/{id:\d+}/start', [\App\Controllers\CarpoolController::class, 'startTrip']);
+        $r->addRoute('POST', '/carpools/{id:\d+}/complete', [\App\Controllers\CarpoolController::class, 'completeTrip']);
+
+        // Annulation
+        $r->addRoute('POST', '/carpools/{id:\d+}/cancel', [\App\Controllers\CarpoolController::class, 'cancelCarpool']);
+
+        // ==================== RÉSERVATIONS PASSAGER ====================
+
+        // Mes réservations
+        $r->addRoute('GET', '/reservations', [\App\Controllers\ReservationController::class, 'index']);
+        $r->addRoute('GET', '/reservations/{id:\d+}', [\App\Controllers\ReservationController::class, 'show']);
+
+        // Annulation par passager
+        $r->addRoute('POST', '/reservations/{id:\d+}/cancel', [\App\Controllers\ReservationController::class, 'cancel']);
+
+        // Confirmation après trajet
+        $r->addRoute('POST', '/reservations/{id:\d+}/confirm', [\App\Controllers\ReservationController::class, 'confirmTrip']);
+
+        // ==================== AVIS ====================
+
+        // Laisser un avis après un trajet
+        $r->addRoute('GET', '/reviews/create/{carpool_id:\d+}', [\App\Controllers\ReviewController::class, 'showCreate']);
+        $r->addRoute('POST', '/reviews/create', [\App\Controllers\ReviewController::class, 'create']);
+
+        // Voir les avis d'un conducteur
+        $r->addRoute('GET', '/reviews/driver/{id:\d+}', [\App\Controllers\ReviewController::class, 'showDriverReviews']);
+        $r->addRoute('GET', '/api/reviews/driver/{id:\d+}', [\App\Controllers\ReviewController::class, 'apiDriverReviews']);
+
+        // ==================== ESPACE EMPLOYÉ ====================
+
+        $r->addRoute('GET', '/employee', [\App\Controllers\EmployeeController::class, 'dashboard']);
+        $r->addRoute('GET', '/employee/reviews', [\App\Controllers\EmployeeController::class, 'pendingReviews']);
+        $r->addRoute('POST', '/employee/reviews/{id}/approve', [\App\Controllers\EmployeeController::class, 'approveReview']);
+        $r->addRoute('POST', '/employee/reviews/{id}/reject', [\App\Controllers\EmployeeController::class, 'rejectReview']);
+        $r->addRoute('GET', '/employee/complaints', [\App\Controllers\EmployeeController::class, 'complaints']);
+        $r->addRoute('POST', '/employee/complaints/{id}/resolve', [\App\Controllers\EmployeeController::class, 'resolveComplaint']);
+
+        // ==================== ESPACE ADMINISTRATEUR ====================
+
+        $r->addRoute('GET', '/admin', [\App\Controllers\AdminController::class, 'dashboard']);
+
+        // Gestion des utilisateurs
+        $r->addRoute('GET', '/admin/users', [\App\Controllers\AdminController::class, 'users']);
+        $r->addRoute('POST', '/admin/users/{id:\d+}/suspend', [\App\Controllers\AdminController::class, 'suspendUser']);
+        $r->addRoute('POST', '/admin/users/{id:\d+}/activate', [\App\Controllers\AdminController::class, 'activateUser']);
+
+        // Gestion des employés
+        $r->addRoute('GET', '/admin/employees', [\App\Controllers\AdminController::class, 'employees']);
+        $r->addRoute('GET', '/admin/employees/create', [\App\Controllers\AdminController::class, 'showCreateEmployee']);
+        $r->addRoute('POST', '/admin/employees/create', [\App\Controllers\AdminController::class, 'createEmployee']);
+        $r->addRoute('POST', '/admin/employees/{id:\d+}/suspend', [\App\Controllers\AdminController::class, 'suspendEmployee']);
+
+        // Statistiques et graphiques
+        $r->addRoute('GET', '/admin/stats', [\App\Controllers\AdminController::class, 'stats']);
+        $r->addRoute('GET', '/api/admin/daily-carpools', [\App\Controllers\AdminController::class, 'apiDailyCarpools']);
+        $r->addRoute('GET', '/api/admin/daily-earnings', [\App\Controllers\AdminController::class, 'apiDailyEarnings']);
     }
 
     public function dispatch()
@@ -101,7 +177,7 @@ class Router
 
         // Vérification que la classe du contrôleur existe
         if (! class_exists($controllerClass)) {
-            throw new \Exception("Controller class not found: {$controllerClass}");
+            throw new \Exception("Classe du controlleur non trouvée : {$controllerClass}");
         }
 
         // Instanciation du contrôleur
@@ -109,7 +185,7 @@ class Router
 
         // Vérification que la méthode existe dans le contrôleur
         if (! method_exists($controller, $method)) {
-            throw new \Exception("Method {$method} not found in {$controllerClass}");
+            throw new \Exception("Méthode {$method} non trouvée dans {$controllerClass}");
         }
 
         // Appel de la méthode avec les paramètres
