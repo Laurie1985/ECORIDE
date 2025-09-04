@@ -117,11 +117,12 @@ CREATE TABLE IF NOT EXISTS `reservation` (
     `passenger_id` INT NOT NULL,
     `seats_booked` INT NOT NULL,
     `status` ENUM(
-        'pending',
         'confirmed',
         'canceled',
-        'completed'
-    ) DEFAULT 'pending',
+        'completed',
+        'awaiting_passenger_confirmation',
+        'disputed'
+    ) DEFAULT 'confirmed',
     `amount_paid` INT NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `cancellation_date` TIMESTAMP NULL DEFAULT NULL,
@@ -168,3 +169,5 @@ VALUES ('Toyota'),
     ('Tesla'),
     ('Hyundai'),
     ('Kia');
+
+ALTER TABLE reservation ADD COLUMN complaint_comment TEXT NULL;
