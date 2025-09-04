@@ -5,7 +5,8 @@ use PDO;
 use PDOException;
 
 //Création de la classe Database pour la connexion à la base de données
-class Database extends PDO
+class Database extends PDO// hérite de PDO
+
 {
     // Déclaration d'une variable statique pour stocker l'instance unique de PDO
     private static ?PDO $instance = null;
