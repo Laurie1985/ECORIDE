@@ -30,6 +30,23 @@ class User extends BaseModel
     }
 
     /**
+     * Récupérer les utilisateurs par rôle (pour Admin)
+     */
+    public static function getUsersByRole(string $roleName): array
+    {
+        $db   = Database::getInstance();
+        $stmt = $db->prepare("
+            SELECT u.*
+            FROM users u
+            JOIN user_roles ur ON u.user_id = ur.user_id
+            JOIN roles r ON ur.role_id = r.role_id
+            WHERE r.role_name = ? AND u.status = 'active'
+        ");
+        $stmt->execute([$roleName]);
+        return $stmt->fetchAll();
+    }
+
+    /**
      * Récupère les rôles d'un utilisateur
      */
     public static function getUserRoles(int $userId): array

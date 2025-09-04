@@ -9,7 +9,7 @@ class Carpool extends BaseModel
     protected static $primaryKey = 'carpool_id';
 
     /**
-     * Recherche simple pour l'API JavaScript (US 3)
+     * Recherche simple pour l'API JavaScript
      */
     public static function searchForAPI(array $filters = []): array
     {
@@ -143,5 +143,140 @@ class Carpool extends BaseModel
     {
         $carpool = self::getWithDetails($carpoolId);
         return $carpool && $carpool['energy_type'] === 'electric';
+    }
+
+    /**
+     * Créer un covoiturage avec is_ecological automatiquement
+     */
+    public static function createWithEcologicalCheck(array $data): int
+    {
+        $db = Database::getInstance();
+
+        // Récupérer le type d'énergie du véhicule
+        $stmt = $db->prepare("SELECT energy_type FROM vehicles WHERE vehicle_id = ?");
+        $stmt->execute([$data['vehicle_id']]);
+        $vehicle = $stmt->fetch();
+
+        // Définir is_ecological selon le véhicule
+        $data['is_ecological'] = ($vehicle && $vehicle['energy_type'] === 'electric') ? 1 : 0;
+
+        return self::create($data);
+    }
+
+/**
+ * Annulation de covoiturage par le conducteur avec remboursement des passagers
+ */
+    public static function cancelByDriver(int $carpoolId, int $driverId): bool
+    {
+        try {
+            $db = Database::getInstance();
+            $db->beginTransaction();
+
+            // Vérifier que le covoiturage existe et appartient au conducteur
+            $carpool = self::find($carpoolId);
+            if (! $carpool || $carpool['driver_id'] != $driverId) {
+                $db->rollBack();
+                return false;
+            }
+
+            // Vérifier que le covoiturage peut être annulé en vérifiant son statut
+            if (in_array($carpool['status'], ['finished', 'canceled'])) {
+                $db->rollBack();
+                return false;
+            }
+
+            // Récupérer toutes les réservations confirmées pour ce covoiturage
+            $reservations = Reservation::findAllBy([
+                'carpool_id' => $carpoolId,
+                'status'     => 'confirmed',
+            ]);
+
+            // Rembourser tous les passagers
+            foreach ($reservations as $reservation) {
+                // Rembourser le passager
+                User::updateCredits($reservation['passenger_id'], $reservation['amount_paid']);
+
+                // Créer une transaction de remboursement
+                Transaction::createRefund(
+                    $reservation['passenger_id'],
+                    $reservation['reservation_id'],
+                    $reservation['amount_paid']
+                );
+
+                // Marquer la réservation comme annulée
+                Reservation::update($reservation['reservation_id'], [
+                    'status'            => 'canceled',
+                    'cancellation_date' => date('Y-m-d H:i:s'),
+                ]);
+            }
+
+            // Marquer le covoiturage comme annulé
+            self::update($carpoolId, ['status' => 'canceled']);
+
+            $db->commit();
+            return true;
+
+        } catch (\Exception $e) {
+            $db->rollBack();
+            error_log("Erreur annulation covoiturage: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Le conducteur démarre son covoiturage
+     */
+    public static function startTrip(int $carpoolId, int $driverId): bool
+    {
+        $carpool = self::find($carpoolId);
+
+        if (! $carpool || $carpool['driver_id'] != $driverId || $carpool['status'] !== 'scheduled') {
+            return false;
+        }
+
+        return self::update($carpoolId, ['status' => 'in_progress']);
+    }
+
+/**
+ * Le conducteur termine son covoiturage
+ */
+    public static function completeTrip(int $carpoolId, int $driverId): bool
+    {
+        $carpool = self::find($carpoolId);
+
+        if (! $carpool || $carpool['driver_id'] != $driverId || $carpool['status'] !== 'in_progress') {
+            return false;
+        }
+
+        self::update($carpoolId, ['status' => 'finished']);
+
+        // Marquer les réservations pour validation passager
+        $reservations = Reservation::findAllBy(['carpool_id' => $carpoolId, 'status' => 'confirmed']);
+        foreach ($reservations as $reservation) {
+            Reservation::update($reservation['reservation_id'], [
+                'status' => 'awaiting_passenger_confirmation',
+            ]);
+        }
+
+        return true;
+    }
+
+    /**
+     * Statistiques covoiturages par jour
+     */
+    public static function getDailyCarpools(int $days = 30): array
+    {
+        $db   = Database::getInstance();
+        $stmt = $db->prepare("
+        SELECT
+            DATE(created_at) as date,
+            COUNT(*) as count
+        FROM carpools
+        WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
+        GROUP BY DATE(created_at)
+        ORDER BY date DESC
+    ");
+        $stmt->execute([$days]);
+        return $stmt->fetchAll();
     }
 }
