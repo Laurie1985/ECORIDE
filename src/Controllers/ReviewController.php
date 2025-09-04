@@ -18,7 +18,7 @@ class ReviewController extends BaseController
     }
 
     /**
-     * US 11: Afficher le formulaire pour laisser un avis après un trajet
+     * Afficher le formulaire pour laisser un avis après un trajet
      */
     public function showCreate(int $carpoolId)
     {
@@ -44,7 +44,7 @@ class ReviewController extends BaseController
         }
 
         $this->render('reviews/create', [
-            'title'       => 'Laisser un avis - EcoRide',
+            'title'       => 'Ecoride - Avis',
             'cssFile'     => 'reviews',
             'carpool'     => $carpool,
             'reservation' => $reservation,
@@ -58,7 +58,7 @@ class ReviewController extends BaseController
     }
 
     /**
-     * US 11: Créer un avis (sera en attente de validation employé)
+     * Créer un avis (sera en attente de validation employé)
      */
     public function create()
     {
@@ -137,7 +137,7 @@ class ReviewController extends BaseController
     }
 
     /**
-     * US 5: Afficher les avis approuvés d'un conducteur
+     * Afficher les avis approuvés d'un conducteur
      */
     public function showDriverReviews(int $driverId)
     {
@@ -164,7 +164,7 @@ class ReviewController extends BaseController
         }
 
         $this->render('reviews/driver', [
-            'title'         => "Avis sur {$driver['username']} - EcoRide",
+            'title'         => "Ecoride - Avis sur {$driver['username']}",
             'cssFile'       => 'reviews',
             'driver'        => $driver,
             'reviews'       => $reviews,
