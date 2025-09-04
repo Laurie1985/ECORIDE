@@ -1,12 +1,13 @@
 <?php
 namespace App\Controllers;
 
-use App\Config\Database;
 use App\Models\Brand;
 use App\Models\Carpool;
 use App\Models\DriverPreference;
 use App\Models\Reservation;
+use App\Models\Role;
 use App\Models\User;
+use App\Models\UserRole;
 use App\Models\Vehicle;
 
 class UserController extends BaseController
@@ -138,14 +139,9 @@ class UserController extends BaseController
             $userId = $_SESSION['user_id'];
 
             // Mise à jour du type dans user_roles
-            $db   = Database::getInstance();
-            $stmt = $db->prepare("
-                UPDATE user_roles
-                SET user_role = ?
-                WHERE user_id = ? AND role_id = (SELECT role_id FROM roles WHERE role_name = 'user')
-            ");
+            $roleId = Role::findByName('user')['role_id'];
 
-            if ($stmt->execute([$userType, $userId])) {
+            if (UserRole::updateUserType($userId, $roleId, $userType)) {
                 $_SESSION['user_type'] = $userType;
                 $_SESSION['success']   = 'Type d\'utilisateur mis à jour';
             } else {
