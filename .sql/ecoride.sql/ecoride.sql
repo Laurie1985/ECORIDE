@@ -1,5 +1,6 @@
 -- Active: 1756370426129@@127.0.0.1@3307@ecoride_db
--- Active: 1744105202078@@127.0.0.1@3306
+DROP DATABASE IF EXISTS `ecoride_db`;
+
 CREATE DATABASE IF NOT EXISTS `ecoride_db` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 USE `ecoride_db`;
@@ -14,12 +15,11 @@ CREATE TABLE IF NOT EXISTS `users` (
     `address` VARCHAR(255),
     `phone` VARCHAR(15),
     `date_of_birth` DATE,
-    `photo` BLOB,
+    `photo` VARCHAR(255),
     `credits` INT DEFAULT 20,
     `rating` FLOAT DEFAULT 0,
     `status` ENUM('active', 'banned') DEFAULT 'active',
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    `appreciation_nb` INT DEFAULT 0,
     CONSTRAINT chk_credits CHECK (credits >= 0),
     CONSTRAINT chk_rating CHECK (
         rating >= 0
@@ -93,10 +93,10 @@ CREATE TABLE IF NOT EXISTS `carpools` (
     `arrival_time` DATETIME NOT NULL,
     `seats_available` INT NOT NULL,
     `price_per_seat` DECIMAL(10, 2) NOT NULL,
-    `is_ecological` BOOLEAN DEFAULT TRUE,
+    `is_ecological` BOOLEAN DEFAULT FALSE,
     `status` ENUM(
         'scheduled',
-        'in progress',
+        'in_progress',
         'finished',
         'canceled'
     ) DEFAULT 'scheduled',
@@ -105,7 +105,10 @@ CREATE TABLE IF NOT EXISTS `carpools` (
     FOREIGN KEY (`vehicle_id`) REFERENCES `vehicles` (`vehicle_id`) ON DELETE CASCADE,
     CONSTRAINT chk_seats_available_carpool CHECK (seats_available > 0),
     CONSTRAINT chk_price_per_seat CHECK (price_per_seat > 0),
-    CONSTRAINT chk_times CHECK (arrival_time > departure_time)
+    CONSTRAINT chk_times CHECK (arrival_time > departure_time),
+    INDEX idx_departure_time (`departure_time`),
+    INDEX idx_departure (`departure`),
+    INDEX idx_arrival (`arrival`)
 );
 
 CREATE TABLE IF NOT EXISTS `reservation` (
@@ -142,14 +145,14 @@ CREATE TABLE IF NOT EXISTS `transactions` (
     FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`reservation_id`) ON DELETE SET NULL
 );
 
---Insertion des rôles par défaut
+-- Insertion des rôles par défaut
 INSERT INTO
     `roles` (`role_name`)
 VALUES ('user'),
     ('admin'),
     ('employee');
 
---Insertion des marques par défaut
+-- Insertion des marques par défaut
 INSERT INTO
     `brands` (`name_brand`)
 VALUES ('Toyota'),
@@ -157,7 +160,7 @@ VALUES ('Toyota'),
     ('Honda'),
     ('Peugeot'),
     ('Renault'),
-    ('Citroën '),
+    ('Citroën'),
     ('BMW'),
     ('Mercedes-Benz'),
     ('Volkswagen'),
