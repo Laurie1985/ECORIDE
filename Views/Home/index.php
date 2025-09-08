@@ -62,8 +62,8 @@
 
 <!-- START VALEURS-->
 <section class="valeurs d-flex flex-column align-items-center">
-    <h2>Pourquoi choisir Ecoride ?</h2>
-    <div class="container d-flex justify-content-center align-items-center">
+    <h2 class="valeurs-title">Pourquoi choisir Ecoride ?</h2>
+    <div class="container valeurs-box d-flex justify-content-center align-items-center">
         <div class="ecology d-flex flex-column justify-content-center align-items-center">
             <div class="ecology-image">
                 <img src="./assets/images/pictoEcologie.png" alt="Pictogramme écologie">
