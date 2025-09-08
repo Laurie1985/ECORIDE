@@ -107,7 +107,6 @@ p {
 .btn:hover {
     background-color: var(--vert);
     color: var(--gris);
-
 }
 
 /* Mobile : Styles pour les titres et les paragraphes */

@@ -49,7 +49,7 @@
                             <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
                         </div>
 
-                        <div class="d-grid">
+                        <div class="d-flex justify-content-center">
                             <button type="submit" class="btn">S'incrire</button>
                         </div>
                     </form>

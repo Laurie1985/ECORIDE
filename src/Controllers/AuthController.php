@@ -18,7 +18,6 @@ class AuthController extends BaseController
         $this->render('auth/login', [
             'title'      => 'Ecoride - Connexion',
             'cssFile'    => 'auth',
-            'jsFile'     => 'auth',
             'csrf_token' => $this->generateCsrfToken(),
         ]);
     }
@@ -37,18 +36,21 @@ class AuthController extends BaseController
             $this->redirect('/login');
         }
 
-        $email    = trim($_POST['email'] ?? '');
+        $login    = trim($_POST['login'] ?? '');
         $password = $_POST['password'] ?? '';
 
         // Validation des champs
-        if (empty($email) || empty($password)) {
+        if (empty($login) || empty($password)) {
             $_SESSION['error'] = 'Veuillez remplir tous les champs';
             $this->redirect('/login');
         }
 
-        // Vérification des identifiants
+        // Vérification des identifiants : essaye email puis username
         try {
-            $user = User::findByEmail($email);
+            $user = User::findByEmail($login);
+            if (! $user) {
+                $user = User::findByUsername($login);
+            }
 
             if ($user && password_verify($password, $user['password_hash'])) {
                 if ($user['status'] === 'banned') {
@@ -57,10 +59,9 @@ class AuthController extends BaseController
                 }
 
                 // Connexion réussie
-                $_SESSION['user_id']        = $user['user_id'];
-                $_SESSION['user_name']      = $user['name'];
-                $_SESSION['user_firstname'] = $user['firstname'];
-                $_SESSION['user_email']     = $user['email'];
+                $_SESSION['user_id']    = $user['user_id'];
+                $_SESSION['username']   = $user['username'];
+                $_SESSION['user_email'] = $user['email'];
 
                 // Récupérer le rôle de l'utilisateur
                 $this->setUserRole($user['user_id']);
@@ -68,7 +69,7 @@ class AuthController extends BaseController
                 $_SESSION['success'] = 'Connexion réussie !';
                 $this->redirect('/dashboard');
             } else {
-                $_SESSION['error'] = 'Email ou mot de passe incorrect';
+                $_SESSION['error'] = 'Identifiant ou mot de passe incorrect';
                 $this->redirect('/login');
             }
         } catch (\Exception $e) {
@@ -90,6 +91,7 @@ class AuthController extends BaseController
         $this->render('auth/register', [
             'title'      => 'Ecoride - Inscription',
             'cssFile'    => 'auth',
+            'jsFile'     => 'auth',
             'csrf_token' => $this->generateCsrfToken(),
         ]);
     }
