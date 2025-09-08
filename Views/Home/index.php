@@ -14,10 +14,10 @@
             <form action="/carpools" method="GET" class="form needs-validation" novalidate>
                 <div class="inputs-group">
                     <div>
-                        <input type="text" placeholder="Départ" class="form-control" id="departure" required>
+                        <input type="text" name="departure" placeholder="Départ" class="form-control" id="departure" required>
                     </div>
                     <div>
-                        <input type="text" placeholder="Arrivée" class="form-control" id="arrival" required>
+                        <input type="text" name="arrival" placeholder="Arrivée" class="form-control" id="arrival" required>
                     </div>
                     <div>
                         <input type="date" name="date" class="form-control" min="<?php echo date('Y-m-d') ?>" id="date" required>

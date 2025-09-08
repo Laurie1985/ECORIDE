@@ -18,7 +18,7 @@
         <!-- START HEADER -->
         <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="/">
                     <img src="/assets/images/logo2.png" alt="logo Ecoride" class="logo">
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -27,17 +27,25 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#">Accueil</a>
+                            <a class="nav-link" aria-current="page" href="/">Accueil</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Covoiturages</a>
+                            <a class="nav-link" href="/carpools">Covoiturages</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Contact</a>
+                            <a class="nav-link" href="/contact">Contact</a>
                         </li>
                     </ul>
                     <div class="d-flex button">
-                        <button class="btn" type="submit">Connexion</button>
+                        <?php if (isset($_SESSION['user_id'])): ?>
+                            <a href="/dashboard" class="btn me-2">Mon espace</a>
+                            <form method="POST" action="/logout" class="d-inline">
+                                <button class="btn" type="submit">Déconnexion</button>
+                            </form>
+                        <?php else: ?>
+                            <a href="/login" class="btn me-2">Connexion</a>
+                            <a href="/register" class="btn">Inscription</a>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>
@@ -48,6 +56,13 @@
 
     <main>
         <!-- START MAIN -->
+        <?php if (isset($_SESSION['error'])): ?>
+        <div class="alert alert-danger"><?php echo $_SESSION['error'];unset($_SESSION['error']); ?></div>
+            <?php endif; ?>
+            <?php if (isset($_SESSION['success'])): ?>
+        <div class="alert alert-success"><?php echo $_SESSION['success'];unset($_SESSION['success']); ?></div>
+        <?php endif; ?>
+
         <?php echo $content ?? '' ?>
         <!-- END MAIN -->
     </main>
@@ -106,6 +121,9 @@
         </div>
     </div>
 
+    <?php if (isset($jsFile)): ?>
+        <script src="/assets/js/<?php echo $jsFile ?>.js"></script>
+    <?php endif; ?>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 </body>
 </html>

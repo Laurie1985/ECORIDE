@@ -18,6 +18,7 @@ class AuthController extends BaseController
         $this->render('auth/login', [
             'title'      => 'Ecoride - Connexion',
             'cssFile'    => 'auth',
+            'jsFile'     => 'auth',
             'csrf_token' => $this->generateCsrfToken(),
         ]);
     }
