@@ -27,7 +27,7 @@ class UserController extends BaseController
         $myReservations   = Reservation::findAllBy(['passenger_id' => $userId]);
 
         $this->render('users/dashboard', [
-            'title'              => 'Mon espace - EcoRide',
+            'title'              => 'Ecoride - Mon espace',
             'cssFile'            => 'dashboard',
             'user'               => $user,
             'vehicleCount'       => count($myVehicles),

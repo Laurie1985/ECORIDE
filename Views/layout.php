@@ -36,14 +36,14 @@
                             <a class="nav-link" href="/contact">Contact</a>
                         </li>
                     </ul>
-                    <div class="d-flex button">
+                    <div class="d-flex align-items-center flex-nowrap">
                         <?php if (isset($_SESSION['user_id'])): ?>
-                            <a href="/dashboard" class="btn me-2">Mon espace</a>
+                            <a href="/dashboard" class="btn me-4">Compte</a>
                             <form method="POST" action="/logout" class="d-inline">
                                 <button class="btn" type="submit">Déconnexion</button>
                             </form>
                         <?php else: ?>
-                            <a href="/login" class="btn me-2">Connexion</a>
+                            <a href="/login" class="btn me-4">Connexion</a>
                             <a href="/register" class="btn">Inscription</a>
                         <?php endif; ?>
                     </div>

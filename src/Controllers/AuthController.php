@@ -155,12 +155,14 @@ class AuthController extends BaseController
 
         try {
             // Vérifier si email ou username déjà utilisés
-            if (User::findByEmail($email)) {
+            $existingEmail = User::findByEmail($email);
+            if ($existingEmail !== null) {
                 $_SESSION['error'] = 'Cette adresse email est déjà utilisée';
                 $this->redirect('/register');
             }
 
-            if (User::findByUsername($username)) {
+            $existingUsername = User::findByUsername($username);
+            if ($existingUsername !== null) {
                 $_SESSION['error'] = 'Ce nom d\'utilisateur est déjà pris';
                 $this->redirect('/register');
             }

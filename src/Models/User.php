@@ -16,17 +16,19 @@ class User extends BaseModel
      * @param string $email L'adresse e-mail de l'utilisateur à trouver.
      * @return array|false Retourne un tableau associatif si l'utilisateur est trouvé, sinon false.
      */
-    public static function findByEmail(string $email): array | false
+    public static function findByEmail(string $email): ?array
     {
-        return self::findBy(['email' => $email]);
+        $result = self::findBy(['email' => $email]);
+        return $result ?: null;
     }
 
     /**
      * Trouver un utilisateur par son username
      */
-    public static function findByUsername(string $username): array | false
+    public static function findByUsername(string $username): ?array
     {
-        return self::findBy(['username' => $username]);
+        $result = self::findBy(['username' => $username]);
+        return $result ?: null;
     }
 
     /**
