@@ -1,0 +1,36 @@
+.card {
+    background-color: var(--vert);
+    border-radius: 0.5rem;
+}
+
+.title {
+    margin-top: 20px;
+}
+
+.form-label {
+    color: var(--gris);
+    font-family: var(--font-family-title);
+    font-weight: 500;
+}
+
+.form-control {
+    background-color: var(--gris);
+    color: var(--vert-foret);
+    font-family: var(--font-family-text);
+}
+
+.form-control:focus {
+    border-color: var(--vert-foret);
+    box-shadow: 0 0 0 0.2rem rgba(67, 89, 85, 0.25);
+}
+
+.alert-info {
+    background-color: var(--bleu);
+    color: var(--vert-foret);
+}
+
+.small,
+small,
+.form-text {
+    font-family: var(--font-family-text);
+}
