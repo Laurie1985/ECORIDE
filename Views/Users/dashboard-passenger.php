@@ -15,7 +15,7 @@
     </div>
 
     <!-- Statistiques passager -->
-    <div class="row mb-4 mt-4">
+    <div class="row mb-4 mt-4 gy-4">
         <div class="col-md-6">
             <div class="card text-center">
                 <div class="card-body">
@@ -64,7 +64,7 @@
     </div>
 
     <!-- Actions principales -->
-    <div class="row mb-4">
+    <div class="row mb-4 gy-4">
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
@@ -113,10 +113,10 @@
                         <div class="col-md-8">
                             <p class="mb-2"><strong>Devenez conducteur et participez activement à la mobilité durable :</strong></p>
                             <ul class="list-unstyled">
-                                <li>✓ Rentabilisez vos déplacements quotidiens</li>
-                                <li>✓ Gagnez des crédits pour vos futurs trajets</li>
-                                <li>✓ Rencontrez des voyageurs partageant vos valeurs</li>
-                                <li>✓ Contribuez à réduire l'empreinte carbone</li>
+                                <li><p class="mb-0">✓ Rentabilisez vos déplacements quotidiens</p></li>
+                                <li><p class="mb-0">✓ Gagnez des crédits pour vos futurs trajets</p></li>
+                                <li><p class="mb-0">✓ Rencontrez des voyageurs partageant vos valeurs</p></li>
+                                <li><p class="mb-0">✓ Contribuez à réduire l'empreinte carbone</p></li>
                             </ul>
                         </div>
                         <div class="col-md-4 text-center">
