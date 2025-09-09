@@ -67,7 +67,7 @@ class UserController extends BaseController
         $userRoles = User::getUserRoles($userId);
 
         $this->render('users/profile', [
-            'title'      => 'Mon profil - EcoRide',
+            'title'      => 'Ecoride - Mon profil',
             'cssFile'    => 'profile',
             'csrf_token' => $this->generateCsrfToken(),
             'user'       => $user,
@@ -187,7 +187,7 @@ class UserController extends BaseController
         $brands   = Brand::all();
 
         $this->render('users/vehicles', [
-            'title'      => 'Mes véhicules - EcoRide',
+            'title'      => 'Ecoride - Mes véhicules',
             'cssFile'    => 'vehicles',
             'csrf_token' => $this->generateCsrfToken(),
             'vehicles'   => $vehicles,
@@ -241,7 +241,7 @@ class UserController extends BaseController
         $preferences = DriverPreference::findBy(['user_id' => $userId]);
 
         $this->render('users/preferences', [
-            'title'       => 'Mes préférences - EcoRide',
+            'title'       => 'Ecoride - Mes préférences',
             'cssFile'     => 'preferences',
             'csrf_token'  => $this->generateCsrfToken(),
             'preferences' => $preferences,
@@ -304,7 +304,7 @@ class UserController extends BaseController
         $passengerReservations = Reservation::findAllBy(['passenger_id' => $userId]);
 
         $this->render('users/history', [
-            'title'                 => 'Mon historique - EcoRide',
+            'title'                 => 'Ecoride - Mon historique',
             'cssFile'               => 'history',
             'driverCarpools'        => $driverCarpools,
             'passengerReservations' => $passengerReservations,
