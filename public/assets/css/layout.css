@@ -69,6 +69,7 @@ h4 {
     font-style: normal;
     font-size: 1.25rem;
     /* 20px */
+    color: var(--vert-foret);
     margin-bottom: 1rem;
     /* 16px */
 }
