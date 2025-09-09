@@ -161,7 +161,7 @@ class CarpoolController extends BaseController
         }
 
         $this->render('carpools/create', [
-            'title'      => 'Créer un covoiturage - EcoRide',
+            'title'      => 'Ecoride - Créer un covoiturage',
             'cssFile'    => 'carpools',
             'vehicles'   => $vehicles,
             'csrf_token' => $this->generateCsrfToken(),
@@ -246,7 +246,7 @@ class CarpoolController extends BaseController
         $carpools = Carpool::findAllBy(['driver_id' => $userId]);
 
         $this->render('carpools/my_carpools', [
-            'title'      => 'Mes covoiturages - EcoRide',
+            'title'      => 'Ecoride - Mes covoiturages',
             'cssFile'    => 'carpools',
             'carpools'   => $carpools,
             'csrf_token' => $this->generateCsrfToken(),
@@ -265,8 +265,9 @@ class CarpoolController extends BaseController
         $carpoolsWithPassengers = Carpool::getMyTripsWithPassengers($userId);
 
         $this->render('carpools/my_passengers', [
-            'title'    => 'Ecoride - Mes passagers',
-            'carpools' => $carpoolsWithPassengers,
+            'title'                  => 'Ecoride - Mes passagers',
+            'cssFile'                => 'dashboard',
+            'carpoolsWithPassengers' => $carpoolsWithPassengers,
         ]);
     }
 

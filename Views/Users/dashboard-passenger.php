@@ -9,7 +9,7 @@
 <div class="container mt-4 mb-4">
     <div class="row">
         <div class="col-12">
-            <h1 class="dash-title">Votre espace Passager</h1>
+            <h1 class="dash-title">Mon espace Passager</h1>
             <p class="lead">Bonjour<?php echo htmlspecialchars($user['username']) ?></p>
         </div>
     </div>
@@ -68,7 +68,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-header">
-                    <h3>Mes trajets</h3>
+                    <h3>Mes Réservations</h3>
                 </div>
                 <div class="card-body">
                     <div class="list-group list-group-flush">

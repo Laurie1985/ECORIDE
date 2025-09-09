@@ -104,6 +104,7 @@ class Router
         // Laisser un avis après un trajet
         $r->addRoute('GET', '/reviews/create/{carpool_id:\d+}', [\App\Controllers\ReviewController::class, 'showCreate']);
         $r->addRoute('POST', '/reviews/create', [\App\Controllers\ReviewController::class, 'create']);
+        $r->addRoute('GET', '/reviews/about-me', [\App\Controllers\ReviewController::class, 'myReviews']);
 
         // Voir les avis d'un conducteur
         $r->addRoute('GET', '/reviews/driver/{id:\d+}', [\App\Controllers\ReviewController::class, 'showDriverReviews']);

@@ -164,13 +164,31 @@ class ReviewController extends BaseController
         }
 
         $this->render('reviews/driver', [
-            'title'         => "Ecoride - Avis sur {$driver['username']}",
+            'title' => "Ecoride - Avis sur {$driver['username']}",
             'cssFile'       => 'reviews',
             'driver'        => $driver,
             'reviews'       => $reviews,
             'totalReviews'  => $totalReviews,
             'averageRating' => $averageRating,
             'ratingStats'   => $ratingStats,
+        ]);
+    }
+
+    /**
+     * Avis concernant l'utilisateur connecté (conducteur)
+     */
+    public function myReviews()
+    {
+        $this->requireAuth();
+        $userId = $_SESSION['user_id'];
+
+        $reviews = $this->reviewModel->getApprovedReviewsForDriver($userId);
+
+        $this->render('reviews/my_reviews', [
+            'title'   => 'Avis sur mes trajets - EcoRide',
+            'cssFile' => 'reviews',
+            'reviews' => $reviews,
+            'user'    => User::find($userId),
         ]);
     }
 

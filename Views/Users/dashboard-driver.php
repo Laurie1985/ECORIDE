@@ -9,7 +9,7 @@
 <div class="container mt-4 mb-4">
     <div class="row">
         <div class="col-12">
-            <h1 class="dash-title">Votre espace Conducteur</h1>
+            <h1 class="dash-title">Mon espace Conducteur</h1>
             <p class="lead">Bonjour<?php echo htmlspecialchars($user['username']) ?></p>
         </div>
     </div>
@@ -109,6 +109,9 @@
                         </a>
                         <a href="/preferences" class="list-group-item list-group-item-action">
                             <p>Mes préférences de conduite</p>
+                        </a>
+                        <a href="/reviews/about-me" class="list-group-item list-group-item-action">
+                            <p>Avis sur mes trajets</p>
                         </a>
                         <a href="/profile" class="list-group-item list-group-item-action">
                             <p>Modifier mon profil</p>
