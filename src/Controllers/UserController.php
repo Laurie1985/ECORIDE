@@ -19,21 +19,40 @@ class UserController extends BaseController
     {
         $this->requireAuth();
 
-        $userId = $_SESSION['user_id'];
-        $user   = User::find($userId);
+        $userId   = $_SESSION['user_id'];
+        $user     = User::find($userId);
+        $userType = $_SESSION['user_type'] ?? 'passenger';
 
         $myVehicles       = Vehicle::findAllBy(['user_id' => $userId]);
         $myDriverCarpools = Carpool::findAllBy(['driver_id' => $userId]);
         $myReservations   = Reservation::findAllBy(['passenger_id' => $userId]);
 
-        $this->render('users/dashboard', [
-            'title'              => 'Ecoride - Mon espace',
-            'cssFile'            => 'dashboard',
+        $data = [
             'user'               => $user,
             'vehicleCount'       => count($myVehicles),
             'driverCarpoolCount' => count($myDriverCarpools),
             'reservationCount'   => count($myReservations),
-        ]);
+            'cssFile'            => 'dashboard',
+        ];
+
+        // Choisir la vue selon le type d'utilisateur
+        switch ($userType) {
+            case 'driver':
+                $view          = 'users/dashboard-driver';
+                $data['title'] = 'Ecoride - Espace Conducteur';
+                break;
+            case 'both':
+                $view          = 'users/dashboard-both';
+                $data['title'] = 'Ecoride - Mon espace';
+                break;
+            case 'passenger':
+            default:
+                $view          = 'users/dashboard-passenger';
+                $data['title'] = 'Ecoride - Espace Passager';
+                break;
+        }
+
+        $this->render($view, $data);
     }
 
     /**
