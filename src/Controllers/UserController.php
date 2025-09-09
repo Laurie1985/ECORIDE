@@ -186,48 +186,13 @@ class UserController extends BaseController
         $vehicles = Vehicle::findAllBy(['user_id' => $userId]);
         $brands   = Brand::all();
 
-        $this->render('users/vehicles', [
+        $this->render('/vehicles', [
             'title'      => 'Ecoride - Mes véhicules',
             'cssFile'    => 'vehicles',
             'csrf_token' => $this->generateCsrfToken(),
             'vehicles'   => $vehicles,
             'brands'     => $brands,
         ]);
-    }
-
-    /**
-     * Ajouter un véhicule
-     */
-    public function addVehicle()
-    {
-        $this->requireAuth();
-
-        if (! $this->validateCsrfToken()) {
-            $this->redirect('/vehicles');
-        }
-
-        $userId = $_SESSION['user_id'];
-
-        try {
-            Vehicle::create([
-                'user_id'                 => $userId,
-                'brand_id'                => $_POST['brand_id'],
-                'model'                   => $_POST['model'],
-                'registration_number'     => $_POST['registration_number'],
-                'first_registration_date' => $_POST['first_registration_date'],
-                'color'                   => $_POST['color'] ?? null,
-                'seats_available'         => $_POST['seats_available'],
-                'energy_type'             => $_POST['energy_type'],
-            ]);
-
-            $_SESSION['success'] = 'Véhicule ajouté avec succès';
-
-        } catch (\Exception $e) {
-            error_log("Erreur ajout véhicule: " . $e->getMessage());
-            $_SESSION['error'] = 'Erreur lors de l\'ajout du véhicule';
-        }
-
-        $this->redirect('/vehicles');
     }
 
     /**

@@ -90,8 +90,8 @@
 
                             <div class="form-check mb-3">
                                 <input type="radio" name="user_type" value="driver" id="driver"
-                                       class="form-check-input"
-                                       <?php echo($_SESSION['user_type'] ?? '') === 'driver' ? 'checked' : '' ?>>
+                                    class="form-check-input"
+                                    <?php echo($_SESSION['user_type'] ?? '') === 'driver' ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="driver">
                                     <strong>Conducteur uniquement</strong><br>
                                     <small class="text-muted">Je propose mes trajets</small>
@@ -100,8 +100,8 @@
 
                             <div class="form-check mb-3">
                                 <input type="radio" name="user_type" value="both" id="both"
-                                       class="form-check-input"
-                                       <?php echo($_SESSION['user_type'] ?? '') === 'both' ? 'checked' : '' ?>>
+                                    class="form-check-input"
+                                    <?php echo($_SESSION['user_type'] ?? '') === 'both' ? 'checked' : '' ?>>
                                 <label class="form-check-label" for="both">
                                     <strong>Les deux</strong><br>
                                     <small class="text-muted">Je propose et recherche des trajets selon mes besoins</small>

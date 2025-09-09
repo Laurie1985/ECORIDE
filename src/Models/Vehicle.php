@@ -148,6 +148,7 @@ class Vehicle extends BaseModel
             error_log("Erreur création véhicule: " . $e->getMessage());
             return ['success' => false, 'errors' => ['Erreur lors de la création du véhicule']];
         }
+
     }
 
     /**

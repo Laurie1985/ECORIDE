@@ -34,9 +34,9 @@ class VehicleController extends BaseController
         // Récupère toutes les marques pour le formulaire d'ajout/édition
         $brands = Brand::all();
 
-        $this->render('dashboard/vehicles/index', [
+        $this->render('users/vehicles', [
             'title'      => 'Mes véhicules',
-            'cssFile'    => 'dashboard',
+            'cssFile'    => 'vehicles',
             'vehicles'   => $vehicles,
             'brands'     => $brands,
             'csrf_token' => $this->tokenManager->generateCsrfToken(),
@@ -46,7 +46,7 @@ class VehicleController extends BaseController
     /**
      * Traite la création d'un nouveau véhicule.
      */
-    public function create()
+    /*public function create()
     {
         if (! isset($_SESSION['user_id'])) {
             $this->redirect('/login');
@@ -54,7 +54,7 @@ class VehicleController extends BaseController
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || ! $this->validateCsrfToken()) {
             $_SESSION['error'] = 'Requête invalide.';
-            $this->redirect('/dashboard/vehicles');
+            $this->redirect('/vehicles');
         }
 
         $data            = $_POST;
@@ -69,7 +69,40 @@ class VehicleController extends BaseController
             $_SESSION['errors'] = $result['errors'];
         }
 
-        $this->redirect('/dashboard/vehicles');
+        $this->redirect('/vehicles');
+    }*/
+    public function create()
+    {
+        if (! isset($_SESSION['user_id'])) {
+            $this->redirect('/login');
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || ! $this->validateCsrfToken()) {
+            $_SESSION['error'] = 'Requête invalide.';
+            $this->redirect('/vehicles');
+        }
+
+        $userId = $_SESSION['user_id'];
+
+        try {
+            Vehicle::create([
+                'user_id'                 => $userId,
+                'brand_id'                => $_POST['brand_id'],
+                'model'                   => $_POST['model'],
+                'registration_number'     => $_POST['registration_number'],
+                'first_registration_date' => $_POST['first_registration_date'],
+                'color'                   => $_POST['color'] ?? null,
+                'seats_available'         => $_POST['seats_available'],
+                'energy_type'             => $_POST['energy_type'],
+            ]);
+
+            $_SESSION['success'] = 'Véhicule ajouté avec succès !';
+        } catch (\Exception $e) {
+            error_log("Erreur ajout véhicule: " . $e->getMessage());
+            $_SESSION['error'] = 'Erreur lors de l\'ajout du véhicule';
+        }
+
+        $this->redirect('/vehicles');
     }
 
     /**
@@ -89,14 +122,14 @@ class VehicleController extends BaseController
         // Vérifie si le véhicule existe et appartient à l'utilisateur
         if (! $vehicle || $vehicle['user_id'] != $userId) {
             $_SESSION['error'] = 'Véhicule introuvable ou vous n\'avez pas la permission.';
-            $this->redirect('/dashboard/vehicles');
+            $this->redirect('/vehicles');
         }
 
         $brands = Brand::all();
 
-        $this->render('dashboard/vehicles/edit', [
+        $this->render('users/vehicles_edit', [
             'title'      => 'Modifier un véhicule',
-            'cssFile'    => 'dashboard',
+            'cssFile'    => 'vehicles',
             'vehicle'    => $vehicle,
             'brands'     => $brands,
             'csrf_token' => $this->tokenManager->generateCsrfToken(),
@@ -119,12 +152,12 @@ class VehicleController extends BaseController
 
         if (! $vehicle || $vehicle['user_id'] != $userId) {
             $_SESSION['error'] = 'Véhicule introuvable ou vous n\'avez pas la permission.';
-            $this->redirect('/dashboard/vehicles');
+            $this->redirect('/vehicles');
         }
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || ! $this->validateCsrfToken()) {
             $_SESSION['error'] = 'Requête invalide.';
-            $this->redirect('/dashboard/vehicles');
+            $this->redirect('/vehicles');
         }
 
         $data   = $_POST;
@@ -136,7 +169,7 @@ class VehicleController extends BaseController
             $_SESSION['errors'] = $result['errors'];
         }
 
-        $this->redirect('/dashboard/vehicles');
+        $this->redirect('/vehicles');
     }
 
     /**
@@ -155,7 +188,7 @@ class VehicleController extends BaseController
 
         if (! $vehicle || $vehicle['user_id'] != $userId) {
             $_SESSION['error'] = 'Véhicule introuvable ou vous n\'avez pas la permission.';
-            $this->redirect('/dashboard/vehicles');
+            $this->redirect('/vehicles');
         }
 
         if (Vehicle::safeDelete($vehicleId)) {
@@ -164,6 +197,6 @@ class VehicleController extends BaseController
             $_SESSION['error'] = 'Impossible de supprimer le véhicule car il est associé à des covoiturages actifs.';
         }
 
-        $this->redirect('/dashboard/vehicles');
+        $this->redirect('/vehicles');
     }
 }

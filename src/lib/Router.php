@@ -68,7 +68,7 @@ class Router
         $r->addRoute('POST', '/vehicles/create', [\App\Controllers\VehicleController::class, 'create']);
         $r->addRoute('GET', '/vehicles/{id:\d+}/edit', [\App\Controllers\VehicleController::class, 'showEdit']);
         $r->addRoute('POST', '/vehicles/{id:\d+}/update', [\App\Controllers\VehicleController::class, 'update']);
-        $r->addRoute('POST', '/vehicles/{id:\d+}/delete', [\App\Controllers\VehicleController::class, 'delete']);
+        $r->addRoute('POST', '/vehicles/{vehicleId:\d+}/delete', [\App\Controllers\VehicleController::class, 'delete']);
 
         // ==================== COVOITURAGES CONDUCTEUR ====================
 
@@ -102,13 +102,13 @@ class Router
         // ==================== AVIS ====================
 
         // Laisser un avis après un trajet
-        $r->addRoute('GET', '/reviews/create/{carpool_id:\d+}', [\App\Controllers\ReviewController::class, 'showCreate']);
+        $r->addRoute('GET', '/reviews/create/{carpoolId:\d+}', [\App\Controllers\ReviewController::class, 'showCreate']);
         $r->addRoute('POST', '/reviews/create', [\App\Controllers\ReviewController::class, 'create']);
         $r->addRoute('GET', '/reviews/about-me', [\App\Controllers\ReviewController::class, 'myReviews']);
 
         // Voir les avis d'un conducteur
-        $r->addRoute('GET', '/reviews/driver/{id:\d+}', [\App\Controllers\ReviewController::class, 'showDriverReviews']);
-        $r->addRoute('GET', '/api/reviews/driver/{id:\d+}', [\App\Controllers\ReviewController::class, 'apiDriverReviews']);
+        $r->addRoute('GET', '/reviews/driver/{driverId:\d+}', [\App\Controllers\ReviewController::class, 'showDriverReviews']);
+        $r->addRoute('GET', '/api/reviews/driver/{driverId:\d+}', [\App\Controllers\ReviewController::class, 'apiDriverReviews']);
 
         // ==================== ESPACE EMPLOYÉ ====================
 

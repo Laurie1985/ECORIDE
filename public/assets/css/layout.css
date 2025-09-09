@@ -174,7 +174,7 @@ header {
 }
 
 .logo {
-    max-width: 50%;
+    width: 60%;
     height: auto;
 }
 
@@ -225,6 +225,7 @@ footer {
     align-items: center;
     background-color: var(--vert-foret);
     color: var(--gris);
+    padding-top: 1rem;
 }
 
 .link {
@@ -257,7 +258,7 @@ footer {
     }
 }
 
-/* Styles pour les modals */
+/* Styles pour modal */
 .modal-content {
     font-family: var(--font-family-text);
     background-color: var(--gris);
