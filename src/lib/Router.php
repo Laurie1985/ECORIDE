@@ -78,6 +78,7 @@ class Router
 
         // Mes covoiturages conducteur
         $r->addRoute('GET', '/my-carpools', [\App\Controllers\CarpoolController::class, 'myCarpools']);
+        $r->addRoute('GET', '/my-carpools/passengers', [\App\Controllers\CarpoolController::class, 'myPassengers']);
 
         // Gestion des trajets
         $r->addRoute('POST', '/carpools/{id:\d+}/start', [\App\Controllers\CarpoolController::class, 'startTrip']);

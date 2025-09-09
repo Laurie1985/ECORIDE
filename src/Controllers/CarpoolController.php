@@ -122,7 +122,7 @@ class CarpoolController extends BaseController
                 'success'            => false,
                 'needs_confirmation' => true,
                 'message'            => "Confirmez-vous vouloir réserver {$seatsBooked} place(s) pour {$totalPrice} crédits ?",
-                'total_price'        => $totalPrice,
+                'total_price' => $totalPrice,
             ]);
             return;
         }
@@ -250,6 +250,23 @@ class CarpoolController extends BaseController
             'cssFile'    => 'carpools',
             'carpools'   => $carpools,
             'csrf_token' => $this->generateCsrfToken(),
+        ]);
+    }
+
+    /**
+     * Voir les passagers de mes covoiturages
+     */
+    public function myPassengers()
+    {
+        $this->requireAuth();
+        $userId = $_SESSION['user_id'];
+
+        // Récupérer les covoiturages du conducteur avec leurs réservations
+        $carpoolsWithPassengers = Carpool::getMyTripsWithPassengers($userId);
+
+        $this->render('carpools/my_passengers', [
+            'title'    => 'Ecoride - Mes passagers',
+            'carpools' => $carpoolsWithPassengers,
         ]);
     }
 

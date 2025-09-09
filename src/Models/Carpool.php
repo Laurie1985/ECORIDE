@@ -279,4 +279,52 @@ class Carpool extends BaseModel
         $stmt->execute([$days]);
         return $stmt->fetchAll();
     }
+
+    /**
+     * Récupérer les covoiturages d'un conducteur avec réservations
+     */
+    public static function getMyTripsWithPassengers(int $driverId): array
+    {
+        $db   = Database::getInstance();
+        $stmt = $db->prepare("
+            SELECT c.*,
+            r.reservation_id, r.passenger_id, r.seats_booked,
+            r.amount_paid, r.status, r.cancellation_date,
+            u.username as passenger_username
+            FROM carpools c
+            LEFT JOIN reservation r ON c.carpool_id = r.carpool_id
+            LEFT JOIN users u ON r.passenger_id = u.user_id
+            WHERE c.driver_id = ?
+            ORDER BY c.departure_time DESC, r.created_at
+        ");
+        $stmt->execute([$driverId]);
+        $results = $stmt->fetchAll();
+
+        // Grouper par covoiturage et séparer confirmés/annulés
+        $grouped = [];
+        foreach ($results as $row) {
+            $carpoolId = $row['carpool_id'];
+
+            if (! isset($grouped[$carpoolId])) {
+                $grouped[$carpoolId] = [
+                    'carpool_id'             => $row['carpool_id'],
+                    'departure'              => $row['departure'],
+                    'arrival'                => $row['arrival'],
+                    'departure_time'         => $row['departure_time'],
+                    'confirmed_reservations' => [],
+                    'canceled_reservations'  => [],
+                ];
+            }
+
+            if ($row['reservation_id']) {
+                if ($row['status'] === 'canceled') {
+                    $grouped[$carpoolId]['canceled_reservations'][] = $row;
+                } else {
+                    $grouped[$carpoolId]['confirmed_reservations'][] = $row;
+                }
+            }
+        }
+
+        return array_values($grouped);
+    }
 }

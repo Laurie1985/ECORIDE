@@ -112,11 +112,11 @@
                     <div class="row">
                         <div class="col-md-8">
                             <p class="mb-2"><strong>Devenez conducteur et participez activement à la mobilité durable :</strong></p>
-                            <ul class="list-unstyled">
-                                <li><p class="mb-0">✓ Rentabilisez vos déplacements quotidiens</p></li>
-                                <li><p class="mb-0">✓ Gagnez des crédits pour vos futurs trajets</p></li>
-                                <li><p class="mb-0">✓ Rencontrez des voyageurs partageant vos valeurs</p></li>
-                                <li><p class="mb-0">✓ Contribuez à réduire l'empreinte carbone</p></li>
+                            <ul class="list">
+                                <li><p class="mb-0">Rentabilisez vos déplacements quotidiens</p></li>
+                                <li><p class="mb-0">Gagnez des crédits pour vos futurs trajets</p></li>
+                                <li><p class="mb-0">Rencontrez des voyageurs partageant vos valeurs</p></li>
+                                <li><p class="mb-0">Contribuez à réduire l'empreinte carbone</p></li>
                             </ul>
                         </div>
                         <div class="col-md-4 text-center">
