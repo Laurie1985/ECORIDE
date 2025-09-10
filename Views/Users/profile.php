@@ -109,12 +109,6 @@
                             </div>
                         </div>
 
-                        <?php if (($_SESSION['user_type'] ?? 'passenger') === 'passenger'): ?>
-                        <div class="alert alert-info">
-                            <small><strong>Devenir conducteur :</strong> Ajoutez un véhicule pour proposer vos trajets et gagner des crédits !</small>
-                        </div>
-                        <?php endif; ?>
-
                         <button type="submit" class="btn">Mettre à jour mon statut</button>
                     </form>
                 </div>

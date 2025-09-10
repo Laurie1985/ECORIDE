@@ -1,0 +1,56 @@
+body {
+    background-color: var(--vert);
+}
+
+.dash-title {
+    text-align: center;
+}
+
+.hero {
+    background-image: url('/assets/images/heroDashboard.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 40vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.card {
+    background-color: var(--gris);
+    border: none;
+}
+
+.card-header {
+    background-color: var(--bleu);
+}
+
+.form-label {
+    color: var(--vert-foret);
+}
+
+small {
+    color: var(--vert-foret);
+}
+
+.badge {
+    background-color: var(--vert-foret);
+    color: var(--gris);
+}
+
+.alert {
+    background-color: var(--gris);
+}
+
+
+
+@media (max-width: 768px) {
+    .hero {
+        height: 15vh;
+    }
+}
