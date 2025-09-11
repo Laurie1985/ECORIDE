@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use App\Models\Carpool;
 use App\Models\Reservation;
+use App\Models\User;
 use App\Models\Vehicle;
 
 class CarpoolController extends BaseController
@@ -61,7 +62,7 @@ class CarpoolController extends BaseController
         $this->render('carpools/search', [
             'title'   => 'Ecoride - Rechercher un covoiturage',
             'cssFile' => 'carpools',
-            'jsFile'  => 'carpools-search', // Fichier JS
+            'jsFile'  => 'carpools-search',
         ]);
     }
 
@@ -80,6 +81,7 @@ class CarpoolController extends BaseController
         $this->render('carpools/details', [
             'title'      => 'Ecoride - Détails du covoiturage ',
             'cssFile'    => 'carpool-details',
+            'jsFile'     => 'carpool-details',
             'carpool'    => $carpool,
             'csrf_token' => $this->generateCsrfToken(),
         ]);
@@ -90,6 +92,7 @@ class CarpoolController extends BaseController
      */
     public function bookCarpool(int $carpoolId)
     {
+
         $this->requireAuth();
 
         if (! $this->validateCsrfToken()) {
@@ -116,27 +119,60 @@ class CarpoolController extends BaseController
         $totalPrice = $carpool['price_per_seat'] * $seatsBooked;
 
         // Double confirmation requise
+
+        // Vérifier les crédits avant la confirmation
         if (! $confirmed) {
-            // Première demande - demander confirmation
-            echo json_encode([
-                'success'            => false,
-                'needs_confirmation' => true,
-                'message'            => "Confirmez-vous vouloir réserver {$seatsBooked} place(s) pour {$totalPrice} crédits ?",
-                'total_price' => $totalPrice,
-            ]);
-            return;
+            $user = User::find($userId);
+            if (! $user || $user['credits'] < $totalPrice) {
+                $_SESSION['error'] = "Crédits insuffisants. Vous avez {$user['credits']} crédits mais il en faut {$totalPrice}.";
+                $this->redirect("/carpools/{$carpoolId}");
+            }
+
+            // Stocker les données en session pour la confirmation
+            $_SESSION['booking_data'] = [
+                'carpool_id'   => $carpoolId,
+                'seats_booked' => $seatsBooked,
+                'total_price'  => $totalPrice,
+            ];
+
+            // Rediriger vers une page de confirmation
+            $this->redirect("/carpools/{$carpoolId}/confirm");
         }
 
         // Créer la réservation après double confirmation
         $result = Reservation::createWithPayment($carpoolId, $userId, $seatsBooked, $totalPrice);
 
         if ($result['success']) {
+            unset($_SESSION['booking_data']);
             $_SESSION['success'] = $result['message'];
             $this->redirect('/reservations');
         } else {
             $_SESSION['error'] = $result['message'];
             $this->redirect("/carpools/{$carpoolId}");
         }
+    }
+
+    /**
+     * Afficher la page de confirmation de réservation
+     */
+    public function showConfirmation(int $carpoolId)
+    {
+        $this->requireAuth();
+
+        if (! isset($_SESSION['booking_data'])) {
+            $_SESSION['error'] = 'Aucune réservation en cours';
+            $this->redirect("/carpools/{$carpoolId}");
+        }
+
+        $bookingData = $_SESSION['booking_data'];
+        $carpool     = Carpool::getWithDetails($carpoolId);
+
+        $this->render('carpools/confirm', [
+            'title'        => 'Confirmer la réservation',
+            'carpool'      => $carpool,
+            'booking_data' => $bookingData,
+            'csrf_token'   => $this->generateCsrfToken(),
+        ]);
     }
 
     /**

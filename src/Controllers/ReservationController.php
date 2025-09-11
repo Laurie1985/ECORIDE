@@ -203,7 +203,7 @@ class ReservationController extends BaseController
         $totalReservations = count($reservations);
 
         $this->render('reservations/financial_summary', [
-            'title'             => 'Récapitulatif financier - EcoRide',
+            'title'             => 'Ecoride - Récapitulatif financier',
             'cssFile'           => 'reservations',
             'user'              => $user,
             'transactions'      => $transactions,

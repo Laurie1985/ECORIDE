@@ -32,6 +32,9 @@ class Review
                 'created_at'       => date('Y-m-d H:i:s'),
                 'approved_by'      => null,
                 'approved_at'      => null,
+                'rejected_by'      => null,
+                'rejected_at'      => null,
+                'rejection_reason' => null,
             ]);
             return $result->getInsertedCount() === 1;
         } catch (\Exception $e) {
@@ -59,7 +62,7 @@ class Review
     }
 
     /**
-     * US 12: Approuver un avis (employé)
+     * Approuver un avis (employé)
      */
     public function approveReview(string $reviewId, int $employeeId): bool
     {

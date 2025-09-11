@@ -37,13 +37,14 @@ class Router
 
         // Pages principales
         $r->addRoute('GET', '/carpools', [\App\Controllers\CarpoolController::class, 'index']);
-        $r->addRoute('GET', '/carpools/{id:\d+}', [\App\Controllers\CarpoolController::class, 'show']);
+        $r->addRoute('GET', '/carpools/{carpoolId:\d+}', [\App\Controllers\CarpoolController::class, 'show']);
 
         // API pour JavaScript (recherche et filtres)
         $r->addRoute('GET', '/api/carpools/search', [\App\Controllers\CarpoolController::class, 'apiSearch']);
 
         // Réservation
-        $r->addRoute('POST', '/carpools/{id:\d+}/book', [\App\Controllers\CarpoolController::class, 'bookCarpool']);
+        $r->addRoute('POST', '/carpools/{carpoolId:\d+}/book', [\App\Controllers\CarpoolController::class, 'bookCarpool']);
+        $r->addRoute('GET', '/carpools/{carpoolId:\d+}/confirm', [\App\Controllers\CarpoolController::class, 'showConfirmation']);
 
         // ==================== ESPACE UTILISATEUR ====================
 

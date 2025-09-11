@@ -7,26 +7,28 @@
 <!-- END HERO-->
 
 <!-- START RECHERCHE-->
-<section class="search-form" >
-    <div class="form-container">
-        <h3>Où voulez-vous aller ?</h3>
-        <div class="form-carpool d-flex justify-content-center align-items-center flex-column">
-            <form action="/carpools" method="GET" class="form needs-validation" novalidate>
-                <div class="inputs-group">
-                    <div>
-                        <input type="text" name="departure" placeholder="Départ" class="form-control" id="departure" required>
+<section class="container mb-4">
+    <div class="search-form w-100" >
+        <div class="form-container">
+            <h3>Où voulez-vous aller ?</h3>
+            <div class="form-carpool d-flex justify-content-center align-items-center flex-column">
+                <form action="/carpools" method="GET" class="form needs-validation" novalidate>
+                    <div class="inputs-group">
+                        <div>
+                            <input type="text" name="departure" placeholder="Départ" class="form-control" id="departure" required>
+                        </div>
+                        <div>
+                            <input type="text" name="arrival" placeholder="Arrivée" class="form-control" id="arrival" required>
+                        </div>
+                        <div>
+                            <input type="date" name="date" class="form-control" min="<?php echo date('Y-m-d') ?>" id="date" required>
+                        </div>
                     </div>
                     <div>
-                        <input type="text" name="arrival" placeholder="Arrivée" class="form-control" id="arrival" required>
+                        <button type="submit" class="btn">Rechercher</button>
                     </div>
-                    <div>
-                        <input type="date" name="date" class="form-control" min="<?php echo date('Y-m-d') ?>" id="date" required>
-                    </div>
-                </div>
-                <div>
-                    <button type="submit" class="btn">Rechercher</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </section>

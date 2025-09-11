@@ -18,12 +18,18 @@ class Config
         // Si aucun chemin fourni, utilise le dossier racine du projet
         if ($path === null) {
             // Depuis src/Config/, on remonte de 2 niveaux pour atteindre la racine
-            $path = dirname(__DIR__, 2) . '/';
+            $path = dirname(__DIR__, 2);
         }
         //On vérifie si le fichier .env existe avant de tenter de le charger
-        if (file_exists($path . '.env')) {
-            $dotenv = Dotenv::createImmutable($path);
-            $dotenv->load();
+        $envFile = $path . '/.env';
+
+        if (file_exists($envFile)) {
+            try {
+                $dotenv = Dotenv::createImmutable($path);
+                $dotenv->load();
+            } catch (\Exception $e) {
+                error_log("Erreur chargement .env" . $e->getMessage());
+            }
         }
     }
     /**
