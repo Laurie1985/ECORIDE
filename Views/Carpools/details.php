@@ -40,13 +40,12 @@
                                 <?php if ($carpool['energy_type'] === 'electric'): ?>
                                 <span class="ms-2">
                                     <img src="/assets/images/pictoEcologie.png" alt="Écologique" class="picto me-1">
-                                    Trajet écologique
                                 </span>
                                 <?php endif; ?>
                             </h2>
                         </div>
                         <div class="col-md-4 text-end">
-                            <h3 class="mb-0"><?php echo $carpool['price_per_seat'] ?> crédits</h3>
+                            <h3 class="mb-0 mt-0"><?php echo $carpool['price_per_seat'] ?> crédits</h3>
                         </div>
                     </div>
                 </div>
