@@ -459,7 +459,6 @@ INSERT INTO
         `arrival_time`,
         `seats_available`,
         `price_per_seat`,
-        `is_ecological`,
         `status`
     )
 VALUES (
@@ -471,7 +470,6 @@ VALUES (
         '2025-09-15 12:30:00',
         4,
         25.50,
-        TRUE,
         'scheduled'
     ),
     (
@@ -483,7 +481,6 @@ VALUES (
         '2025-09-16 16:30:00',
         2,
         18.00,
-        TRUE,
         'scheduled'
     ),
     (
@@ -495,7 +492,6 @@ VALUES (
         '2025-09-17 10:00:00',
         3,
         22.00,
-        TRUE,
         'scheduled'
     ),
     (
@@ -507,7 +503,6 @@ VALUES (
         '2025-09-18 17:30:00',
         3,
         15.00,
-        TRUE,
         'scheduled'
     );
 
