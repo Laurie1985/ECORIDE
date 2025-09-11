@@ -1,314 +1,665 @@
-//Gestion des filtres côté client
+// Gestion améliorée de la recherche de covoiturages
 class CarpoolSearch {
     constructor() {
         this.allCarpools = [];
         this.filteredCarpools = [];
+        this.isInitialized = false;
         this.init();
     }
 
+    /**
+     * Initialisation avec vérification que le DOM est prêt
+     */
     init() {
-        this.bindEvents();
-        this.loadInitialResults();
-    }
-
-    bindEvents() {
-        // Recherche principale
-        const searchForm = document.getElementById('search-form');
-        if (searchForm) {
-            searchForm.addEventListener('submit', (e) => this.handleSearch(e));
-        }
-
-        // Filtres avancés
-        const filterInputs = document.querySelectorAll('.filter-input');
-        filterInputs.forEach(input => {
-            input.addEventListener('input', () => this.applyFilters());
-            input.addEventListener('change', () => this.applyFilters());
-        });
-
-        // Reset des filtres
-        const resetBtn = document.getElementById('reset-filters');
-        if (resetBtn) {
-            resetBtn.addEventListener('click', () => this.resetFilters());
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.setup());
+        } else {
+            this.setup();
         }
     }
 
-    async handleSearch(e) {
-        e.preventDefault();
-
-        const departure = document.getElementById('departure').value;
-        const arrival = document.getElementById('arrival').value;
-        const date = document.getElementById('date').value;
-
-        if (!departure || !arrival || !date) {
-            this.showError('Veuillez remplir tous les champs de recherche');
+    /**
+     * Configuration des événements et vérification des éléments
+     */
+    setup() {
+        // Vérifier que nous sommes sur la bonne page
+        if (!document.getElementById('searchForm')) {
+            console.warn('CarpoolSearch: Page de recherche non détectée');
             return;
         }
 
-        this.showLoading(true);
+        this.bindEvents();
+        this.loadInitialResults();
+        this.isInitialized = true;
+        console.log('CarpoolSearch: Initialisé avec succès');
+    }
 
-        try {
-            const response = await fetch(`/carpools/api/search?departure=${encodeURIComponent(departure)}&arrival=${encodeURIComponent(arrival)}&date=${encodeURIComponent(date)}`);
-            const data = await response.json();
+    /**
+     * Liaison des événements avec vérification d'existence des éléments
+     */
+    bindEvents() {
+        // Recherche principale - utilise l'ID de ta vue
+        const searchForm = document.getElementById('searchForm');
+        if (searchForm) {
+            searchForm.addEventListener('submit', (e) => this.handleSearch(e));
+        } else {
+            console.error('Formulaire de recherche non trouvé');
+        }
 
-            if (data.success) {
-                this.allCarpools = data.carpools;
-                this.filteredCarpools = [...this.allCarpools];
-                this.displayResults();
-                this.showFiltersPanel();
+        // Filtres avancés - adaptation aux IDs de ta vue
+        this.bindFilterEvents();
 
-                // Suggestion de date alternative
-                if (data.carpools.length === 0 && data.suggested_date) {
-                    this.showDateSuggestion(data.suggested_date, data.suggestion_message);
-                }
-            } else {
-                this.showError(data.error || 'Erreur lors de la recherche');
+        // Boutons d'action
+        this.bindActionButtons();
+    }
+
+    /**
+     * Liaison spécifique des filtres avec gestion d'erreur
+     */
+    bindFilterEvents() {
+        const filterSelectors = [
+            'filterEcological',
+            'filterMaxPrice',
+            'filterMaxDuration',
+            'filterMinRating'
+        ];
+
+        filterSelectors.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.addEventListener('input', () => this.debounceFilter());
+                element.addEventListener('change', () => this.applyFilters());
             }
-        } catch (error) {
-            console.error('Erreur de recherche:', error);
-            this.showError('Erreur de connexion au serveur');
-        } finally {
-            this.showLoading(false);
+        });
+    }
+
+    /**
+     * Liaison des boutons d'action
+     */
+    bindActionButtons() {
+        const applyBtn = document.getElementById('applyFilters');
+        if (applyBtn) {
+            applyBtn.addEventListener('click', () => this.applyFilters());
+        }
+
+        const clearBtn = document.getElementById('clearFilters');
+        if (clearBtn) {
+            clearBtn.addEventListener('click', () => this.resetFilters());
+        }
+
+        const toggleBtn = document.getElementById('toggleFilters');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => this.toggleFiltersPanel());
         }
     }
 
-    applyFilters() {
-        // Récupération des valeurs des filtres
-        const filters = {
-            ecological: document.getElementById('filter-ecological')?.checked,
-            maxPrice: parseFloat(document.getElementById('filter-max-price')?.value) || null,
-            minRating: parseFloat(document.getElementById('filter-min-rating')?.value) || null,
-            maxDuration: parseInt(document.getElementById('filter-max-duration')?.value) || null,
-            smokingAllowed: document.getElementById('filter-smoking')?.checked,
-            animalsAllowed: document.getElementById('filter-animals')?.checked
-        };
+    /**
+     * Debounce pour éviter trop d'appels lors de la saisie
+     */
+    debounceFilter() {
+        clearTimeout(this.filterTimeout);
+        this.filterTimeout = setTimeout(() => this.applyFilters(), 300);
+    }
 
-        this.filteredCarpools = this.allCarpools.filter(carpool => {
-            // Filtre écologique
-            if (filters.ecological && !carpool.is_ecological) {
-                return false;
-            }
+    /**
+     * Gestion améliorée de la recherche avec validation
+     */
+    async handleSearch(e) {
+        e.preventDefault();
 
-            // Filtre prix maximum
-            if (filters.maxPrice !== null && carpool.price_per_seat > filters.maxPrice) {
-                return false;
-            }
+        const formData = this.getSearchFormData();
 
-            // Filtre note conducteur minimum
-            if (filters.minRating !== null && carpool.driver_rating < filters.minRating) {
-                return false;
-            }
+        if (!this.validateSearchData(formData)) {
+            return;
+        }
 
-            // Filtre durée maximum
-            if (filters.maxDuration !== null && carpool.duration_hours > filters.maxDuration) {
-                return false;
-            }
+        this.showSection('loading');
 
-            // Filtres préférences
-            if (filters.smokingAllowed && !carpool.smoking_allowed) {
-                return false;
-            }
+        try {
+            const data = await this.performSearchRequest(formData);
+            this.handleSearchResponse(data);
+        } catch (error) {
+            this.handleSearchError(error);
+        }
+    }
 
-            if (filters.animalsAllowed && !carpool.animals_allowed) {
-                return false;
-            }
+    /**
+     * Récupération sécurisée des données du formulaire
+     */
+    getSearchFormData() {
+        const departure = this.getElementValue('departure');
+        const arrival = this.getElementValue('arrival');
+        const date = this.getElementValue('date');
 
-            return true;
+        return { departure, arrival, date };
+    }
+
+    /**
+     * Utilitaire pour récupérer la valeur d'un élément
+     */
+    getElementValue(id) {
+        const element = document.getElementById(id);
+        return element ? element.value.trim() : '';
+    }
+
+    /**
+     * Validation des données de recherche
+     */
+    validateSearchData({ departure, arrival, date }) {
+        if (!departure || !arrival || !date) {
+            this.showUserError('Veuillez remplir tous les champs de recherche');
+            return false;
+        }
+
+        // Validation de la date (ne peut pas être dans le passé)
+        const selectedDate = new Date(date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (selectedDate < today) {
+            this.showUserError('La date de départ ne peut pas être dans le passé');
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Requête de recherche avec gestion d'erreur réseau
+     */
+    async performSearchRequest({ departure, arrival, date }) {
+        const params = new URLSearchParams({
+            departure,
+            arrival,
+            date
         });
+
+        const response = await fetch(`/api/carpools/search?${params}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erreur serveur: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+            throw new Error(data.error || 'Erreur lors de la recherche');
+        }
+
+        return data;
+    }
+
+    /**
+     * Traitement de la réponse de recherche
+     */
+    handleSearchResponse(data) {
+        this.allCarpools = Array.isArray(data.carpools) ? data.carpools : [];
+        this.filteredCarpools = [...this.allCarpools];
+
+        if (this.allCarpools.length === 0) {
+            this.handleNoResults(data);
+        } else {
+            this.displayResults();
+            this.showSection('results');
+            this.updateResultsCount();
+        }
+    }
+
+    /**
+     * Gestion des cas sans résultats
+     */
+    handleNoResults(data) {
+        this.showSection('noResults');
+
+        if (data.suggested_date) {
+            this.showDateSuggestion(data.suggested_date, data.suggestion_message);
+        }
+    }
+
+    /**
+     * Gestion d'erreur avec distinction des types
+     */
+    handleSearchError(error) {
+        console.error('Erreur de recherche:', error);
+
+        if (error.name === 'TypeError' && error.message.includes('fetch')) {
+            this.showUserError('Problème de connexion. Vérifiez votre connexion Internet.');
+        } else if (error.message.includes('serveur')) {
+            this.showUserError('Le serveur rencontre des difficultés. Réessayez dans quelques instants.');
+        } else {
+            this.showUserError(error.message || 'Erreur inattendue lors de la recherche');
+        }
+
+        this.showSection('noResults');
+    }
+
+    /**
+     * Application des filtres avec validation
+     */
+    applyFilters() {
+        if (!this.allCarpools.length) {
+            return;
+        }
+
+        const filters = this.getFilterValues();
+
+        this.filteredCarpools = this.allCarpools.filter(carpool =>
+            this.passesAllFilters(carpool, filters)
+        );
 
         this.displayResults();
         this.updateResultsCount();
     }
 
-    displayResults() {
-        const container = document.getElementById('carpools-results');
-        if (!container) return;
+    /**
+     * Récupération sécurisée des valeurs de filtres
+     */
+    getFilterValues() {
+        return {
+            ecological: this.getCheckedValue('filterEcological'),
+            maxPrice: this.getNumericValue('filterMaxPrice'),
+            minRating: this.getNumericValue('filterMinRating'),
+            maxDuration: this.getNumericValue('filterMaxDuration')
+        };
+    }
 
-        if (this.filteredCarpools.length === 0) {
-            container.innerHTML = `
-                <div class="no-results">
-                    <i class="fas fa-search"></i>
-                    <h3>Aucun covoiturage trouvé</h3>
-                    <p>Essayez de modifier vos critères de recherche ou vos filtres</p>
-                </div>
-            `;
+    getCheckedValue(id) {
+        const element = document.getElementById(id);
+        return element && element.value === '1';
+    }
+
+    getNumericValue(id) {
+        const element = document.getElementById(id);
+        if (!element || !element.value) return null;
+        const value = parseFloat(element.value);
+        return isNaN(value) ? null : value;
+    }
+
+    /**
+     * Test si un covoiturage passe tous les filtres
+     */
+    passesAllFilters(carpool, filters) {
+        // Filtre écologique
+        if (filters.ecological && !carpool.is_ecological) {
+            return false;
+        }
+
+        // Filtre prix maximum
+        if (filters.maxPrice !== null && carpool.price_per_seat > filters.maxPrice) {
+            return false;
+        }
+
+        // Filtre note conducteur minimum
+        if (filters.minRating !== null && carpool.driver_rating < filters.minRating) {
+            return false;
+        }
+
+        // Filtre durée maximum
+        if (filters.maxDuration !== null && carpool.duration_hours > filters.maxDuration) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Affichage des résultats avec template sécurisé
+     */
+    displayResults() {
+        const container = document.getElementById('carpoolsList');
+        if (!container) {
+            console.error('Container de résultats non trouvé');
             return;
         }
 
-        const carpoolsHTML = this.filteredCarpools.map(carpool => `
-            <div class="carpool-card" data-id="${carpool.carpool_id}">
-                <div class="carpool-header">
-                    <div class="route">
-                        <i class="fas fa-map-marker-alt text-success"></i>
-                        <span>${carpool.departure}</span>
-                        <i class="fas fa-arrow-right mx-2"></i>
-                        <i class="fas fa-map-marker-alt text-danger"></i>
-                        <span>${carpool.arrival}</span>
-                    </div>
-                    ${carpool.is_ecological ? '<span class="badge badge-success ecological-badge"><i class="fas fa-leaf"></i> Écologique</span>' : ''}
-                </div>
-                
-                <div class="carpool-info">
-                    <div class="time-info">
-                        <i class="fas fa-clock"></i>
-                        Départ: ${carpool.departure_time} • Arrivée: ${carpool.arrival_time}
-                        <small class="text-muted">(${carpool.duration_hours}h)</small>
-                    </div>
-                    
-                    <div class="driver-info">
-                        <div class="driver-avatar">
-                            ${carpool.driver_photo ?
-                `<img src="/uploads/profiles/${carpool.driver_photo}" alt="Photo conducteur">` :
-                '<i class="fas fa-user"></i>'
-            }
-                        </div>
-                        <div>
-                            <strong>${carpool.driver_username}</strong>
-                            <div class="rating">
-                                ${this.generateStars(carpool.driver_rating)}
-                                <span>(${carpool.driver_rating}/5)</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="vehicle-info">
-                        <i class="fas fa-car"></i>
-                        ${carpool.name_brand} ${carpool.vehicle_model} (${carpool.vehicle_color})
-                        <span class="energy-badge energy-${carpool.energy_type}">${this.getEnergyLabel(carpool.energy_type)}</span>
-                    </div>
-                </div>
-                
-                <div class="carpool-footer">
-                    <div class="seats-price">
-                        <span class="seats"><i class="fas fa-users"></i> ${carpool.seats_available} places</span>
-                        <span class="price">${carpool.price_per_seat}€ /personne</span>
-                    </div>
-                    
-                    <a href="/carpools/${carpool.carpool_id}" class="btn btn-primary">
-                        <i class="fas fa-info-circle"></i> Détails
-                    </a>
-                </div>
-            </div>
-        `).join('');
+        if (this.filteredCarpools.length === 0) {
+            container.innerHTML = this.getNoResultsTemplate();
+            return;
+        }
+
+        const carpoolsHTML = this.filteredCarpools
+            .map(carpool => this.createCarpoolCard(carpool))
+            .join('');
 
         container.innerHTML = carpoolsHTML;
     }
 
-    generateStars(rating) {
+    /**
+     * Template pour aucun résultat
+     */
+    getNoResultsTemplate() {
+        return `
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3>Aucun covoiturage trouvé</h3>
+                    <p class="text-muted">Essayez de modifier vos critères de recherche ou vos filtres</p>
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Création d'une carte covoiturage avec échappement HTML
+     */
+    createCarpoolCard(carpool) {
+        const departure = this.escapeHtml(carpool.departure);
+        const arrival = this.escapeHtml(carpool.arrival);
+        const driverName = this.escapeHtml(carpool.driver_username);
+        const vehicleInfo = this.escapeHtml(`${carpool.name_brand} ${carpool.vehicle_model}`);
+
+        const ecoBadge = carpool.is_ecological ?
+            '<span class="badge bg-success ms-2">Écologique</span>' : '';
+
+        const starsHtml = this.generateStarsHtml(carpool.driver_rating);
+        const preferenceTags = this.createPreferenceTags(carpool);
+
+        return `
+            <div class="card mb-3 col-6 carpool-card" data-carpool-id="${carpool.carpool_id}">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-start">
+                                <div class="me-3">
+                                    <img src="/assets/images/default-avatar.png" alt="Photo" 
+                                         class="rounded-circle" width="50" height="50">
+                                </div>
+                                <div>
+                                    <h5 class="mb-1">
+                                        <span class="route">${departure} → ${arrival}</span>
+                                        ${ecoBadge}
+                                    </h5>
+                                    <p class="mb-1">
+                                        <strong>Conducteur :</strong> ${driverName} 
+                                        <span class="text-warning">
+                                            ${starsHtml} (${carpool.driver_rating}/5)
+                                        </span>
+                                    </p>
+                                    <p class="mb-0 text-muted">
+                                        <small>${vehicleInfo}</small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <p class="mb-1">
+                                    <strong>${this.formatTime(carpool.departure_time)}</strong><br>
+                                    <small class="text-muted">→ ${this.formatTime(carpool.arrival_time)}</small>
+                                </p>
+                                <p class="mb-0">
+                                    <small class="text-muted">Durée: ${carpool.duration_hours}h</small>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="text-center">
+                                <h4 class="text-primary mb-1">${carpool.price_per_seat}€</h4>
+                                <p class="mb-2">
+                                    <small>${carpool.seats_available} place(s) disponible(s)</small>
+                                </p>
+                                <div class="d-grid gap-2">
+                                    <button type="button" class="btn btn-sm" 
+                                            onclick="viewCarpoolDetails(${carpool.carpool_id})">
+                                        Voir détails
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-12">
+                            <div class="preferences-tags">
+                                ${preferenceTags}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Échappement HTML pour éviter les injections XSS
+     */
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    /**
+     * Génération des étoiles pour la note
+     */
+    generateStarsHtml(rating) {
         const fullStars = Math.floor(rating);
-        const hasHalfStar = rating % 1 !== 0;
-        let stars = '';
+        const hasHalfStar = rating % 1 >= 0.5;
+        let starsHtml = '';
 
         for (let i = 0; i < fullStars; i++) {
-            stars += '<i class="fas fa-star text-warning"></i>';
+            starsHtml += '★';
         }
 
         if (hasHalfStar) {
-            stars += '<i class="fas fa-star-half-alt text-warning"></i>';
+            starsHtml += '☆';
         }
 
-        const emptyStars = 5 - Math.ceil(rating);
-        for (let i = 0; i < emptyStars; i++) {
-            stars += '<i class="far fa-star text-muted"></i>';
+        return starsHtml;
+    }
+
+    /**
+     * Création des tags de préférences
+     */
+    createPreferenceTags(carpool) {
+        const tags = [];
+
+        if (carpool.smoking_allowed) {
+            tags.push('<span class="badge bg-secondary me-1">Fumeurs acceptés</span>');
         }
 
-        return stars;
+        if (carpool.animals_allowed) {
+            tags.push('<span class="badge bg-secondary me-1">Animaux acceptés</span>');
+        }
+
+        return tags.join('');
     }
 
-    getEnergyLabel(energyType) {
-        const labels = {
-            'electric': 'Électrique',
-            'hybrid': 'Hybride',
-            'diesel': 'Diesel',
-            'essence': 'Essence'
-        };
-        return labels[energyType] || energyType;
-    }
-
+    /**
+     * Mise à jour du compteur de résultats
+     */
     updateResultsCount() {
-        const countElement = document.getElementById('results-count');
-        if (countElement) {
-            const total = this.allCarpools.length;
-            const filtered = this.filteredCarpools.length;
-            countElement.textContent = `${filtered} résultat${filtered > 1 ? 's' : ''} sur ${total}`;
+        const titleElement = document.getElementById('resultsTitle');
+        if (titleElement) {
+            const count = this.filteredCarpools.length;
+            titleElement.textContent = `${count} covoiturage(s) trouvé(s)`;
         }
     }
 
-    showFiltersPanel() {
-        const filtersPanel = document.getElementById('filters-panel');
-        if (filtersPanel) {
-            filtersPanel.style.display = 'block';
-        }
-    }
+    /**
+     * Gestion de l'affichage des sections
+     */
+    showSection(section) {
+        const sections = {
+            'initial': 'initialMessage',
+            'loading': 'loadingMessage',
+            'noResults': 'noResultsMessage',
+            'results': 'resultsSection'
+        };
 
-    resetFilters() {
-        // Reset tous les filtres
-        document.querySelectorAll('.filter-input').forEach(input => {
-            if (input.type === 'checkbox') {
-                input.checked = false;
-            } else {
-                input.value = '';
+        // Masquer toutes les sections
+        Object.values(sections).forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.style.display = 'none';
             }
         });
 
-        // Réafficher tous les résultats
-        this.filteredCarpools = [...this.allCarpools];
-        this.displayResults();
-        this.updateResultsCount();
+        // Afficher la section demandée
+        const targetElement = document.getElementById(sections[section]);
+        if (targetElement) {
+            targetElement.style.display = 'block';
+        }
     }
 
+    /**
+     * Affichage d'erreur utilisateur
+     */
+    showUserError(message) {
+        // Utiliser le système d'alerte de Bootstrap si disponible
+        if (typeof bootstrap !== 'undefined') {
+            // Créer une alerte Bootstrap temporaire
+            this.showBootstrapAlert(message, 'danger');
+        } else {
+            // Fallback avec alert() standard
+            alert(message);
+        }
+    }
+
+    /**
+     * Affichage d'alerte Bootstrap
+     */
+    showBootstrapAlert(message, type = 'info') {
+        const alertHtml = `
+            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                ${this.escapeHtml(message)}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+
+        const container = document.querySelector('.container');
+        if (container) {
+            container.insertAdjacentHTML('afterbegin', alertHtml);
+        }
+    }
+
+    /**
+     * Toggle du panneau de filtres
+     */
+    toggleFiltersPanel() {
+        const filtersSection = document.getElementById('filtersSection');
+        const toggleBtn = document.getElementById('toggleFilters');
+
+        if (filtersSection && toggleBtn) {
+            const isVisible = filtersSection.style.display !== 'none';
+            filtersSection.style.display = isVisible ? 'none' : 'block';
+            toggleBtn.textContent = isVisible ? 'Filtres avancés' : 'Masquer les filtres';
+        }
+    }
+
+    /**
+     * Reset des filtres avec nettoyage complet
+     */
+    resetFilters() {
+        const filterIds = ['filterEcological', 'filterMaxPrice', 'filterMaxDuration', 'filterMinRating'];
+
+        filterIds.forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.value = '';
+            }
+        });
+
+        if (this.allCarpools.length > 0) {
+            this.filteredCarpools = [...this.allCarpools];
+            this.displayResults();
+            this.updateResultsCount();
+        }
+    }
+
+    /**
+     * Affichage de suggestion de date
+     */
     showDateSuggestion(suggestedDate, message) {
-        const suggestionDiv = document.getElementById('date-suggestion');
-        if (suggestionDiv) {
-            suggestionDiv.innerHTML = `
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle"></i>
-                    ${message}
-                    <button class="btn btn-sm btn-outline-primary ml-2" onclick="document.getElementById('date').value='${suggestedDate}'; this.closest('.alert').style.display='none';">
-                        Essayer cette date
-                    </button>
-                </div>
-            `;
-            suggestionDiv.style.display = 'block';
+        const suggestionSection = document.getElementById('suggestionSection');
+        const suggestionText = document.getElementById('suggestionText');
+        const acceptBtn = document.getElementById('acceptSuggestion');
+
+        if (suggestionSection && suggestionText) {
+            suggestionText.textContent = message;
+            suggestionSection.style.display = 'block';
+
+            if (acceptBtn) {
+                // Nettoyer les anciens listeners
+                const newBtn = acceptBtn.cloneNode(true);
+                acceptBtn.parentNode.replaceChild(newBtn, acceptBtn);
+
+                // Ajouter le nouveau listener
+                newBtn.addEventListener('click', () => {
+                    document.getElementById('date').value = suggestedDate;
+                    this.handleSearch(new Event('submit'));
+                });
+            }
         }
     }
 
-    showLoading(show) {
-        const spinner = document.getElementById('loading-spinner');
-        if (spinner) {
-            spinner.style.display = show ? 'block' : 'none';
+    /**
+     * Formatage de l'heure
+     */
+    formatTime(datetime) {
+        try {
+            const date = new Date(datetime);
+            return date.toLocaleTimeString('fr-FR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        } catch (error) {
+            console.warn('Erreur formatage date:', error);
+            return datetime;
         }
     }
 
-    showError(message) {
-        const errorDiv = document.getElementById('error-message');
-        if (errorDiv) {
-            errorDiv.innerHTML = `
-                <div class="alert alert-danger">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    ${message}
-                </div>
-            `;
-            errorDiv.style.display = 'block';
-        }
-    }
-
+    /**
+     * Chargement initial des résultats depuis l'URL
+     */
     loadInitialResults() {
-        // Si on arrive sur la page avec des paramètres d'URL, charger automatiquement
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('departure') && urlParams.get('arrival') && urlParams.get('date')) {
-            document.getElementById('departure').value = urlParams.get('departure');
-            document.getElementById('arrival').value = urlParams.get('arrival');
-            document.getElementById('date').value = urlParams.get('date');
+        const departure = urlParams.get('departure');
+        const arrival = urlParams.get('arrival');
+        const date = urlParams.get('date');
 
-            // Déclencher la recherche automatiquement
-            setTimeout(() => {
-                document.getElementById('search-form').dispatchEvent(new Event('submit'));
-            }, 100);
+        if (departure && arrival && date) {
+            // Pré-remplir le formulaire
+            this.setElementValue('departure', departure);
+            this.setElementValue('arrival', arrival);
+            this.setElementValue('date', date);
+
+            // Lancer la recherche directement plutôt qu'avec setTimeout
+            this.handleSearch(new Event('submit'));
+        }
+    }
+
+    /**
+     * Utilitaire pour définir la valeur d'un élément
+     */
+    setElementValue(id, value) {
+        const element = document.getElementById(id);
+        if (element) {
+            element.value = value;
         }
     }
 }
 
-// Initialisation quand le DOM est chargé
+// Fonction globale pour les détails (conservée pour compatibilité)
+function viewCarpoolDetails(carpoolId) {
+    if (carpoolId && Number.isInteger(carpoolId)) {
+        window.location.href = `/carpools/${carpoolId}`;
+    } else {
+        console.error('ID de covoiturage invalide:', carpoolId);
+    }
+}
+
+// Initialisation sécurisée
+let carpoolSearchInstance = null;
+
 document.addEventListener('DOMContentLoaded', () => {
-    new CarpoolSearch();
+    try {
+        carpoolSearchInstance = new CarpoolSearch();
+    } catch (error) {
+        console.error('Erreur initialisation CarpoolSearch:', error);
+    }
 });
