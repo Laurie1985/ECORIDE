@@ -189,7 +189,7 @@ class CarpoolController extends BaseController
         }
 
         $userId   = $_SESSION['user_id'];
-        $vehicles = Vehicle::getByUser($userId);
+        $vehicles = Vehicle::getByUserWithBrand($userId);
 
         if (empty($vehicles)) {
             $_SESSION['error'] = 'Vous devez d\'abord ajouter un véhicule';
@@ -284,6 +284,7 @@ class CarpoolController extends BaseController
         $this->render('carpools/my_carpools', [
             'title'      => 'Ecoride - Mes covoiturages',
             'cssFile'    => 'carpools',
+            'jsFile'     => 'my-carpools',
             'carpools'   => $carpools,
             'csrf_token' => $this->generateCsrfToken(),
         ]);
