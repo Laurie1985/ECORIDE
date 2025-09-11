@@ -42,16 +42,6 @@ h1.hero-title {
     color: var(--gris);
 }
 
-@media (max-width: 768px) {
-    .hero {
-        height: 15vh;
-    }
-
-    h1.hero-title {
-        padding: 1rem;
-    }
-}
-
 .card-header {
     background-color: var(--bleu);
 }
@@ -63,4 +53,22 @@ h1.hero-title {
 
 .form-label {
     color: var(--vert-foret);
+}
+
+.picto {
+    width: 50px;
+}
+
+@media (max-width: 768px) {
+    .hero {
+        height: 15vh;
+    }
+
+    h1.hero-title {
+        padding: 1rem;
+    }
+
+    .picto {
+        width: 40px;
+    }
 }
