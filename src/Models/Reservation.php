@@ -37,7 +37,7 @@ class Reservation extends BaseModel
                 'passenger_id' => $passengerId,
                 'seats_booked' => $seatsBooked,
                 'amount_paid'  => $totalPrice,
-                'status'       => 'confirmed',
+                'status'       => 'awaiting_passenger_confirmation',
             ]);
 
             // Déduire les crédits du passager
@@ -65,7 +65,7 @@ class Reservation extends BaseModel
     }
 
     // le passager confirme que le trajet s'est bien passé
-    public static function confirmTripByPassenger(int $reservationId, int $passengerId, bool $tripWentWell, string $comment = ''): bool
+    public static function confirmTripByPassenger(int $reservationId, int $passengerId, bool $tripWentWell, string $comment = ''): array
     {
         try {
             $db = Database::getInstance();
@@ -74,12 +74,12 @@ class Reservation extends BaseModel
             $reservation = self::find($reservationId);
             if (! $reservation || $reservation['passenger_id'] != $passengerId) {
                 $db->rollBack();
-                return false;
+                return ['success' => false, 'message' => "Réservation introuvable ou vous n'êtes pas le passager."];
             }
 
             if ($reservation['status'] !== 'awaiting_passenger_confirmation') {
                 $db->rollBack();
-                return false;
+                return ['success' => false, 'message' => 'Statut de la réservation incorrect pour la confirmation.'];
             }
 
             if ($tripWentWell) {
@@ -115,12 +115,12 @@ class Reservation extends BaseModel
             }
 
             $db->commit();
-            return true;
+            return ['success' => true, 'message' => 'Confirmation effectuée.'];
 
         } catch (\Exception $e) {
             $db->rollBack();
             error_log("Erreur confirmation passager: " . $e->getMessage());
-            return false;
+            return ['success' => false, 'message' => 'Erreur lors de la confirmation du trajet.'];
         }
     }
 

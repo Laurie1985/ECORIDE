@@ -86,7 +86,7 @@ class Router
         $r->addRoute('POST', '/carpools/{id:\d+}/complete', [\App\Controllers\CarpoolController::class, 'completeTrip']);
 
         // Annulation
-        $r->addRoute('POST', '/carpools/{id:\d+}/cancel', [\App\Controllers\CarpoolController::class, 'cancelCarpool']);
+        $r->addRoute('POST', '/carpools/{carpoolId:\d+}/cancel', [\App\Controllers\CarpoolController::class, 'cancelCarpool']);
 
         // ==================== RÉSERVATIONS PASSAGER ====================
 

@@ -71,6 +71,8 @@ class CarpoolController extends BaseController
      */
     public function show(int $carpoolId)
     {
+        $this->requireAuth();
+
         $carpool = Carpool::getWithDetails($carpoolId);
 
         if (! $carpool) {

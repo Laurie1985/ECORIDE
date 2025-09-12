@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `reservation` (
         'completed',
         'awaiting_passenger_confirmation',
         'disputed'
-    ) DEFAULT 'confirmed',
+    ) NOT NULL,
     `amount_paid` INT NOT NULL,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `cancellation_date` TIMESTAMP NULL DEFAULT NULL,

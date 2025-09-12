@@ -131,8 +131,7 @@
 
                     <!-- Bouton pour voir les avis -->
                     <div class="text-center">
-                        <a href="/reviews/driver/<?php echo $carpool['driver_id'] ?>"
-                           class="btn btn-outline-primary btn-sm">
+                        <a href="/reviews/driver/<?php echo $carpool['driver_id'] ?>"class="btn btn-outline-primary btn-sm">
                             Voir les avis sur ce conducteur
                         </a>
                     </div>
@@ -253,16 +252,16 @@
         </div>
     </div>
 
-    <!-- Section de réservation -->
+    <!-- Section de réservation ou gestion pour le conducteur -->
     <?php if ($carpool['status'] === 'scheduled' && $carpool['seats_available'] > 0): ?>
     <div class="row">
         <div class="col-12">
             <div class="card">
+                <?php if (! isset($_SESSION['user_id'])): ?>
                 <div class="card-header">
                     <h3>Participer à ce covoiturage</h3>
                 </div>
                 <div class="card-body">
-                    <?php if (! isset($_SESSION['user_id'])): ?>
                     <!-- Visiteur non connecté -->
                     <div class="alert alert-info text-center">
                         <h4>Connectez-vous pour participer</h4>
@@ -272,8 +271,30 @@
                             <a href="/register" class="btn">Créer un compte</a>
                         </div>
                     </div>
-                    <?php else: ?>
-                    <!-- Utilisateur connecté -->
+                </div>
+
+                <?php elseif ($carpool['driver_id'] == $_SESSION['user_id']): ?>
+                <!-- C'est le conducteur de ce covoiturage -->
+                <div class="card-header">
+                    <h3>Gestion de votre covoiturage</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info text-center">
+                        <h4>Votre covoiturage</h4>
+                        <p class="mb-3">Vous êtes le conducteur de ce trajet.</p>
+                        <div class="d-flex gap-2 justify-content-center">
+                            <a href="/my-carpools" class="btn">Gérer mes covoiturages</a>
+                            <a href="/my-passengers" class="btn btn-outline-info">Voir mes passagers</a>
+                        </div>
+                    </div>
+                </div>
+
+                <?php else: ?>
+                    <!-- Utilisateur connecté qui n'est pas le conducteur -->
+                <div class="card-header">
+                    <h3>Réserver ce covoiturage</h3>
+                </div>
+                <div class="card-body">
                     <form method="POST" action="/carpools/<?php echo $carpool['carpool_id'] ?>/book" id="reservationForm">
                         <input type="hidden" name="csrf_token" value="<?php echo $csrf_token ?>">
                         <input type="hidden" name="carpool_id" value="<?php echo $carpool['carpool_id'] ?>">
@@ -290,7 +311,7 @@
                             <div class="col-md-4">
                                 <label class="form-label">Prix total</label>
                                 <div class="form-control bg-light">
-                                    <span id="totalPrice"><?php echo $carpool['price_per_seat'] ?>€</span>
+                                    <span id="totalPrice"><?php echo $carpool['price_per_seat'] ?>crédits</span>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -306,28 +327,44 @@
                             </small>
                         </div>
                     </form>
-                    <?php endif; ?>
                 </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
+
     <?php elseif ($carpool['status'] === 'scheduled' && $carpool['seats_available'] === 0): ?>
     <!-- Plus de places disponibles -->
     <div class="row">
         <div class="col-12">
-            <div class="alert alert-warning text-center">
-                <h4>Covoiturage complet</h4>
-                <p class="mb-0">Toutes les places ont été réservées pour ce trajet.</p>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Disponibilité</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning text-center">
+                        <h4>Covoiturage complet</h4>
+                        <p class="mb-0">Toutes les places ont été réservées pour ce trajet.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
     <?php elseif ($carpool['status'] !== 'scheduled'): ?>
     <!-- Trajet non disponible -->
     <div class="row">
         <div class="col-12">
-            <div class="alert alert-info text-center">
-                <h4>Trajet non disponible</h4>
-                <p class="mb-0">Ce covoiturage n'est plus disponible à la réservation.</p>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Statut du covoiturage</h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-info text-center">
+                        <h4>Trajet non disponible</h4>
+                        <p class="mb-0">Ce covoiturage n'est plus disponible à la réservation.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -338,12 +375,23 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body text-center">
+                    <?php if ($carpool['driver_id'] != $_SESSION['user_id']): ?>
+                    <!-- Pour les passagers/visiteurs -->
                     <a href="/carpools" class="btn btn-outline-secondary me-2">
                         Nouvelle recherche
                     </a>
                     <a href="/" class="btn btn-outline-secondary">
                         Retour à l'accueil
                     </a>
+                    <?php else: ?>
+                    <!-- Pour le conducteur -->
+                    <a href="/my-carpools" class="btn btn-outline-secondary me-2">
+                        Mes covoiturages
+                    </a>
+                    <a href="/dashboard" class="btn btn-outline-secondary">
+                        Mon tableau de bord
+                    </a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>

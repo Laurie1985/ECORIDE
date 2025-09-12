@@ -185,7 +185,7 @@ class ReviewController extends BaseController
         $reviews = $this->reviewModel->getApprovedReviewsForDriver($userId);
 
         $this->render('reviews/my_reviews', [
-            'title'   => 'Avis sur mes trajets - EcoRide',
+            'title'   => 'Ecoride - Avis sur mes trajets',
             'cssFile' => 'reviews',
             'reviews' => $reviews,
             'user'    => User::find($userId),
