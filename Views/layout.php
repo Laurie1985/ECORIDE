@@ -76,7 +76,7 @@
             <div class="footer-bottom d-flex align-items-center">
                 <a href="#" data-bs-toggle="modal" data-bs-target="#mentionsLegalesModal" class="link">Mentions légales.</a>
                 <div class="footer-copy">
-                    &copy; 2025 Ecoride | Tous droits réservés. Laurie Berthon
+                    &copy; 2025 ECORIDE | Tous droits réservés. Laurie Berthon
                 </div>
             </div>
         </div>

@@ -3,7 +3,6 @@ namespace App\Controllers;
 
 use App\Models\Carpool;
 use App\Models\Reservation;
-use App\Models\Transaction;
 use App\Models\User;
 
 class ReservationController extends BaseController
@@ -183,7 +182,7 @@ class ReservationController extends BaseController
     /**
      * Récapitulatif financier du passager
      */
-    public function financialSummary()
+    /*public function financialSummary()
     {
         $userId = $_SESSION['user_id'];
 
@@ -199,7 +198,7 @@ class ReservationController extends BaseController
         $totalReservations = count($reservations);
 
         $this->redirect('/reservations');
-    }
+    }*/
 
     private function sanitizeInput($data)
     {

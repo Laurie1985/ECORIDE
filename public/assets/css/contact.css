@@ -1,0 +1,70 @@
+body {
+    background-color: var(--vert);
+}
+
+/*Section hero*/
+.hero {
+    background-image: url('/assets/images/accueilBanniere.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 40vh;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+
+}
+
+/* Overlay sombre pour améliorer la lisibilité du texte */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    /* Overlay semi-transparent */
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    /* Au-dessus de l'overlay */
+}
+
+h1.hero-title {
+    color: var(--gris);
+}
+
+.card {
+    border: none;
+}
+
+.card-header {
+    background-color: var(--bleu);
+}
+
+.card-body {
+    padding-left: 10px;
+    background-color: var(--gris);
+}
+
+.form-label {
+    color: var(--vert-foret);
+}
+
+@media (max-width: 768px) {
+    .hero {
+        height: 15vh;
+    }
+
+    h1.hero-title {
+        padding: 1rem;
+    }
+}
