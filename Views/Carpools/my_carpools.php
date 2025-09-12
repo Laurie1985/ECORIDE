@@ -120,7 +120,7 @@
                     <?php if ($seatsBooked > 0): ?>
                     <div class="alert alert-info py-2">
                         <small>
-                            <strong>Revenus actuels :</strong>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           <?php echo $driverRevenue ?> crédits
+                            <strong>Revenus actuels :</strong>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <?php echo $driverRevenue ?> crédits
                             <br><span class="text-muted">(<?php echo $totalRevenue ?> -<?php echo $commission ?> commission)</span>
                         </small>
                     </div>
@@ -230,10 +230,10 @@
                             </div>
 
                             <p><strong>Trajet :</strong>
-                               <?php echo htmlspecialchars($carpool['departure']) ?> →<?php echo htmlspecialchars($carpool['arrival']) ?>
+                                <?php echo htmlspecialchars($carpool['departure']) ?> →<?php echo htmlspecialchars($carpool['arrival']) ?>
                             </p>
                             <p><strong>Date :</strong>
-                               <?php echo date('d/m/Y H:i', strtotime($carpool['departure_time'])) ?>
+                                <?php echo date('d/m/Y H:i', strtotime($carpool['departure_time'])) ?>
                             </p>
                         </div>
                         <div class="modal-footer">

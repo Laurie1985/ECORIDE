@@ -20,6 +20,7 @@ class ReservationController extends BaseController
     public function index()
     {
         $userId       = $_SESSION['user_id'];
+        $user         = User::find($userId);
         $reservations = Reservation::getPassengerReservations($userId);
 
         // Séparer les réservations en attente de confirmation
@@ -36,6 +37,7 @@ class ReservationController extends BaseController
             'cssFile'              => 'reservations',
             'awaitingConfirmation' => $awaitingConfirmation,
             'reservations'         => $otherReservations,
+            'user'                 => $user,
             'csrf_token'           => $this->generateCsrfToken(),
         ]);
     }
@@ -127,13 +129,7 @@ class ReservationController extends BaseController
             $this->redirect('/reservations');
         }
 
-        $this->render('reservations/details', [
-            'title'       => 'Ecoride - Détails de la réservation',
-            'cssFile'     => 'reservations',
-            'reservation' => $reservation,
-            'carpool'     => $carpool,
-            'csrf_token'  => $this->generateCsrfToken(),
-        ]);
+        $this->redirect('/reservations');
     }
 
     /**
@@ -202,14 +198,7 @@ class ReservationController extends BaseController
         $totalSpent        = array_sum(array_column($reservations, 'amount_paid'));
         $totalReservations = count($reservations);
 
-        $this->render('reservations/financial_summary', [
-            'title'             => 'Ecoride - Récapitulatif financier',
-            'cssFile'           => 'reservations',
-            'user'              => $user,
-            'transactions'      => $transactions,
-            'totalSpent'        => $totalSpent,
-            'totalReservations' => $totalReservations,
-        ]);
+        $this->redirect('/reservations');
     }
 
     private function sanitizeInput($data)

@@ -28,7 +28,7 @@ class Transaction extends BaseModel
     public static function createPlatformCommission(int $reservationId): int
     {
         return self::create([
-            'user_id'          => null, // Plateforme
+            'user_id'          => 2, // Id de l'administrateur
             'reservation_id'   => $reservationId,
             'amount'           => 2, // Commission fixe
             'transaction_type' => 'credit',

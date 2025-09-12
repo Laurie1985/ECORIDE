@@ -34,9 +34,8 @@
         </div>
     </div>
 
-     <!-- Structure principale avec filtres à gauche et résultats à droite -->
     <div class="row mt-4">
-        <!-- Filtres avancés (US 4) - Colonne de gauche -->
+        <!-- Filtres avancés -->
         <div class="col-lg-3 mb-4">
             <div class="card sticky-filters">
                 <div class="card-header">
@@ -55,21 +54,21 @@
                     <div class="mb-3">
                         <label for="filterMaxPrice" class="form-label">Prix maximum (crédits)</label>
                         <input type="number"
-                               id="filterMaxPrice"
-                               class="form-control"
-                               placeholder="Ex: 25"
-                               min="0"
-                               step="1">
+                            id="filterMaxPrice"
+                            class="form-control"
+                            placeholder="Ex: 25"
+                            min="0"
+                            step="1">
                     </div>
 
                     <div class="mb-3">
                         <label for="filterMaxDuration" class="form-label">Durée maximum (heures)</label>
                         <input type="number"
-                               id="filterMaxDuration"
-                               class="form-control"
-                               placeholder="Ex: 4"
-                               min="1"
-                               max="12">
+                            id="filterMaxDuration"
+                            class="form-control"
+                            placeholder="Ex: 4"
+                            min="1"
+                            max="12">
                     </div>
 
                     <div class="mb-3">

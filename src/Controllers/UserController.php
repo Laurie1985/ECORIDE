@@ -266,7 +266,7 @@ class UserController extends BaseController
         $driverCarpools = Carpool::findAllBy(['driver_id' => $userId]);
 
         // Covoiturages en tant que passager
-        $passengerReservations = Reservation::findAllBy(['passenger_id' => $userId]);
+        $passengerReservations = Reservation::getPassengerReservations($userId);
 
         $this->render('users/history', [
             'title'                 => 'Ecoride - Mon historique',

@@ -169,6 +169,7 @@ class CarpoolController extends BaseController
 
         $this->render('carpools/confirm', [
             'title'        => 'Confirmer la réservation',
+            'cssFile'      => 'reservations',
             'carpool'      => $carpool,
             'booking_data' => $bookingData,
             'csrf_token'   => $this->generateCsrfToken(),
@@ -323,6 +324,14 @@ class CarpoolController extends BaseController
         $userId = $_SESSION['user_id'];
 
         if (Carpool::startTrip($carpoolId, $userId)) {
+            // Récupérer les passagers pour l'email
+            $passengers = Reservation::getPassengersByCarpool($carpoolId);
+            $carpool    = Carpool::find($carpoolId);
+
+            // Envoyer les emails
+            $emailService = new \App\Services\EmailService();
+            $emailService->sendTripStartedNotification($passengers, $carpool);
+
             $_SESSION['success'] = 'Trajet démarré !';
         } else {
             $_SESSION['error'] = 'Impossible de démarrer ce trajet';
@@ -346,6 +355,14 @@ class CarpoolController extends BaseController
         $userId = $_SESSION['user_id'];
 
         if (Carpool::completeTrip($carpoolId, $userId)) {
+            // Récupérer les passagers pour l'email
+            $passengers = Reservation::getPassengersByCarpool($carpoolId);
+            $carpool    = Carpool::find($carpoolId);
+
+            // Envoyer les emails de confirmation
+            $emailService = new \App\Services\EmailService();
+            $emailService->sendTripCompletedNotification($passengers, $carpool);
+
             $_SESSION['success'] = 'Trajet terminé ! Les passagers ont reçu un mail pour confirmer.';
         } else {
             $_SESSION['error'] = 'Impossible de terminer ce trajet';

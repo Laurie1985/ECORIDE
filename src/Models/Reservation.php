@@ -219,6 +219,24 @@ class Reservation extends BaseModel
     }
 
     /**
+     * Récupérer les passagers d'un covoiturage spécifique
+     */
+    public static function getPassengersByCarpool($carpoolId)
+    {
+        $db   = Database::getInstance();
+        $stmt = $db->prepare("
+            SELECT r.reservation_id, r.seats_booked, r.amount_paid, r.status,
+                u.email, u.username
+            FROM reservation r
+            JOIN users u ON r.passenger_id = u.user_id
+            WHERE r.carpool_id = ? AND r.status = 'confirmed'
+        ");
+
+        $stmt->execute([$carpoolId]);
+        return $stmt->fetchAll();
+    }
+
+    /**
      * Créer une plainte pour l'employé
      */
     private static function createComplaintTicket(int $reservationId, int $passengerId, string $comment): void
@@ -228,7 +246,7 @@ class Reservation extends BaseModel
     }
 
     /**
-     * Récupérer les plaintes pour l'employé (US 12)
+     * Récupérer les plaintes pour l'employé
      */
     public static function getComplaints(): array
     {

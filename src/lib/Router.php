@@ -67,8 +67,8 @@ class Router
 
         $r->addRoute('GET', '/vehicles', [\App\Controllers\VehicleController::class, 'index']);
         $r->addRoute('POST', '/vehicles/create', [\App\Controllers\VehicleController::class, 'create']);
-        $r->addRoute('GET', '/vehicles/{id:\d+}/edit', [\App\Controllers\VehicleController::class, 'showEdit']);
-        $r->addRoute('POST', '/vehicles/{id:\d+}/update', [\App\Controllers\VehicleController::class, 'update']);
+        $r->addRoute('GET', '/vehicles/{vehicleId:\d+}/edit', [\App\Controllers\VehicleController::class, 'showEdit']);
+        $r->addRoute('POST', '/vehicles/{vehicleId:\d+}/update', [\App\Controllers\VehicleController::class, 'update']);
         $r->addRoute('POST', '/vehicles/{vehicleId:\d+}/delete', [\App\Controllers\VehicleController::class, 'delete']);
 
         // ==================== COVOITURAGES CONDUCTEUR ====================
@@ -92,13 +92,13 @@ class Router
 
         // Mes réservations
         $r->addRoute('GET', '/reservations', [\App\Controllers\ReservationController::class, 'index']);
-        $r->addRoute('GET', '/reservations/{id:\d+}', [\App\Controllers\ReservationController::class, 'show']);
+        $r->addRoute('GET', '/reservations/{reservationId:\d+}', [\App\Controllers\ReservationController::class, 'show']);
 
         // Annulation par passager
-        $r->addRoute('POST', '/reservations/{id:\d+}/cancel', [\App\Controllers\ReservationController::class, 'cancel']);
+        $r->addRoute('POST', '/reservations/{reservationId:\d+}/cancel', [\App\Controllers\ReservationController::class, 'cancel']);
 
         // Confirmation après trajet
-        $r->addRoute('POST', '/reservations/{id:\d+}/confirm', [\App\Controllers\ReservationController::class, 'confirmTrip']);
+        $r->addRoute('POST', '/reservations/{reservationId:\d+}/confirm', [\App\Controllers\ReservationController::class, 'confirmTrip']);
 
         // ==================== AVIS ====================
 
