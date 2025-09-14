@@ -43,8 +43,8 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="card">
-                <div class="card-header bg-warning text-dark">
-                    <h4 class="mb-0">Action requise</h4>
+                <div class="card-header bg-warning">
+                    <h3 class="mb-0">Trajets à confirmer</h3>
                 </div>
                 <div class="card-body">
                     <p class="mb-3">Vous avez des trajets terminés qui nécessitent votre confirmation :</p>
@@ -52,7 +52,7 @@
                     <div class="alert alert-info">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <strong><?php echo htmlspecialchars($reservation['departure']) ?> →<?php echo htmlspecialchars($reservation['arrival']) ?></strong>
+                                <strong><?php echo htmlspecialchars($reservation['departure']) ?> -><?php echo htmlspecialchars($reservation['arrival']) ?></strong>
                                 <br><small>Trajet du<?php echo date('d/m/Y', strtotime($reservation['departure_time'])) ?></small>
                             </div>
                             <div>
@@ -113,10 +113,11 @@
 
         <?php foreach ($statusOrder as $status): ?>
             <?php if (isset($groupedReservations[$status]) && ! empty($groupedReservations[$status])): ?>
-            <div class="card-header col-12 mb-4">
-                <h3><?php echo $statusLabels[$status] ?></h3>
+            <div class="mb-4">
+                <h3 class="card-header"><?php echo $statusLabels[$status] ?></h3>
+
                 <?php foreach ($groupedReservations[$status] as $reservation): ?>
-            </div>
+
                 <div class="card mb-3">
                     <div class="card-body">
                         <div class="row align-items-center">
@@ -194,7 +195,7 @@
                                     <?php endif; ?>
 
                                 <?php elseif ($reservation['status'] === 'awaiting_passenger_confirmation'): ?>
-                                    <a href="/reservations/confirm/<?php echo $reservation['reservation_id'] ?>"class="btn btn-warning btn-sm">
+                                    <a href="/reservations/confirm/<?php echo $reservation['reservation_id'] ?>" class="btn btn-warning btn-sm">
                                         Confirmer le trajet
                                     </a>
 
@@ -215,6 +216,7 @@
                         </div>
                     </div>
                 </div>
+
 
                 <!-- Modal d'annulation pour chaque réservation -->
                 <?php if ($reservation['status'] === 'confirmed'): ?>
@@ -319,102 +321,14 @@
     <?php endif; ?>
 
     <!-- Navigation -->
-    <div class="row mt-4">
+    <div class="row mt-2 mb-4">
         <div class="col-12 text-center">
-            <a href="/dashboard" class="btn btn-outline-secondary me-2">
+            <a href="/dashboard" class="btn">
                 Tableau de bord
             </a>
-            <a href="/carpools" class="btn btn-outline-info">
+            <a href="/carpools" class="btn">
                 Rechercher un covoiturage
             </a>
         </div>
     </div>
 </div>
-
-<!-- Modals de confirmation de trajet -->
-<?php if (! empty($awaitingConfirmation)): ?>
-    <?php foreach ($awaitingConfirmation as $reservation): ?>
-    <div class="modal fade" id="confirmModal<?php echo $reservation['reservation_id'] ?>" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Confirmer le trajet</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <form method="POST" action="/reservations/confirm/<?php echo $reservation['reservation_id'] ?>">
-                    <div class="modal-body">
-                        <input type="hidden" name="csrf_token" value="<?php echo $csrf_token ?>">
-
-                        <p><strong>Trajet :</strong>
-                            <?php echo htmlspecialchars($reservation['departure']) ?> →<?php echo htmlspecialchars($reservation['arrival']) ?>
-                        </p>
-                        <p><strong>Date :</strong>
-                            <?php echo date('d/m/Y H:i', strtotime($reservation['departure_time'])) ?>
-                        </p>
-
-                        <div class="mb-3">
-                            <label class="form-label">Le trajet s'est-il bien passé ?</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="trip_went_well" id="tripOk<?php echo $reservation['reservation_id'] ?>" value="1" required>
-                                <label class="form-check-label text-success" for="tripOk<?php echo $reservation['reservation_id'] ?>">
-                                    Oui, tout s'est bien passé
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="trip_went_well" id="tripProblem<?php echo $reservation['reservation_id'] ?>" value="0" required>
-                                <label class="form-check-label text-danger" for="tripProblem<?php echo $reservation['reservation_id'] ?>">
-                                    Non, j'ai rencontré des problèmes
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="mb-3" id="commentSection<?php echo $reservation['reservation_id'] ?>" style="display: none;">
-                            <label for="comment<?php echo $reservation['reservation_id'] ?>" class="form-label">
-                                Décrivez le problème rencontré *
-                            </label>
-                            <textarea class="form-control"
-                                    id="comment<?php echo $reservation['reservation_id'] ?>"
-                                    name="comment"
-                                    rows="3"
-                                    placeholder="Détaillez ce qui s'est mal passé..."></textarea>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Annuler
-                        </button>
-                        <button type="submit" class="btn btn-primary">
-                            Confirmer
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // Afficher/masquer le champ commentaire selon la sélection
-        document.addEventListener('DOMContentLoaded', function() {
-            const radioOk = document.getElementById('tripOk<?php echo $reservation['reservation_id'] ?>');
-            const radioProblem = document.getElementById('tripProblem<?php echo $reservation['reservation_id'] ?>');
-            const commentSection = document.getElementById('commentSection<?php echo $reservation['reservation_id'] ?>');
-            const commentField = document.getElementById('comment<?php echo $reservation['reservation_id'] ?>');
-
-            radioProblem.addEventListener('change', function() {
-                if (this.checked) {
-                    commentSection.style.display = 'block';
-                    commentField.required = true;
-                }
-            });
-
-            radioOk.addEventListener('change', function() {
-                if (this.checked) {
-                    commentSection.style.display = 'none';
-                    commentField.required = false;
-                    commentField.value = '';
-                }
-            });
-        });
-    </script>
-    <?php endforeach; ?>
-<?php endif; ?>

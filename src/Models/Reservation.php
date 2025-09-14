@@ -65,7 +65,7 @@ class Reservation extends BaseModel
     }
 
     // le passager confirme que le trajet s'est bien passé
-    public static function confirmTripByPassenger(int $reservationId, int $passengerId, bool $tripWentWell, string $comment = ''): array
+    public static function confirmTripByPassenger(int $reservationId, int $passengerId, bool $tripWentWell, string $comment = ''): bool
     {
         try {
             $db = Database::getInstance();
@@ -74,12 +74,12 @@ class Reservation extends BaseModel
             $reservation = self::find($reservationId);
             if (! $reservation || $reservation['passenger_id'] != $passengerId) {
                 $db->rollBack();
-                return ['success' => false, 'message' => "Réservation introuvable ou vous n'êtes pas le passager."];
+                return false;
             }
 
             if ($reservation['status'] !== 'awaiting_passenger_confirmation') {
                 $db->rollBack();
-                return ['success' => false, 'message' => 'Statut de la réservation incorrect pour la confirmation.'];
+                return false;
             }
 
             if ($tripWentWell) {
@@ -115,12 +115,12 @@ class Reservation extends BaseModel
             }
 
             $db->commit();
-            return ['success' => true, 'message' => 'Confirmation effectuée.'];
+            return true;
 
         } catch (\Exception $e) {
             $db->rollBack();
             error_log("Erreur confirmation passager: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Erreur lors de la confirmation du trajet.'];
+            return false;
         }
     }
 
@@ -216,6 +216,42 @@ class Reservation extends BaseModel
         ");
         $stmt->execute([$passengerId]);
         return $stmt->fetchAll();
+    }
+
+    /**
+     * Récupérer une réservation avec ses détails complets
+     */
+    public static function getWithDetails(int $reservationId, int $userId): ?array
+    {
+        $db = Database::getInstance();
+
+        $stmt = $db->prepare("
+        SELECT
+            r.*,
+            c.departure,
+            c.arrival,
+            c.departure_time,
+            c.arrival_time,
+            c.price_per_seat,
+            c.status as carpool_status,
+            c.driver_id,
+            u.username as driver_username,
+            u.photo as driver_photo,
+            v.model,
+            v.color,
+            v.energy_type,
+            b.name_brand as brand_name
+        FROM reservation r
+        JOIN carpools c ON r.carpool_id = c.carpool_id
+        JOIN users u ON c.driver_id = u.user_id
+        LEFT JOIN vehicles v ON c.vehicle_id = v.vehicle_id
+        LEFT JOIN brands b ON v.brand_id = b.brand_id
+        WHERE r.reservation_id = ?
+        AND r.passenger_id = ?
+    ");
+
+        $stmt->execute([$reservationId, $userId]);
+        return $stmt->fetch() ?: null;
     }
 
     /**

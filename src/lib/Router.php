@@ -44,7 +44,6 @@ class Router
 
         // Réservation
         $r->addRoute('POST', '/carpools/{carpoolId:\d+}/book', [\App\Controllers\CarpoolController::class, 'bookCarpool']);
-        $r->addRoute('GET', '/carpools/{carpoolId:\d+}/confirm', [\App\Controllers\CarpoolController::class, 'showConfirmation']);
 
         // ==================== ESPACE UTILISATEUR ====================
 
@@ -82,8 +81,8 @@ class Router
         $r->addRoute('GET', '/my-carpools/passengers', [\App\Controllers\CarpoolController::class, 'myPassengers']);
 
         // Gestion des trajets
-        $r->addRoute('POST', '/carpools/{id:\d+}/start', [\App\Controllers\CarpoolController::class, 'startTrip']);
-        $r->addRoute('POST', '/carpools/{id:\d+}/complete', [\App\Controllers\CarpoolController::class, 'completeTrip']);
+        $r->addRoute('POST', '/carpools/{carpoolId:\d+}/start', [\App\Controllers\CarpoolController::class, 'startTrip']);
+        $r->addRoute('POST', '/carpools/{carpoolId:\d+}/complete', [\App\Controllers\CarpoolController::class, 'completeTrip']);
 
         // Annulation
         $r->addRoute('POST', '/carpools/{carpoolId:\d+}/cancel', [\App\Controllers\CarpoolController::class, 'cancelCarpool']);
@@ -92,19 +91,19 @@ class Router
 
         // Mes réservations
         $r->addRoute('GET', '/reservations', [\App\Controllers\ReservationController::class, 'index']);
-        $r->addRoute('GET', '/reservations/{reservationId:\d+}', [\App\Controllers\ReservationController::class, 'show']);
+
+        // Confirmation après trajet
+        $r->addRoute('GET', '/reservations/confirm/{reservationId:\d+}', [\App\Controllers\ReservationController::class, 'showConfirmation']);
+        $r->addRoute('POST', '/reservations/confirm/{reservationId:\d+}', [\App\Controllers\ReservationController::class, 'confirmTrip']);
 
         // Annulation par passager
         $r->addRoute('POST', '/reservations/{reservationId:\d+}/cancel', [\App\Controllers\ReservationController::class, 'cancel']);
 
-        // Confirmation après trajet
-        $r->addRoute('POST', '/reservations/{reservationId:\d+}/confirm', [\App\Controllers\ReservationController::class, 'confirmTrip']);
+        $r->addRoute('GET', '/reservations/{reservationId:\d+}', [\App\Controllers\ReservationController::class, 'show']);
 
         // ==================== AVIS ====================
 
         // Laisser un avis après un trajet
-        $r->addRoute('GET', '/reviews/create/{carpoolId:\d+}', [\App\Controllers\ReviewController::class, 'showCreate']);
-        $r->addRoute('POST', '/reviews/create', [\App\Controllers\ReviewController::class, 'create']);
         $r->addRoute('GET', '/reviews/about-me', [\App\Controllers\ReviewController::class, 'myReviews']);
 
         // Voir les avis d'un conducteur
@@ -126,19 +125,21 @@ class Router
 
         // Gestion des utilisateurs
         $r->addRoute('GET', '/admin/users', [\App\Controllers\AdminController::class, 'users']);
-        $r->addRoute('POST', '/admin/users/{id:\d+}/suspend', [\App\Controllers\AdminController::class, 'suspendUser']);
-        $r->addRoute('POST', '/admin/users/{id:\d+}/activate', [\App\Controllers\AdminController::class, 'activateUser']);
+        $r->addRoute('POST', '/admin/users/{userId:\d+}/suspend', [\App\Controllers\AdminController::class, 'suspendUser']);
+        $r->addRoute('POST', '/admin/users/{userId:\d+}/activate', [\App\Controllers\AdminController::class, 'activateUser']);
 
         // Gestion des employés
         $r->addRoute('GET', '/admin/employees', [\App\Controllers\AdminController::class, 'employees']);
         $r->addRoute('GET', '/admin/employees/create', [\App\Controllers\AdminController::class, 'showCreateEmployee']);
         $r->addRoute('POST', '/admin/employees/create', [\App\Controllers\AdminController::class, 'createEmployee']);
-        $r->addRoute('POST', '/admin/employees/{id:\d+}/suspend', [\App\Controllers\AdminController::class, 'suspendEmployee']);
+        $r->addRoute('POST', '/admin/employees/{employeeId:\d+}/suspend', [\App\Controllers\AdminController::class, 'suspendEmployee']);
 
         // Statistiques et graphiques
         $r->addRoute('GET', '/admin/stats', [\App\Controllers\AdminController::class, 'stats']);
         $r->addRoute('GET', '/api/admin/daily-carpools', [\App\Controllers\AdminController::class, 'apiDailyCarpools']);
         $r->addRoute('GET', '/api/admin/daily-earnings', [\App\Controllers\AdminController::class, 'apiDailyEarnings']);
+
+        $r->addRoute('GET', '/test-reviews', [\App\Controllers\ReservationController::class, 'testMongoReviews']);
     }
 
     public function dispatch()

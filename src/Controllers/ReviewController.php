@@ -1,9 +1,7 @@
 <?php
 namespace App\Controllers;
 
-use App\Models\Carpool;
-use App\Models\Reservation;
-use App\Models\Review;
+use App\Models\MongoReview;
 use App\Models\User;
 
 class ReviewController extends BaseController
@@ -14,126 +12,12 @@ class ReviewController extends BaseController
     {
         parent::__construct();
         $this->requireAuth();
-        $this->reviewModel = new Review();
-    }
-
-    /**
-     * Afficher le formulaire pour laisser un avis après un trajet
-     */
-    public function showCreate(int $carpoolId)
-    {
-        $userId = $_SESSION['user_id'];
-
-        // Vérifier que l'utilisateur a bien participé à ce covoiturage
-        $reservation = Reservation::findBy([
-            'carpool_id'   => $carpoolId,
-            'passenger_id' => $userId,
-            'status'       => 'completed',
-        ]);
-
-        if (! $reservation) {
-            $_SESSION['error'] = 'Vous ne pouvez laisser un avis que pour vos trajets terminés';
-            $this->redirect('/history');
-        }
-
-        // Récupérer les détails du covoiturage
-        $carpool = Carpool::getWithDetails($carpoolId);
-        if (! $carpool) {
-            $_SESSION['error'] = 'Covoiturage introuvable';
-            $this->redirect('/history');
-        }
-
-        $this->render('reviews/create', [
-            'title'       => 'Ecoride - Avis',
-            'cssFile'     => 'reviews',
-            'carpool'     => $carpool,
-            'reservation' => $reservation,
-            'csrf_token'  => $this->generateCsrfToken(),
-        ]);
+        $this->reviewModel = new MongoReview();
     }
 
     private function sanitizeInput($data)
     {
         return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');
-    }
-
-    /**
-     * Créer un avis (sera en attente de validation employé)
-     */
-    public function create()
-    {
-        if (! $this->validateCsrfToken()) {
-            $_SESSION['error'] = 'Token invalide';
-            $this->redirect('/history');
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            $this->redirect('/history');
-        }
-
-        $carpoolId = filter_var($_POST['carpool_id'] ?? null, FILTER_VALIDATE_INT);
-        $rating    = filter_var($_POST['rating'] ?? null, FILTER_VALIDATE_INT);
-        $comment   = $this->sanitizeInput($_POST['comment'] ?? '');
-        $userId    = $_SESSION['user_id'];
-
-        // Validation
-        if (! $carpoolId || $rating === false || $rating < 1 || $rating > 5) {
-            $_SESSION['error'] = 'Données invalides';
-            $this->redirect('/history');
-        }
-
-        if (empty($comment) || strlen($comment) < 10) {
-            $_SESSION['error'] = 'Le commentaire doit contenir au moins 10 caractères';
-            $this->redirect("/reviews/create/{$carpoolId}");
-        }
-
-        if (strlen($comment) > 1000) {
-            $_SESSION['error'] = 'Le commentaire ne peut pas dépasser 1000 caractères';
-            $this->redirect("/reviews/create/{$carpoolId}");
-        }
-
-        // Vérifier que l'utilisateur peut laisser cet avis
-        $reservation = Reservation::findBy([
-            'carpool_id'   => $carpoolId,
-            'passenger_id' => $userId,
-            'status'       => 'completed',
-        ]);
-
-        if (! $reservation) {
-            $_SESSION['error'] = 'Vous ne pouvez pas laisser d\'avis pour ce trajet';
-            $this->redirect('/history');
-        }
-
-        // Récupérer l'ID du conducteur
-        $carpool = Carpool::find($carpoolId);
-        if (! $carpool) {
-            $_SESSION['error'] = 'Covoiturage introuvable';
-            $this->redirect('/history');
-        }
-
-        // Vérifier qu'il n'a pas déjà laissé un avis pour ce trajet
-        $existingReviews = $this->reviewModel->getReviewsForCarpoolAndReviewer($carpoolId, $userId);
-        if (! empty($existingReviews)) {
-            $_SESSION['error'] = 'Vous avez déjà laissé un avis pour ce trajet';
-            $this->redirect('/history');
-        }
-
-        // Créer l'avis (en attente de validation)
-        $success = $this->reviewModel->createPendingReview(
-            $carpoolId,
-            $userId,
-            $carpool['driver_id'],
-            $rating,
-            $comment
-        );
-
-        if ($success) {
-            $_SESSION['success'] = 'Votre avis a été soumis et sera visible après validation par nos équipes';
-        } else {
-            $_SESSION['error'] = 'Erreur lors de l\'enregistrement de votre avis';
-        }
-
-        $this->redirect('/history');
     }
 
     /**
@@ -153,21 +37,39 @@ class ReviewController extends BaseController
 
         // Calculer les statistiques
         $totalReviews  = count($reviews);
-        $averageRating = $driver['rating'];
+        $averageRating = 0;
 
-        $ratingStats = [
-            5 => 0, 4 => 0, 3 => 0, 2 => 0, 1 => 0,
-        ];
+        if ($totalReviews > 0) {
+            $totalRatingSum = 0;
+            foreach ($reviews as $review) {
+                $totalRatingSum += $review['rating'];
+            }
+            $averageRating = round($totalRatingSum / $totalReviews, 1);
+        }
 
+        // Statistiques par note
+        $ratingStats = [5 => 0, 4 => 0, 3 => 0, 2 => 0, 1 => 0];
         foreach ($reviews as $review) {
             $ratingStats[$review['rating']]++;
+        }
+
+        // Enrichir les avis avec les noms des passagers
+        $enrichedReviews = [];
+        foreach ($reviews as $review) {
+            $reviewer                = User::find($review['reviewer_id']);
+            $review['reviewer_name'] = $reviewer ? $reviewer['username'] : 'Utilisateur inconnu';
+            // Convertir la date MongoDB en format lisible
+            if (isset($review['created_at']) && $review['created_at'] instanceof \MongoDB\BSON\UTCDateTime) {
+                $review['formatted_date'] = $review['created_at']->toDateTime()->format('d/m/Y');
+            }
+            $enrichedReviews[] = $review;
         }
 
         $this->render('reviews/driver', [
             'title' => "Ecoride - Avis sur {$driver['username']}",
             'cssFile'       => 'reviews',
             'driver'        => $driver,
-            'reviews'       => $reviews,
+            'reviews'       => $enrichedReviews,
             'totalReviews'  => $totalReviews,
             'averageRating' => $averageRating,
             'ratingStats'   => $ratingStats,
@@ -175,20 +77,40 @@ class ReviewController extends BaseController
     }
 
     /**
-     * Avis concernant l'utilisateur connecté (conducteur)
+     * Avis concernant le conducteur
      */
     public function myReviews()
     {
-        $this->requireAuth();
-        $userId = $_SESSION['user_id'];
-
+        $userId  = $_SESSION['user_id'];
         $reviews = $this->reviewModel->getApprovedReviewsForDriver($userId);
 
+        // Enrichir avec les noms des passagers
+        $enrichedReviews = [];
+        foreach ($reviews as $review) {
+            $reviewer                = User::find($review['reviewer_id']);
+            $review['reviewer_name'] = $reviewer ? $reviewer['username'] : 'Utilisateur inconnu';
+            // Convertir la date MongoDB
+            if (isset($review['created_at']) && $review['created_at'] instanceof \MongoDB\BSON\UTCDateTime) {
+                $review['formatted_date'] = $review['created_at']->toDateTime()->format('d/m/Y H:i');
+            }
+            $enrichedReviews[] = $review;
+        }
+
+        // Calculer la note moyenne
+        $totalReviews  = count($reviews);
+        $averageRating = 0;
+        if ($totalReviews > 0) {
+            $totalRatingSum = array_sum(array_column($reviews, 'rating'));
+            $averageRating  = round($totalRatingSum / $totalReviews, 1);
+        }
+
         $this->render('reviews/my_reviews', [
-            'title'   => 'Ecoride - Avis sur mes trajets',
-            'cssFile' => 'reviews',
-            'reviews' => $reviews,
-            'user'    => User::find($userId),
+            'title'         => 'Ecoride - Mes avis reçus',
+            'cssFile'       => 'reviews',
+            'reviews'       => $enrichedReviews,
+            'user'          => User::find($userId),
+            'totalReviews'  => $totalReviews,
+            'averageRating' => $averageRating,
         ]);
     }
 
@@ -201,9 +123,16 @@ class ReviewController extends BaseController
 
         try {
             $reviews = $this->reviewModel->getApprovedReviewsForDriver($driverId);
+            // Enrichir avec les données utilisateur
+            $enrichedReviews = [];
+            foreach ($reviews as $review) {
+                $reviewer                = User::find($review['reviewer_id']);
+                $review['reviewer_name'] = $reviewer ? $reviewer['username'] : 'Utilisateur inconnu';
+                $enrichedReviews[]       = $review;
+            }
             echo json_encode([
                 'success' => true,
-                'reviews' => $reviews,
+                'reviews' => $enrichedReviews,
             ]);
         } catch (\Exception $e) {
             echo json_encode([

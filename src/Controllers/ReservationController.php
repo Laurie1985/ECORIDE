@@ -67,7 +67,7 @@ class ReservationController extends BaseController
         $this->redirect('/reservations');
     }
 
-    /**
+    /*
      * Confirmation du trajet par le passager
      */
     public function confirmTrip(int $reservationId)
@@ -81,28 +81,109 @@ class ReservationController extends BaseController
         $tripWentWell = isset($_POST['trip_went_well']) && $_POST['trip_went_well'] === '1';
         $comment      = htmlspecialchars(trim($_POST['comment'] ?? ''), ENT_QUOTES, 'UTF-8');
 
+        // Données pour l'avis (si trajet réussi)
+        $rating        = null;
+        $reviewComment = null;
+
+        if ($tripWentWell) {
+            $rating        = filter_var($_POST['rating'] ?? null, FILTER_VALIDATE_INT);
+            $reviewComment = htmlspecialchars(trim($_POST['review_comment'] ?? ''), ENT_QUOTES, 'UTF-8');
+        }
+
         // Validation du commentaire si problème signalé
         if (! $tripWentWell && empty($comment)) {
             $_SESSION['error'] = 'Veuillez préciser le problème rencontré';
-            $this->redirect('/reservations');
+            $this->redirect("/reservations/confirm/{$reservationId}");
         }
 
         try {
-            if (Reservation::confirmTripByPassenger($reservationId, $userId, $tripWentWell, $comment)) {
-                if ($tripWentWell) {
-                    $_SESSION['success'] = 'Validation confirmée.';
+            // 1. Confirmer le trajet
+            $confirmResult = Reservation::confirmTripByPassenger($reservationId, $userId, $tripWentWell, $comment);
+
+            if (! $confirmResult) {
+                $_SESSION['error'] = 'Impossible de valider ce trajet';
+                $this->redirect('/reservations');
+            }
+
+            // 2. Si trajet OK et avis fourni, sauvegarder en MongoDB
+            if ($tripWentWell && $rating && ! empty($reviewComment)) {
+                try {
+                    $reservation = Reservation::getWithDetails($reservationId, $userId);
+
+                    if ($reservation) {
+
+                        // Sauvegarder l'avis en MongoDB
+                        $mongoReview = new \App\Models\MongoReview();
+                        $mongoReview->createPendingReview(
+                            $reservation['carpool_id'],
+                            $userId,
+                            $reservation['driver_id'],
+                            $rating,
+                            $reviewComment
+                        );
+                    }
+                } catch (\Exception $e) {
+                    // L'avis n'est pas critique, on continue même si ça échoue
+                    error_log("Erreur sauvegarde avis MongoDB: " . $e->getMessage());
+                }
+            }
+
+            // 3. Messages de retour
+            if ($tripWentWell) {
+                if ($rating) {
+                    $_SESSION['success'] = 'Trajet validé et avis enregistré. Merci pour votre retour !';
                 } else {
-                    $_SESSION['success'] = 'Votre signalement a été transmis à nos équipes.';
+                    $_SESSION['success'] = 'Trajet validé avec succès.';
                 }
             } else {
-                $_SESSION['error'] = 'Impossible de valider ce trajet';
+                $_SESSION['success'] = 'Votre signalement a été transmis à nos équipes. Un employé va examiner la situation.';
             }
+
         } catch (\Exception $e) {
             error_log("Erreur validation trajet: " . $e->getMessage());
             $_SESSION['error'] = 'Erreur lors de la validation';
         }
 
         $this->redirect('/reservations');
+    }
+
+    /**
+     * Afficher la page de confirmation post-trajet
+     */
+    public function showConfirmation(int $reservationId)
+    {
+        $userId = $_SESSION['user_id'];
+
+        // Récupérer la réservation avec ses détails
+        $reservation = Reservation::getWithDetails($reservationId, $userId);
+
+        if (! $reservation) {
+            $_SESSION['error'] = 'Réservation introuvable';
+            $this->redirect('/reservations');
+        }
+
+        // Vérifier que la réservation est en attente de confirmation
+        if ($reservation['status'] !== 'awaiting_passenger_confirmation') {
+            $_SESSION['error'] = 'Cette réservation n\'est pas en attente de confirmation';
+            $this->redirect('/reservations');
+        }
+
+        // Récupérer les détails complets du covoiturage
+        $carpool = Carpool::getWithDetails($reservation['carpool_id']);
+
+        if (! $carpool) {
+            $_SESSION['error'] = 'Covoiturage introuvable';
+            $this->redirect('/reservations');
+        }
+
+        $this->render('reservations/confirm', [
+            'title'       => 'Confirmation trajet',
+            'cssFile'     => 'reservations',
+            'jsFile'      => 'reservation-confirm',
+            'reservation' => $reservation,
+            'carpool'     => $carpool,
+            'csrf_token'  => $this->generateCsrfToken(),
+        ]);
     }
 
     /**
@@ -179,26 +260,30 @@ class ReservationController extends BaseController
         ]);
     }
 
-    /**
-     * Récapitulatif financier du passager
-     */
-    /*public function financialSummary()
+    public function testMongoReviews()
     {
-        $userId = $_SESSION['user_id'];
+        try {
+            $mongoReview    = new \App\Models\MongoReview();
+            $pendingReviews = $mongoReview->getPendingReviews();
 
-        // Récupérer l'utilisateur pour voir ses crédits actuels
-        $user = User::find($userId);
+            echo "<h3>Avis en attente de validation :</h3>";
+            echo "<pre>";
+            foreach ($pendingReviews as $review) {
+                echo "ID: " . $review['_id'] . "\n";
+                echo "Covoiturage: " . $review['carpool_id'] . "\n";
+                echo "Note: " . $review['rating'] . "/5\n";
+                echo "Commentaire: " . $review['comment'] . "\n";
+                echo "Status: " . $review['status'] . "\n";
+                echo "Date: " . $review['created_at']->toDateTime()->format('Y-m-d H:i:s') . "\n";
+                echo "-------------------\n";
+            }
+            echo "</pre>";
 
-        // Historique des transactions
-        $transactions = Transaction::getUserHistory($userId);
-
-        // Statistiques des réservations
-        $reservations      = Reservation::findAllBy(['passenger_id' => $userId]);
-        $totalSpent        = array_sum(array_column($reservations, 'amount_paid'));
-        $totalReservations = count($reservations);
-
-        $this->redirect('/reservations');
-    }*/
+        } catch (\Exception $e) {
+            echo "Erreur : " . $e->getMessage();
+        }
+        exit;
+    }
 
     private function sanitizeInput($data)
     {
