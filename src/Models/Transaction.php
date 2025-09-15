@@ -28,7 +28,7 @@ class Transaction extends BaseModel
     public static function createPlatformCommission(int $reservationId): int
     {
         return self::create([
-            'user_id'          => 2, // Id de l'administrateur
+            'user_id'          => 11, // Id de l'administrateur
             'reservation_id'   => $reservationId,
             'amount'           => 2, // Commission fixe
             'transaction_type' => 'credit',
@@ -83,7 +83,7 @@ class Transaction extends BaseModel
         $stmt = $db->prepare("
             SELECT SUM(amount) as total
             FROM transactions
-            WHERE user_id IS NULL
+            WHERE user_id = 11
             AND transaction_type = 'credit'
         ");
         $stmt->execute();
@@ -102,7 +102,7 @@ class Transaction extends BaseModel
                 DATE(created_at) as date,
                 SUM(amount) as daily_total
             FROM transactions
-            WHERE user_id IS NULL
+            WHERE user_id = 11
             AND transaction_type = 'credit'
             AND created_at >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
             GROUP BY DATE(created_at)

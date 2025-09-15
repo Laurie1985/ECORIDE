@@ -42,7 +42,8 @@ class User extends BaseModel
             FROM users u
             JOIN user_roles ur ON u.user_id = ur.user_id
             JOIN roles r ON ur.role_id = r.role_id
-            WHERE r.role_name = ? AND u.status = 'active'
+            WHERE r.role_name = ?
+            ORDER BY u.created_at DESC
         ");
         $stmt->execute([$roleName]);
         return $stmt->fetchAll();

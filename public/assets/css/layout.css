@@ -110,6 +110,7 @@ p {
 .btn:hover {
     background-color: var(--vert);
     color: var(--gris);
+    transform: translateY(-1px);
 }
 
 /* Mobile : Styles pour les titres et les paragraphes */

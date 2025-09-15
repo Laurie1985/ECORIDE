@@ -262,18 +262,20 @@ class Carpool extends BaseModel
     }
 
     /**
-     * Statistiques covoiturages par jour
+     * Statistiques covoiturages par jour (trajets ayant lieu)
      */
     public static function getDailyCarpools(int $days = 30): array
     {
         $db   = Database::getInstance();
         $stmt = $db->prepare("
         SELECT
-            DATE(created_at) as date,
+            DATE(departure_time) as date,
             COUNT(*) as count
         FROM carpools
-        WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
-        GROUP BY DATE(created_at)
+        WHERE departure_time >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
+        AND departure_time <= NOW()
+        AND status IN ('finished', 'in_progress')
+        GROUP BY DATE(departure_time)
         ORDER BY date DESC
     ");
         $stmt->execute([$days]);

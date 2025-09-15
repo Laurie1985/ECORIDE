@@ -122,24 +122,24 @@ class Router
         // ==================== ESPACE ADMINISTRATEUR ====================
 
         $r->addRoute('GET', '/admin', [\App\Controllers\AdminController::class, 'dashboard']);
+        $r->addRoute('GET', '/admin/dashboard', [\App\Controllers\AdminController::class, 'dashboard']);
 
         // Gestion des utilisateurs
         $r->addRoute('GET', '/admin/users', [\App\Controllers\AdminController::class, 'users']);
-        $r->addRoute('POST', '/admin/users/{userId:\d+}/suspend', [\App\Controllers\AdminController::class, 'suspendUser']);
-        $r->addRoute('POST', '/admin/users/{userId:\d+}/activate', [\App\Controllers\AdminController::class, 'activateUser']);
+        $r->addRoute('POST', '/admin/users/suspend/{userId:\d+}', [\App\Controllers\AdminController::class, 'suspendUser']);
+        $r->addRoute('POST', '/admin/users/activate/{userId:\d+}', [\App\Controllers\AdminController::class, 'activateUser']);
 
         // Gestion des employés
         $r->addRoute('GET', '/admin/employees', [\App\Controllers\AdminController::class, 'employees']);
         $r->addRoute('GET', '/admin/employees/create', [\App\Controllers\AdminController::class, 'showCreateEmployee']);
         $r->addRoute('POST', '/admin/employees/create', [\App\Controllers\AdminController::class, 'createEmployee']);
-        $r->addRoute('POST', '/admin/employees/{employeeId:\d+}/suspend', [\App\Controllers\AdminController::class, 'suspendEmployee']);
+        $r->addRoute('POST', '/admin/employees/suspend/{employeeId:\d+}', [\App\Controllers\AdminController::class, 'suspendEmployee']);
+        $r->addRoute('POST', '/admin/employees/activate/{employeeId:\d+}', [\App\Controllers\AdminController::class, 'activateEmployee']);
 
         // Statistiques et graphiques
         $r->addRoute('GET', '/admin/stats', [\App\Controllers\AdminController::class, 'stats']);
-        $r->addRoute('GET', '/api/admin/daily-carpools', [\App\Controllers\AdminController::class, 'apiDailyCarpools']);
-        $r->addRoute('GET', '/api/admin/daily-earnings', [\App\Controllers\AdminController::class, 'apiDailyEarnings']);
-
-        $r->addRoute('GET', '/test-reviews', [\App\Controllers\ReservationController::class, 'testMongoReviews']);
+        $r->addRoute('GET', '/admin/api/daily-carpools', [\App\Controllers\AdminController::class, 'apiDailyCarpools']);
+        $r->addRoute('GET', '/admin/api/daily-earnings', [\App\Controllers\AdminController::class, 'apiDailyEarnings']);
     }
 
     public function dispatch()

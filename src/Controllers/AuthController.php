@@ -67,7 +67,8 @@ class AuthController extends BaseController
                 $this->setUserRole($user['user_id']);
 
                 $_SESSION['success'] = 'Connexion réussie !';
-                $this->redirect('/dashboard');
+                // Redirection selon le rôle
+                $this->redirectByRole();
             } else {
                 $_SESSION['error'] = 'Identifiant ou mot de passe incorrect';
                 $this->redirect('/login');
@@ -232,6 +233,29 @@ class AuthController extends BaseController
             error_log("Erreur récupération rôles: " . $e->getMessage());
             $_SESSION['user_role'] = 'user';
             $_SESSION['user_type'] = 'passenger';
+        }
+    }
+
+    /**
+     * Redirige l'utilisateur selon son rôle
+     */
+    private function redirectByRole()
+    {
+        $userRole = $_SESSION['user_role'] ?? 'user';
+
+        switch ($userRole) {
+            case 'admin':
+                $this->redirect('/admin/dashboard');
+                break;
+
+            case 'employee':
+                $this->redirect('/employees/dashboard');
+                break;
+
+            case 'user':
+            default:
+                $this->redirect('/dashboard');
+                break;
         }
     }
 }

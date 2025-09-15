@@ -121,6 +121,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <?php if (isset($jsFile)): ?>
         <script src="/assets/js/<?php echo $jsFile ?>.js"></script>
     <?php endif; ?>

@@ -2,8 +2,8 @@
 namespace App\Controllers;
 
 use App\Models\Carpool;
+use App\Models\MongoReview;
 use App\Models\Reservation;
-use App\Models\Review;
 use App\Models\Role;
 use App\Models\Transaction;
 use App\Models\User;
@@ -35,14 +35,14 @@ class AdminController extends BaseController
         $platformEarnings  = Transaction::getPlatformTotalEarnings();
 
         // Statistiques des avis
-        $reviewModel  = new Review();
+        $reviewModel  = new MongoReview();
         $reviewsStats = $reviewModel->getReviewsStats();
 
         // Réservations par statut
         $reservationsByStatus = Reservation::getReservationsByStatus();
 
         $this->render('admin/dashboard', [
-            'title'                => 'Administration - EcoRide',
+            'title'                => 'Ecoride - Administration',
             'cssFile'              => 'admin',
             'totalUsers'           => $totalUsers,
             'totalCarpools'        => $totalCarpools,
@@ -103,8 +103,9 @@ class AdminController extends BaseController
         $users = User::all();
 
         $this->render('admin/users', [
-            'title'      => 'Gestion des utilisateurs - EcoRide',
+            'title'      => 'Ecoride - Gestion des utilisateurs',
             'cssFile'    => 'admin',
+            'jsFile'     => 'admin-users',
             'users'      => $users,
             'csrf_token' => $this->generateCsrfToken(),
         ]);
@@ -180,6 +181,7 @@ class AdminController extends BaseController
         $this->render('admin/employees', [
             'title'      => 'Ecoride - Gestion des employés',
             'cssFile'    => 'admin',
+            'jsFile'     => 'admin-users',
             'employees'  => $employees,
             'csrf_token' => $this->generateCsrfToken(),
         ]);
@@ -193,6 +195,7 @@ class AdminController extends BaseController
         $this->render('admin/create_employee', [
             'title'      => 'Ecoride - Créer un employé',
             'cssFile'    => 'admin',
+            'js'         => 'create-employee',
             'csrf_token' => $this->generateCsrfToken(),
         ]);
     }
@@ -292,6 +295,31 @@ class AdminController extends BaseController
             $_SESSION['success'] = "Le compte de l'employé {$employee['username']} a été suspendu";
         } else {
             $_SESSION['error'] = 'Erreur lors de la suspension';
+        }
+
+        $this->redirect('/admin/employees');
+    }
+
+    /**
+     * Réactiver un employé
+     */
+    public function activateEmployee(int $employeeId)
+    {
+        if (! $this->validateCsrfToken()) {
+            $_SESSION['error'] = 'Token invalide';
+            $this->redirect('/admin/employees');
+        }
+
+        $employee = User::find($employeeId);
+        if (! $employee) {
+            $_SESSION['error'] = 'Employé introuvable';
+            $this->redirect('/admin/employees');
+        }
+
+        if (User::updateStatus($employeeId, 'active')) {
+            $_SESSION['success'] = "Le compte de l'employé {$employee['username']} a été réactivé";
+        } else {
+            $_SESSION['error'] = 'Erreur lors de la réactivation';
         }
 
         $this->redirect('/admin/employees');

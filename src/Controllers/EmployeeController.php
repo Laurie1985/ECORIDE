@@ -2,8 +2,8 @@
 namespace App\Controllers;
 
 use App\Models\Carpool;
+use App\Models\MongoReview;
 use App\Models\Reservation;
-use App\Models\Review;
 use App\Models\User;
 
 class EmployeeController extends BaseController
@@ -26,7 +26,7 @@ class EmployeeController extends BaseController
     public function dashboard()
     {
         // Compter les avis en attente
-        $reviewModel         = new Review();
+        $reviewModel         = new MongoReview();
         $pendingReviewsCount = count($reviewModel->getPendingReviews());
 
         // Compter les plaintes non traitées
@@ -45,7 +45,7 @@ class EmployeeController extends BaseController
      */
     public function pendingReviews()
     {
-        $reviewModel    = new Review();
+        $reviewModel    = new MongoReview();
         $pendingReviews = $reviewModel->getPendingReviews();
 
         $this->render('employee/reviews', [
@@ -66,7 +66,7 @@ class EmployeeController extends BaseController
             $this->redirect('/employee/reviews');
         }
 
-        $reviewModel = new Review();
+        $reviewModel = new MongoReview();
         $employeeId  = $_SESSION['user_id'];
 
         if ($reviewModel->approveReview($reviewId, $employeeId)) {
@@ -89,7 +89,7 @@ class EmployeeController extends BaseController
         }
 
         $reason      = $_POST['reason'] ?? 'Non conforme aux règles';
-        $reviewModel = new Review();
+        $reviewModel = new MongoReview();
         $employeeId  = $_SESSION['user_id'];
 
         if ($reviewModel->rejectReview($reviewId, $employeeId, $reason)) {
