@@ -284,7 +284,7 @@
                         <p class="mb-3">Vous êtes le conducteur de ce trajet.</p>
                         <div class="d-flex gap-2 justify-content-center">
                             <a href="/my-carpools" class="btn">Gérer mes covoiturages</a>
-                            <a href="/my-passengers" class="btn btn-outline-info">Voir mes passagers</a>
+                            <a href="/my-carpools/passengers" class="btn btn-outline-info">Voir mes passagers</a>
                         </div>
                     </div>
                 </div>

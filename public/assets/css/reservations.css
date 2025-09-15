@@ -49,7 +49,6 @@ h1.hero-title {
 
 .card {
     background-color: var(--gris);
-    border: var(--bleu);
     box-shadow: 0 2px 4px var(--bleu);
     margin: 2rem;
 }

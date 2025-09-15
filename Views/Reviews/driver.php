@@ -3,12 +3,13 @@
 <!-- START HERO-->
 <section class="hero">
     <div class="hero-content">
+        <h1 class="d-flex justify-content-center">Les avis de votre conducteur</h1>
     </div>
 </section>
 <!-- END HERO-->
 
 <div class="container mt-4 mb-4">
-    <h1 class="d-flex justify-content-center">Les avis de votre conducteur</h1>
+
     <!-- Profil du conducteur -->
     <div class="row mb-4">
         <div class="col-12">

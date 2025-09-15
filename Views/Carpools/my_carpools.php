@@ -120,7 +120,7 @@
                     <?php if ($seatsBooked > 0): ?>
                     <div class="alert alert-info py-2">
                         <small>
-                            <strong>Revenus actuels :</strong>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <?php echo $driverRevenue ?> crédits
+                            <strong>Revenus actuels :</strong>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           <?php echo $driverRevenue ?> crédits
                             <br><span class="text-muted">(<?php echo $totalRevenue ?> -<?php echo $commission ?> commission)</span>
                         </small>
                     </div>
@@ -131,32 +131,20 @@
                 <div class="card-footer">
                     <div class="d-flex gap-2 flex-wrap">
                         <!-- Voir les détails -->
-                        <a href="/carpools/<?php echo $carpool['carpool_id'] ?>"
-                           class="btn btn-sm">
+                        <a href="/carpools/<?php echo $carpool['carpool_id'] ?>" class="btn btn-sm">
                             Voir détails
                         </a>
 
                         <?php if ($carpool['status'] === 'scheduled'): ?>
                             <!-- Trajet programmé -->
-                            <?php
-                                $departureTime = new DateTime($carpool['departure_time']);
-                                $now           = new DateTime();
-                                $canStart      = $departureTime <= $now->add(new DateInterval('PT30M')); // 30 min avant
-                            ?>
 
-                            <?php if ($canStart): ?>
-                                <!-- Bouton démarrer (30 min avant le départ) -->
+                                <!-- Bouton démarrer -->
                                 <form method="POST" action="/carpools/<?php echo $carpool['carpool_id'] ?>/start" class="d-inline">
                                     <input type="hidden" name="csrf_token" value="<?php echo $csrf_token ?>">
-                                    <button type="submit" class="btn btn-success btn-sm">
+                                    <button type="submit" class="btn">
                                         Démarrer le trajet
                                     </button>
                                 </form>
-                            <?php else: ?>
-                                <small class="text-muted align-self-center">
-                                    Démarrage possible 30 min avant le départ
-                                </small>
-                            <?php endif; ?>
 
                             <!-- Bouton annuler -->
                             <button type="button"
@@ -314,7 +302,7 @@
             <a href="/dashboard" class="btn me-2">
                 Retour au tableau de bord
             </a>
-            <a href="/my-passengers" class="btn">
+            <a href="/my-carpools/passengers" class="btn">
                 Voir mes passagers
             </a>
         </div>

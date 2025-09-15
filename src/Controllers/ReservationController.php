@@ -260,31 +260,6 @@ class ReservationController extends BaseController
         ]);
     }
 
-    public function testMongoReviews()
-    {
-        try {
-            $mongoReview    = new \App\Models\MongoReview();
-            $pendingReviews = $mongoReview->getPendingReviews();
-
-            echo "<h3>Avis en attente de validation :</h3>";
-            echo "<pre>";
-            foreach ($pendingReviews as $review) {
-                echo "ID: " . $review['_id'] . "\n";
-                echo "Covoiturage: " . $review['carpool_id'] . "\n";
-                echo "Note: " . $review['rating'] . "/5\n";
-                echo "Commentaire: " . $review['comment'] . "\n";
-                echo "Status: " . $review['status'] . "\n";
-                echo "Date: " . $review['created_at']->toDateTime()->format('Y-m-d H:i:s') . "\n";
-                echo "-------------------\n";
-            }
-            echo "</pre>";
-
-        } catch (\Exception $e) {
-            echo "Erreur : " . $e->getMessage();
-        }
-        exit;
-    }
-
     private function sanitizeInput($data)
     {
         return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');

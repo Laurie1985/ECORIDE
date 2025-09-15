@@ -44,6 +44,7 @@ h1.hero-title {
     text-align: center;
     font-weight: 500;
     color: var(--gris);
+    font-size: 1.5rem;
 }
 
 .card {

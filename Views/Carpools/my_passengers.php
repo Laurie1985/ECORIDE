@@ -2,16 +2,13 @@
 
 <!-- START HERO-->
 <section class="hero">
-    <div class="hero-content"></div>
+    <div class="hero-content">
+        <h1 class="dash-title mb-5">Réservations sur mes trajets</h1>
+    </div>
 </section>
 <!-- END HERO-->
 
 <div class="container mt-4 mb-4">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="dash-title mb-5">Réservations sur mes trajets</h1>
-        </div>
-    </div>
 
     <?php if (empty($carpoolsWithPassengers)): ?>
     <div class="row card mb-5">

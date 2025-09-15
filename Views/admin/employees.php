@@ -155,7 +155,8 @@
                                             <?php echo htmlspecialchars($employee['email']) ?>
                                         </p>
                                         <p class="mb-2">
-                                            Créé le :<?php echo date('d/m/Y', strtotime($employee['created_at'])) ?>
+                                            Créé le
+                                            <?php echo date('d/m/Y', strtotime($employee['created_at'])) ?>
                                         </p>
                                     </div>
                                 </div>

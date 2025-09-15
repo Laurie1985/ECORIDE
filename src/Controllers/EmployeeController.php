@@ -48,6 +48,28 @@ class EmployeeController extends BaseController
         $reviewModel    = new MongoReview();
         $pendingReviews = $reviewModel->getPendingReviews();
 
+        // Enrichir les avis avec les pseudos des utilisateurs
+        $enrichedReviews = [];
+        foreach ($pendingReviews as $review) {
+            // Récupérer les infos du reviewer (celui qui a écrit l'avis)
+            $reviewer                    = User::find($review['reviewer_id']);
+            $review['reviewer_username'] = $reviewer ? $reviewer['username'] : 'Utilisateur inconnu';
+
+            // Récupérer les infos du conducteur évalué
+            $reviewedUser                     = User::find($review['reviewed_user_id']);
+            $review['reviewed_user_username'] = $reviewedUser ? $reviewedUser['username'] : 'Utilisateur inconnu';
+
+            // Récupérer les infos du covoiturage pour plus de contexte
+            $carpool = Carpool::getWithDetails($review['carpool_id']);
+            if ($carpool) {
+                $review['carpool_departure'] = $carpool['departure'];
+                $review['carpool_arrival']   = $carpool['arrival'];
+                $review['carpool_date']      = date('d/m/Y', strtotime($carpool['departure_time']));
+            }
+
+            $enrichedReviews[] = $review;
+        }
+
         $this->render('employee/reviews', [
             'title'      => 'Ecoride - Avis en attente',
             'cssFile'    => 'employee',

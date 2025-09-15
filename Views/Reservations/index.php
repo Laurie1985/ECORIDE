@@ -69,7 +69,7 @@
     </div>
     <?php endif; ?>
 
-    <?php if (empty($reservations)): ?>
+    <?php if (empty($reservations) && empty($awaitingConfirmation)): ?>
     <!-- Aucune réservation -->
     <div class="row">
         <div class="col-12">
@@ -277,11 +277,16 @@
                                 'confirmed'   => 0,
                                 'completed'   => 0,
                                 'canceled'    => 0,
+                                'disputed'    => 0,
                                 'total_spent' => 0,
                             ];
 
                             foreach ($reservations as $reservation) {
                                 $stats[$reservation['status']]++;
+
+                                if (isset($stats[$reservation['status']])) {
+                                    $stats[$reservation['status']]++;
+                                }
                                 //Compter tous les crédits dépensés sauf les annulations qui sont remboursées
                                 if ($reservation['status'] !== 'cancelled') {
                                     $stats['total_spent'] += $reservation['amount_paid'];

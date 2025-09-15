@@ -291,7 +291,7 @@ class Reservation extends BaseModel
             SELECT r.*,
                 c.departure, c.arrival, c.departure_time,
                 u.username as passenger_username, u.email as passenger_email,
-                d.username as driver_username
+                d.username as driver_username, d.email as driver_email
             FROM reservation r
             JOIN carpools c ON r.carpool_id = c.carpool_id
             JOIN users u ON r.passenger_id = u.user_id
@@ -339,6 +339,14 @@ class Reservation extends BaseModel
             FROM reservation
             GROUP BY status
         ");
-        return $stmt->fetchAll();
+        $results = $stmt->fetchAll();
+
+        // Convertir en tableau associatif
+        $formatted = [];
+        foreach ($results as $row) {
+            $formatted[$row['status']] = (int) $row['count'];
+        }
+
+        return $formatted;
     }
 }

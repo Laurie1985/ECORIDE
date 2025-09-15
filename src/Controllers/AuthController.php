@@ -249,7 +249,7 @@ class AuthController extends BaseController
                 break;
 
             case 'employee':
-                $this->redirect('/employees/dashboard');
+                $this->redirect('/employee');
                 break;
 
             case 'user':

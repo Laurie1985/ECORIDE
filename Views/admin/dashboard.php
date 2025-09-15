@@ -11,7 +11,9 @@
 <div class="container mt-4 mb-4">
     <div class="row">
         <div class="col-12">
-            <p class="lead">Bonjour :<?php echo htmlspecialchars($_SESSION['username']) ?></p>
+            <p class="lead">Bonjour :
+                <strong><?php echo htmlspecialchars($_SESSION['username']) ?></strong>
+            </p>
         </div>
     </div>
 
@@ -39,7 +41,7 @@
                 <div class="card-body">
                     <h3 class="stat-title">Utilisateurs</h3>
                     <h2 class="stat-number"><?php echo isset($totalUsers) ? $totalUsers : 0 ?></h2>
-                    <p class="text-muted">Actifs sur la plateforme</p>
+                    <p>Actifs sur la plateforme</p>
                 </div>
             </div>
         </div>
@@ -48,7 +50,7 @@
                 <div class="card-body">
                     <h3 class="stat-title">Covoiturages</h3>
                     <h2 class="stat-number"><?php echo isset($totalCarpools) ? $totalCarpools : 0 ?></h2>
-                    <p class="text-muted">Trajets créés</p>
+                    <p>Trajets créés</p>
                 </div>
             </div>
         </div>
@@ -57,7 +59,7 @@
                 <div class="card-body">
                     <h3 class="stat-title">Réservations</h3>
                     <h2 class="stat-number"><?php echo isset($totalReservations) ? $totalReservations : 0 ?></h2>
-                    <p class="text-muted">Total</p>
+                    <p>Total</p>
                 </div>
             </div>
         </div>
@@ -66,7 +68,7 @@
                 <div class="card-body">
                     <h3 class="stat-title">Revenus</h3>
                     <h2 class="stat-number"><?php echo isset($platformEarnings) ? number_format($platformEarnings, 2) : '0.00' ?></h2>
-                    <p class="text-muted">Gains plateforme</p>
+                    <p>Gains plateforme</p>
                 </div>
             </div>
         </div>
@@ -119,13 +121,13 @@
                         <div class="col-6">
                             <div class="text-center">
                                 <h2><?php echo isset($totalUsers) ? $totalUsers : 0 ?></h2>
-                                <p class="text-muted">Utilisateurs actifs</p>
+                                <p>Utilisateurs actifs</p>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="text-center">
                                 <h2><?php echo isset($totalCarpools) ? $totalCarpools : 0 ?></h2>
-                                <p class="text-muted">Covoiturages créés</p>
+                                <p>Covoiturages créés</p>
                             </div>
                         </div>
                     </div>
@@ -156,13 +158,13 @@
                         <div class="col-6">
                             <div class="text-center">
                                 <h2><?php echo isset($totalReservations) ? $totalReservations : 0 ?></h2>
-                                <p class="text-muted">Réservations totales</p>
+                                <p>Réservations totales</p>
                             </div>
                         </div>
                         <div class="col-6">
                             <div class="text-center">
                                 <h2><?php echo isset($platformEarnings) ? number_format($platformEarnings, 0) : 0 ?></h2>
-                                <p class="text-muted">Revenus générés</p>
+                                <p>Revenus générés</p>
                             </div>
                         </div>
                     </div>
@@ -177,15 +179,18 @@
                             <?php foreach ($reservationsByStatus as $status => $count): ?>
                                 <div class="list-group-item d-flex justify-content-between align-items-center">
                                     <p>
+                                        <strong>
                                         <?php
                                             $statusLabels = [
                                                 'awaiting_passenger_confirmation' => 'En attente de confirmation',
                                                 'completed'                       => 'Terminées',
                                                 'disputed'                        => 'En litige',
                                                 'canceled'                        => 'Annulées',
+                                                'confirmed'                       => 'Confirmées',
                                             ];
                                             echo $statusLabels[$status] ?? ucfirst(str_replace('_', ' ', $status));
                                         ?>
+                                        </strong>
                                     </p>
                                     <span class="badge bg-primary rounded-pill"><?php echo is_numeric($count) ? $count : 0 ?></span>
                                 </div>
@@ -210,7 +215,7 @@
                         <div class="col-md-6">
                             <h4>Avis des utilisateurs :</h4>
                             <ul class="list-unstyled">
-                                <li><p class="mb-2"><strong>Total d'avis :</strong>                                                                                    <?php echo $reviewsStats['total'] ?></p></li>
+                                <li><p class="mb-2"><strong>Total d'avis :</strong>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <?php echo $reviewsStats['total'] ?></p></li>
                                 <li><p class="mb-2"><strong>Note moyenne :</strong>
                                     <?php if (isset($reviewsStats['average']) && $reviewsStats['average'] > 0): ?>
                                         <?php echo number_format($reviewsStats['average'], 1) ?>/5

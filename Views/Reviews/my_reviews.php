@@ -1,11 +1,13 @@
 <!-- START HERO-->
 <section class="hero">
-    <div class="hero-content"></div>
+    <div class="hero-content">
+        <h1 class="d-flex justify-content-center">Mes avis reçus</h1>
+    </div>
 </section>
 <!-- END HERO-->
 
 <div class="container mt-4 mb-4">
-    <h1 class="d-flex justify-content-center">Mes avis reçus</h1>
+
     <!-- Résumé de mes avis -->
     <div class="row mb-4">
         <div class="col-12">
