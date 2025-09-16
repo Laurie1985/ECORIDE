@@ -19,24 +19,30 @@ class MongoDb
      */
     private function __construct()
     {
-        $mongoHost = Config::get('MONGO_HOST', 'localhost');
-        $mongoPort = Config::get('MONGO_PORT', '27017');
-        $mongoUser = Config::get('MONGO_INITDB_ROOT_USERNAME');
-        $mongoPass = Config::get('MONGO_INITDB_ROOT_PASSWORD');
+        // PRIORITÉ 1: Si Heroku mLab existe, on l'utilise
+        $mongoUri = Config::get('MONGOLAB_URI') ?: Config::get('MONGODB_URI');
 
-        $connectionString = "mongodb://";
-        if (! empty($mongoUser) && ! empty($mongoPass)) {
-            $connectionString .= "{$mongoUser}:{$mongoPass}@";
+        if (! empty($mongoUri)) {
+            // Mode Heroku : utilise l'URI complète
+            $this->client = new Client($mongoUri);
+        } else {
+            $mongoHost = Config::get('MONGO_HOST', 'localhost');
+            $mongoPort = Config::get('MONGO_PORT', '27017');
+            $mongoUser = Config::get('MONGO_INITDB_ROOT_USERNAME');
+            $mongoPass = Config::get('MONGO_INITDB_ROOT_PASSWORD');
+
+            $connectionString = "mongodb://";
+            if (! empty($mongoUser) && ! empty($mongoPass)) {
+                $connectionString .= "{$mongoUser}:{$mongoPass}@";
+            }
+            $connectionString .= "{$mongoHost}:{$mongoPort}";
+
+            $this->client = new Client($connectionString);
         }
-        $connectionString .= "{$mongoHost}:{$mongoPort}";
-
-        $this->client = new Client($connectionString);
     }
 
     /**
      * Retourne l'instance unique de la classe MongoDb.
-     *
-     * @return MongoDb
      */
     public static function getInstance(): MongoDb
     {
