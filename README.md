@@ -87,7 +87,7 @@ Fonctionnalités spécifiques :
 
     - Installer les dépendances :
 
-        Composer install
+        composer install
     
     - Créer un fichier .env : 
 
