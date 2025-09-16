@@ -3,7 +3,7 @@
 <!-- START HERO-->
 <section class="hero">
     <div class="hero-content">
-        <h1 class="dash-title">Mes préférences de conduite</h1>
+        <h1 class="hero-title">Mes préférences de conduite</h1>
     </div>
 </section>
 <!-- END HERO-->

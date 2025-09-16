@@ -2,10 +2,6 @@ body {
     background-color: var(--vert);
 }
 
-.dash-title {
-    text-align: center;
-}
-
 .hero {
     background-image: url('/assets/images/heroDashboard.jpeg');
     background-size: cover;
@@ -44,6 +40,7 @@ body {
     text-align: center;
     font-weight: 500;
     color: var(--gris);
+    font-size: 1.5rem;
 }
 
 .card {

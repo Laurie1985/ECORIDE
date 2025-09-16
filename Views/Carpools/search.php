@@ -104,7 +104,7 @@
                 </div>
             </div>
 
-            <!-- Loading -->
+            <!-- Chargement -->
             <div id="loadingMessage" class="card text-center" style="display: none;">
                 <div class="card-body py-5">
                     <div class="spinner-border text-primary" role="status">
@@ -121,9 +121,9 @@
                     <p class="text-muted" id="noResultsText">Aucun covoiturage ne correspond à vos critères.</p>
                     <div id="suggestionSection" style="display: none;">
                         <div class="alert alert-info mt-4">
-                            <h5>Suggestion</h5>
+                            <h4>Suggestion</h4>
                             <p class="mb-3" id="suggestionText"></p>
-                            <button type="button" id="acceptSuggestion" class="btn btn-outline-primary">
+                            <button type="button" id="acceptSuggestion" class="btn">
                                 Essayer cette date
                             </button>
                         </div>
@@ -157,7 +157,7 @@
                 <div class="driver-photo mb-2">
                     <img src="" alt="Photo conducteur" class="rounded-circle driver-image" width="60" height="60">
                 </div>
-                <h6 class="driver-name mb-1"></h6>
+                <h4 class="driver-name mb-1"></h4>
                 <div class="driver-rating">
                     <span class="rating-value"></span>
                 </div>

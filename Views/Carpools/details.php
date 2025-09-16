@@ -113,15 +113,17 @@
                     <div class="d-flex align-items-center mb-3">
                         <div class="me-3">
                             <?php if (! empty($carpool['photo'])): ?>
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($carpool['photo']) ?>"alt="Photo<?php echo htmlspecialchars($carpool['username']) ?>"class="rounded-circle" width="60" height="60">
+                            <img src="data:image/jpeg;base64,<?php echo base64_encode($carpool['photo']) ?>"alt="Photo de
+                            <?php echo htmlspecialchars($carpool['username']) ?>"class="rounded-circle" width="60" height="60">
                             <?php else: ?>
-                            <img src="/assets/images/default-avatar.png"alt="Photo<?php echo htmlspecialchars($carpool['username']) ?>"class="rounded-circle" width="60" height="60">
+                            <img src="/assets/images/default.jpeg"alt="Photo de
+                            <?php echo htmlspecialchars($carpool['username']) ?>"class="rounded-circle" width="60" height="60">
                             <?php endif; ?>
                         </div>
                         <div>
                             <h4 class="mb-1"><?php echo htmlspecialchars($carpool['username']) ?></h4>
                             <div class=" mb-1">
-                                <span class="text-dark ms-1">(<?php echo number_format($carpool['rating'], 1) ?>/5)</span>
+                                <h4 class="ms-1"><?php echo number_format($carpool['rating'], 1) ?>/5</h4>
                             </div>
                             <?php if (! empty($carpool['phone'])): ?>
                             <small class="text-muted">Contact disponible après réservation</small>
@@ -131,7 +133,7 @@
 
                     <!-- Bouton pour voir les avis -->
                     <div class="text-center">
-                        <a href="/reviews/driver/<?php echo $carpool['driver_id'] ?>"class="btn btn-outline-primary btn-sm">
+                        <a href="/reviews/driver/<?php echo $carpool['driver_id'] ?>"class="btn">
                             Voir les avis sur ce conducteur
                         </a>
                     </div>
@@ -284,7 +286,7 @@
                         <p class="mb-3">Vous êtes le conducteur de ce trajet.</p>
                         <div class="d-flex gap-2 justify-content-center">
                             <a href="/my-carpools" class="btn">Gérer mes covoiturages</a>
-                            <a href="/my-carpools/passengers" class="btn btn-outline-info">Voir mes passagers</a>
+                            <a href="/my-carpools/passengers" class="btn">Voir mes passagers</a>
                         </div>
                     </div>
                 </div>
@@ -315,7 +317,7 @@
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <button type="submit" class="btn" id="reserveBtn">
+                                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#bookingModal" id="reserveBtn">
                                     Participer
                                 </button>
                             </div>
@@ -377,21 +379,62 @@
                 <div class="card-body text-center">
                     <?php if ($carpool['driver_id'] != $_SESSION['user_id']): ?>
                     <!-- Pour les passagers/visiteurs -->
-                    <a href="/carpools" class="btn btn-outline-secondary me-2">
+                    <a href="/carpools" class="btn me-2">
                         Nouvelle recherche
                     </a>
-                    <a href="/" class="btn btn-outline-secondary">
+                    <a href="/" class="btn">
                         Retour à l'accueil
                     </a>
                     <?php else: ?>
                     <!-- Pour le conducteur -->
-                    <a href="/my-carpools" class="btn btn-outline-secondary me-2">
+                    <a href="/my-carpools" class="btn me-2">
                         Mes covoiturages
                     </a>
-                    <a href="/dashboard" class="btn btn-outline-secondary">
+                    <a href="/dashboard" class="btn">
                         Mon tableau de bord
                     </a>
                     <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmation minimale -->
+    <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmer la réservation</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Trajet :</strong>
+                    <?php echo htmlspecialchars($carpool['departure']) ?> -><?php echo htmlspecialchars($carpool['arrival']) ?></p>
+                    <p><strong>Date :</strong>
+                    <?php echo date('d/m/Y à H:i', strtotime($carpool['departure_time'])) ?></p>
+                    <p><strong>Conducteur :</strong>
+                    <?php echo htmlspecialchars($carpool['username']) ?></p>
+
+                    <hr>
+
+                    <p><strong>Places réservées :</strong> <span id="modalSeats">1</span></p>
+                    <p><strong>Total à payer :</strong> <span id="modalTotal"><?php echo $carpool['price_per_seat'] ?></span> crédits</p>
+
+                    <div class="alert alert-warning">
+                        <small>Le montant sera immédiatement débité de votre compte.</small>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-bs-dismiss="modal">Annuler</button>
+
+                    <form method="POST" action="/carpools/<?php echo $carpool['carpool_id'] ?>/book" style="display: inline;">
+                        <input type="hidden" name="csrf_token" value="<?php echo $csrf_token ?>">
+                        <input type="hidden" name="seats_booked" id="hiddenSeatsBooked" value="1">
+                        <button type="submit" class="btn">
+                            Confirmer et payer
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

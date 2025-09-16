@@ -11,8 +11,9 @@
 <div class="container mt-4 mb-4">
     <div class="row">
         <div class="col-12">
-
-            <p class="lead">Bonjour<?php echo htmlspecialchars($user['username']) ?>, vous êtes conducteur et passager</p>
+            <p class="lead">Bonjour
+                <strong><?php echo htmlspecialchars($user['username']) ?></strong>, vous êtes conducteur et passager
+            </p>
         </div>
     </div>
 

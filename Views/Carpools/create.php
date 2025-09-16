@@ -156,14 +156,14 @@ echo $energyTypes[$vehicle['energy_type']] ?? $vehicle['energy_type'];
                             <div class="col-md-6">
                                 <label for="price_per_seat" class="form-label">Prix par place (en crédits) *</label>
                                 <input type="number"
-                                       class="form-control"
-                                       id="price_per_seat"
-                                       name="price_per_seat"
-                                       min="3"
-                                       step="1"
-                                       placeholder="Ex: 15"
-                                       value="<?php echo $_POST['price_per_seat'] ?? '' ?>"
-                                       required>
+                                        class="form-control"
+                                        id="price_per_seat"
+                                        name="price_per_seat"
+                                        min="3"
+                                        step="1"
+                                        placeholder="Ex: 15"
+                                        value="<?php echo $_POST['price_per_seat'] ?? '' ?>"
+                                        required>
                                 <small class="form-text text-muted">
                                     Minimum 3 crédits (2 crédits de commission + 1 crédit minimum pour vous)
                                 </small>
@@ -178,22 +178,22 @@ echo $energyTypes[$vehicle['energy_type']] ?? $vehicle['energy_type'];
                             <div class="col-md-6">
                                 <div class="form-check mb-2">
                                     <input class="form-check-input"
-                                           type="checkbox"
-                                           id="smoking_allowed"
-                                           name="smoking_allowed"
-                                           value="1"
-                                           <?php echo(isset($_POST['smoking_allowed']) && $_POST['smoking_allowed']) ? 'checked' : '' ?>>
+                                            type="checkbox"
+                                            id="smoking_allowed"
+                                            name="smoking_allowed"
+                                            value="1"
+                                            <?php echo(isset($_POST['smoking_allowed']) && $_POST['smoking_allowed']) ? 'checked' : '' ?>>
                                     <label class="form-check-label" for="smoking_allowed">
                                         Fumeurs acceptés
                                     </label>
                                 </div>
                                 <div class="form-check mb-2">
                                     <input class="form-check-input"
-                                           type="checkbox"
-                                           id="animals_allowed"
-                                           name="animals_allowed"
-                                           value="1"
-                                           <?php echo(isset($_POST['animals_allowed']) && $_POST['animals_allowed']) ? 'checked' : '' ?>>
+                                            type="checkbox"
+                                            id="animals_allowed"
+                                            name="animals_allowed"
+                                            value="1"
+                                            <?php echo(isset($_POST['animals_allowed']) && $_POST['animals_allowed']) ? 'checked' : '' ?>>
                                     <label class="form-check-label" for="animals_allowed">
                                         Animaux acceptés
                                     </label>
@@ -202,11 +202,11 @@ echo $energyTypes[$vehicle['energy_type']] ?? $vehicle['energy_type'];
                             <div class="col-md-6">
                                 <label for="personalized_preferences" class="form-label">Préférences personnalisées</label>
                                 <textarea class="form-control"
-                                          id="personalized_preferences"
-                                          name="personalized_preferences"
-                                          rows="3"
-                                          maxlength="500"
-                                          placeholder="Ex: Musique classique uniquement, pas de conversation, arrêt pause possible..."><?php echo htmlspecialchars($_POST['personalized_preferences'] ?? '') ?></textarea>
+                                            id="personalized_preferences"
+                                            name="personalized_preferences"
+                                            rows="3"
+                                            maxlength="500"
+                                            placeholder="Ex: Musique classique uniquement, pas de conversation, arrêt pause possible..."><?php echo htmlspecialchars($_POST['personalized_preferences'] ?? '') ?></textarea>
                                 <small class="form-text text-muted">Maximum 500 caractères</small>
                             </div>
                         </div>
@@ -229,7 +229,7 @@ echo $energyTypes[$vehicle['energy_type']] ?? $vehicle['energy_type'];
                         <div class="row">
                             <div class="col-12">
                                 <div class="d-flex justify-content-between">
-                                    <a href="/dashboard" class="btn btn-outline-secondary">
+                                    <a href="/dashboard" class="btn">
                                         Annuler
                                     </a>
                                     <button type="submit" class="btn" id="submitBtn">

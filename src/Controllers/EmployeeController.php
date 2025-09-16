@@ -148,7 +148,7 @@ class EmployeeController extends BaseController
             $this->redirect('/employee/complaints');
         }
 
-        $action = $_POST['action'] ?? ''; // 'refund' ou 'pay_driver'
+        $action = $_POST['action'] ?? '';
         $notes  = $_POST['notes'] ?? '';
 
         try {

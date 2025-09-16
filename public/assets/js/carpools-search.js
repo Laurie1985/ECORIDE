@@ -1,7 +1,8 @@
 /**
- * JavaScript pour la recherche de covoiturages avec filtres
+ * Recherche de covoiturages avec filtres
  */
 
+//Variables globales
 let currentResults = [];
 let currentFilters = {};
 
@@ -107,7 +108,7 @@ function displayResults(carpools) {
     // Mise à jour du titre
     const departure = document.getElementById('departure').value;
     const arrival = document.getElementById('arrival').value;
-    resultsTitle.textContent = `${departure} → ${arrival}`;
+    resultsTitle.textContent = `${departure} -> ${arrival}`;
 
     // Vider les résultats précédents
     carpoolsList.innerHTML = '';
@@ -133,7 +134,7 @@ function createCarpoolElement(carpool) {
     if (carpool.driver_photo) {
         driverImage.src = `data:image/jpeg;base64,${carpool.driver_photo}`;
     } else {
-        driverImage.src = '/assets/images/default-avatar.png';
+        driverImage.src = '/assets/images/default.jpeg';
     }
     driverImage.alt = `Photo de ${carpool.driver_username}`;
 

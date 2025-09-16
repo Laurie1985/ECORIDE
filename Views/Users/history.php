@@ -3,7 +3,7 @@
 <!-- START HERO-->
 <section class="hero">
     <div class="hero-content">
-        <h1 class="dash-title">Mon historique</h1>
+        <h1 class="hero-title">Mon historique</h1>
     </div>
 </section>
 <!-- END HERO-->
@@ -17,7 +17,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <h2><?php echo count($driverCarpools) + count($passengerReservations) ?></h2>
-                    <p class="text-muted">Total trajets</p>
+                    <p>Total trajets</p>
                 </div>
             </div>
         </div>
@@ -28,7 +28,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <h2><?php echo count($driverCarpools) ?></h2>
-                    <p class="text-muted">Mes trajets proposés</p>
+                    <p>Mes trajets proposés</p>
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <h2><?php echo count($passengerReservations) ?></h2>
-                    <p class="text-muted">Mes réservations</p>
+                    <p>Mes réservations</p>
                 </div>
             </div>
         </div>
@@ -59,7 +59,7 @@
                             echo $ecoCount;
                         ?>
                     </h2>
-                    <p class="text-muted">Mes trajets écologiques</p>
+                    <p>Mes trajets écologiques</p>
                 </div>
             </div>
         </div>
@@ -160,11 +160,11 @@
                                     ?>
                                 </div>
                                 <div class="col-md-3 text-end">
-                                    <a href="/carpools/<?php echo $carpool['carpool_id'] ?>" class="btn btn-sm">
+                                    <a href="/carpools/<?php echo $carpool['carpool_id'] ?>" class="btn">
                                         Voir détails
                                     </a>
                                     <?php if (in_array($carpool['status'], ['finished', 'completed'])): ?>
-                                    <a href="/my-carpools/passengers" class="btn btn-sm btn-outline-info">
+                                    <a href="/my-carpools/passengers" class="btn">
                                         Mes passagers
                                     </a>
                                     <?php endif; ?>

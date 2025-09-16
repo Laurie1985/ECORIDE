@@ -65,7 +65,8 @@
                                         </div>
                                         <p class="mb-1"><?php echo nl2br(htmlspecialchars($review['comment'])) ?></p>
                                         <small class="text-muted">
-                                            Covoiturage #<?php echo $review['carpool_id'] ?>
+                                            Covoiturage #
+                                            <?php echo $review['carpool_id'] ?>
                                         </small>
                                     </div>
                                     <div class="col-md-4 text-md-end">
@@ -133,7 +134,7 @@
                         <p class="text-muted">Vous n'avez pas encore reçu d'avis de la part de vos passagers.</p>
                         <p class="text-muted">Continuez à offrir un excellent service pour recevoir vos premiers avis !</p>
                         <div class="mt-3">
-                            <a href="/my-carpools" class="btn btn-outline-primary">
+                            <a href="/my-carpools" class="btn">
                                 Mes covoiturages
                             </a>
                         </div>
@@ -146,10 +147,10 @@
     <!-- Navigation -->
     <div class="row mt-4">
         <div class="col-12 text-center">
-            <a href="/dashboard" class="btn btn-outline-primary me-2">
+            <a href="/dashboard" class="btn me-2">
                 Tableau de bord
             </a>
-            <a href="/my-carpools" class="btn btn-outline-secondary">
+            <a href="/my-carpools" class="btn">
                 Mes covoiturages
             </a>
         </div>

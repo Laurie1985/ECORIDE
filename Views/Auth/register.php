@@ -58,7 +58,7 @@
 
             <!-- Informations sur les crédits -->
             <div class="alert alert-info mt-3">
-                <h6>🎉 Bonus de bienvenue</h6>
+                <h4>Bonus de bienvenue</h4>
                 <p class="mb-0">En créant votre compte, vous bénéficiez automatiquement de <strong>20 crédits gratuits</strong> pour reserver vos premiers trajets !</p>
             </div>
         </div>

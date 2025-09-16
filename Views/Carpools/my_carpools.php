@@ -64,7 +64,7 @@
                         <div class="col-8">
                             <h2 class="mb-0">
                                 <?php echo htmlspecialchars($carpool['departure']) ?>
-                                →
+                                ->
                                 <?php echo htmlspecialchars($carpool['arrival']) ?>
                             </h2>
                         </div>
@@ -120,7 +120,7 @@
                     <?php if ($seatsBooked > 0): ?>
                     <div class="alert alert-info py-2">
                         <small>
-                            <strong>Revenus actuels :</strong>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           <?php echo $driverRevenue ?> crédits
+                            <strong>Revenus actuels :</strong>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <?php echo $driverRevenue ?> crédits
                             <br><span class="text-muted">(<?php echo $totalRevenue ?> -<?php echo $commission ?> commission)</span>
                         </small>
                     </div>
@@ -131,7 +131,7 @@
                 <div class="card-footer">
                     <div class="d-flex gap-2 flex-wrap">
                         <!-- Voir les détails -->
-                        <a href="/carpools/<?php echo $carpool['carpool_id'] ?>" class="btn btn-sm">
+                        <a href="/carpools/<?php echo $carpool['carpool_id'] ?>" class="btn">
                             Voir détails
                         </a>
 
@@ -158,7 +158,7 @@
                             <!-- Trajet en cours -->
                             <form method="POST" action="/carpools/<?php echo $carpool['carpool_id'] ?>/complete" class="d-inline">
                                 <input type="hidden" name="csrf_token" value="<?php echo $csrf_token ?>">
-                                <button type="submit" class="btn btn-success btn-sm">
+                                <button type="submit" class="btn">
                                     Arrivés à destination
                                 </button>
                             </form>
@@ -166,7 +166,7 @@
                         <?php elseif ($carpool['status'] === 'finished'): ?>
                             <!-- Trajet terminé -->
                             <span class="badge bg-success">Trajet terminé</span>
-                            <a href="/reviews" class="btn btn-sm">
+                            <a href="/reviews" class="btn">
                                 Voir les avis
                             </a>
 
@@ -178,7 +178,7 @@
 
                         <!-- Voir les passagers (si réservations) -->
                         <?php if ($seatsBooked > 0): ?>
-                            <a href="/my-passengers#carpool-<?php echo $carpool['carpool_id'] ?>"class="btn btn-outline-info btn-sm">
+                            <a href="/my-passengers#carpool-<?php echo $carpool['carpool_id'] ?>"class="btn">
                                 Voir passagers (<?php echo $seatsBooked ?>)
                             </a>
                         <?php endif; ?>
@@ -225,10 +225,10 @@
                             </p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <button type="button" class="btn" data-bs-dismiss="modal">
                                 Annuler
                             </button>
-                            <button type="submit" class="btn btn-danger">
+                            <button type="submit" class="btn">
                                 Confirmer l'annulation
                             </button>
                         </div>

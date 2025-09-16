@@ -3,7 +3,7 @@
 <!-- START HERO-->
 <section class="hero">
     <div class="hero-content">
-        <h1 class="dash-title mb-5">Réservations sur mes trajets</h1>
+        <h1 class="hero-title">Réservations sur mes trajets</h1>
     </div>
 </section>
 <!-- END HERO-->
@@ -24,8 +24,9 @@
         <?php foreach ($carpoolsWithPassengers as $carpool): ?>
         <div class="card mb-3">
             <div class="card-header">
-                <h3><?php echo htmlspecialchars($carpool['departure']) ?> →<?php echo htmlspecialchars($carpool['arrival']) ?></h3>
-                <small><?php echo date('d/m/Y H:i', strtotime($carpool['departure_time'])) ?></small>
+                <h3><?php echo htmlspecialchars($carpool['departure']) ?> ->
+                <?php echo htmlspecialchars($carpool['arrival']) ?></h3>
+                <p><?php echo date('d/m/Y H:i', strtotime($carpool['departure_time'])) ?></p>
             </div>
             <div class="card-body">
                 <!-- Réservations confirmées -->

@@ -42,7 +42,15 @@
                 <div class="card-body">
                     <h3 class="stat-title">Actifs</h3>
                     <h2 class="stat-number text-success">
-                        <?php echo count(array_filter($users, fn($user) => $user['status'] === 'active')) ?>
+                        <?php
+                            $count = 0;
+                            foreach ($users as $user) {
+                                if ($user['status'] === 'active') {
+                                    $count++;
+                                }
+                            }
+                            echo $count;
+                        ?>
                     </h2>
                 </div>
             </div>
@@ -52,7 +60,15 @@
                 <div class="card-body">
                     <h3 class="stat-title">Suspendus</h3>
                     <h2 class="stat-number text-danger">
-                        <?php echo count(array_filter($users, fn($user) => $user['status'] === 'banned')) ?>
+                        <?php
+                            $count = 0;
+                            foreach ($users as $user) {
+                                if ($user['status'] === 'banned') {
+                                    $count++;
+                                }
+                            }
+                            echo $count;
+                        ?>
                     </h2>
                 </div>
             </div>

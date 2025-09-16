@@ -11,7 +11,9 @@
 <div class="container mt-4 mb-4">
     <div class="row">
         <div class="col-12">
-            <p class="lead">Bonjour<?php echo htmlspecialchars($user['username']) ?></p>
+            <p class="lead">Bonjour
+                <strong><?php echo htmlspecialchars($user['username']) ?></strong>
+            </p>
         </div>
     </div>
 
@@ -37,33 +39,6 @@
         </div>
     </div>
 
-    <!-- Recherche trajets -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card search-form">
-                <div class="card-header">
-                    <h3>Chercher un trajet</h3>
-                </div>
-                <div class="card-body d-flex justify-content-center">
-                    <form action="/carpools" method="GET" class="row g-3">
-                        <div class="col-md-4">
-                            <input type="text" name="departure" class="form-control" placeholder="Départ" required>
-                        </div>
-                        <div class="col-md-4">
-                            <input type="text" name="arrival" class="form-control" placeholder="Arrivée" required>
-                        </div>
-                        <div class="col-md-3">
-                            <input type="date" name="date" class="form-control" min="<?php echo date('Y-m-d') ?>" required>
-                        </div>
-                        <div class="col-md-1">
-                            <button type="submit" class="btn">Rechercher</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Actions principales -->
     <div class="row mb-4 gy-4">
         <div class="col-md-6">
@@ -84,7 +59,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card">
+            <div class="card h-100">
                 <div class="card-header">
                     <h3>Mon compte</h3>
                 </div>
@@ -92,9 +67,6 @@
                     <div class="list-group list-group-flush">
                         <a href="/profile" class="list-group-item list-group-item-action">
                             <p>Modifier mon profil</p>
-                        </a>
-                        <a href="/reviews/my-reviews" class="list-group-item list-group-item-action">
-                            <p>Mes avis laissés</p>
                         </a>
                     </div>
                 </div>

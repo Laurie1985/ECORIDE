@@ -9,7 +9,13 @@
 <!-- END HERO-->
 
 <div class="container mt-4 mb-4">
-
+    <div class="row">
+        <div class="col-12">
+            <p class="lead">Bonjour :
+                <strong><?php echo htmlspecialchars($_SESSION['username']) ?></strong>
+            </p>
+        </div>
+    </div>
     <!-- Statistiques rapides -->
     <div class="row mb-4">
         <div class="col-md-6">
@@ -28,9 +34,9 @@
             <div class="card">
                 <div class="card-body text-center">
                     <h2 class="text-danger"><?php echo $complaintsCount ?></h2>
-                    <p>Plaintes à traiter</p>
+                    <p>Litiges à traiter</p>
                     <a href="/employee/complaints" class="btn">
-                        Traiter les plaintes
+                        Traiter les litiges
                     </a>
                 </div>
             </div>
@@ -56,7 +62,7 @@
                         <div class="col-md-4 mb-3 d-flex justify-content-center">
                             <div class="d-flex">
                                 <a href="/employee/complaints" class="btn">
-                                    Résoudre les plaintes
+                                    Résoudre les litiges
                                 </a>
                             </div>
                         </div>
@@ -85,17 +91,29 @@
                         <div class="col-md-6">
                             <h4>Modération des avis :</h4>
                             <ul>
-                                <li>Vérifier le contenu approprié</li>
-                                <li>Rejeter les avis inappropriés</li>
-                                <li>Approuver les avis conformes</li>
+                                <li>
+                                    <p>Vérifier le contenu approprié</p>
+                                </li>
+                                <li>
+                                    <p>Rejeter les avis inappropriés</p>
+                                </li>
+                                <li>
+                                    <p>Approuver les avis conformes</p>
+                                </li>
                             </ul>
                         </div>
                         <div class="col-md-6">
-                            <h4>Gestion des plaintes :</h4>
+                            <h4>Gestion des litiges :</h4>
                             <ul>
-                                <li>Analyser les conflits passager/conducteur</li>
-                                <li>Décider du remboursement ou paiement</li>
-                                <li>Documenter les résolutions</li>
+                                <li>
+                                    <p>Analyser les conflits passager/conducteur</p>
+                                </li>
+                                <li>
+                                    <p>Décider du remboursement ou paiement</p>
+                                </li>
+                                <li>
+                                    <p>Documenter les résolutions</p>
+                                </li>
                             </ul>
                         </div>
                     </div>

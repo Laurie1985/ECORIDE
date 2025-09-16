@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initialisation
     loadDriverReviews(driverId);
     initPriceCalculator(pricePerSeat);
+    initBookingModal();
 });
 
 /**
@@ -116,4 +117,31 @@ function escapeHtml(unsafe) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+}
+
+/**
+ * Initialise la modal de confirmation de réservation
+ */
+function initBookingModal() {
+    const modalButton = document.querySelector('[data-bs-target="#bookingModal"]');
+    const seatsSelect = document.getElementById('seats_booked');
+    const modalSeats = document.getElementById('modalSeats');
+    const modalTotal = document.getElementById('modalTotal');
+    const hiddenInput = document.getElementById('hiddenSeatsBooked');
+
+    if (!modalButton || !seatsSelect || !modalSeats || !modalTotal || !hiddenInput) {
+        return; // Éléments non trouvés
+    }
+
+    const pricePerSeat = parseInt(window.carpoolData.pricePerSeat);
+
+    // Synchroniser avec la modal au clic sur le bouton de réservation
+    modalButton.addEventListener('click', function () {
+        const seats = parseInt(seatsSelect.value);
+        const total = seats * pricePerSeat;
+
+        modalSeats.textContent = seats;
+        modalTotal.textContent = total;
+        hiddenInput.value = seats;
+    });
 }

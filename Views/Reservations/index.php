@@ -53,10 +53,11 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 <strong><?php echo htmlspecialchars($reservation['departure']) ?> -><?php echo htmlspecialchars($reservation['arrival']) ?></strong>
-                                <br><small>Trajet du<?php echo date('d/m/Y', strtotime($reservation['departure_time'])) ?></small>
+                                <br><small>Trajet du
+                                    <?php echo date('d/m/Y', strtotime($reservation['departure_time'])) ?></small>
                             </div>
                             <div>
-                                <a href="/reservations/confirm/<?php echo $reservation['reservation_id'] ?>"class="btn btn-warning">
+                                <a href="/reservations/confirm/<?php echo $reservation['reservation_id'] ?>"class="btn">
                                     Confirmer le trajet
                                 </a>
                             </div>
@@ -185,7 +186,7 @@
 
                                     <?php if ($canCancel): ?>
                                         <button type="button"
-                                                class="btn btn-outline-danger btn-sm mb-2"
+                                                class="btn mb-2"
                                                 data-bs-toggle="modal"
                                                 data-bs-target="#cancelModal<?php echo $reservation['reservation_id'] ?>">
                                             Annuler
@@ -195,7 +196,7 @@
                                     <?php endif; ?>
 
                                 <?php elseif ($reservation['status'] === 'awaiting_passenger_confirmation'): ?>
-                                    <a href="/reservations/confirm/<?php echo $reservation['reservation_id'] ?>" class="btn btn-warning btn-sm">
+                                    <a href="/reservations/confirm/<?php echo $reservation['reservation_id'] ?>" class="btn">
                                         Confirmer le trajet
                                     </a>
 
@@ -208,7 +209,8 @@
                                 <?php if (in_array($reservation['status'], ['confirmed', 'awaiting_passenger_confirmation']) && ! empty($reservation['driver_phone'])): ?>
                                     <div class="mt-2">
                                         <small class="text-muted">
-                                            Contact :<?php echo htmlspecialchars($reservation['driver_phone']) ?>
+                                            Contact :
+                                            <?php echo htmlspecialchars($reservation['driver_phone']) ?>
                                         </small>
                                     </div>
                                 <?php endif; ?>
@@ -247,7 +249,7 @@
                                     </p>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="submit" class="btn btn-danger">
+                                    <button type="submit" class="btn">
                                         Annuler ma réservation
                                     </button>
                                 </div>

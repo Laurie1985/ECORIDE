@@ -103,10 +103,10 @@ class Router
 
         // ==================== AVIS ====================
 
-        // Laisser un avis après un trajet
+        // Voir ses avis reçus en tant que conducteur
         $r->addRoute('GET', '/reviews/about-me', [\App\Controllers\ReviewController::class, 'myReviews']);
 
-        // Voir les avis d'un conducteur
+        // Voir les avis d'un conducteur pour un passager
         $r->addRoute('GET', '/reviews/driver/{driverId:\d+}', [\App\Controllers\ReviewController::class, 'showDriverReviews']);
         $r->addRoute('GET', '/api/reviews/driver/{driverId:\d+}', [\App\Controllers\ReviewController::class, 'apiDriverReviews']);
 
@@ -114,10 +114,10 @@ class Router
 
         $r->addRoute('GET', '/employee', [\App\Controllers\EmployeeController::class, 'dashboard']);
         $r->addRoute('GET', '/employee/reviews', [\App\Controllers\EmployeeController::class, 'pendingReviews']);
-        $r->addRoute('POST', '/employee/reviews/{id}/approve', [\App\Controllers\EmployeeController::class, 'approveReview']);
-        $r->addRoute('POST', '/employee/reviews/{id}/reject', [\App\Controllers\EmployeeController::class, 'rejectReview']);
+        $r->addRoute('POST', '/employee/reviews/{reviewId}/approve', [\App\Controllers\EmployeeController::class, 'approveReview']);
+        $r->addRoute('POST', '/employee/reviews/{reviewId}/reject', [\App\Controllers\EmployeeController::class, 'rejectReview']);
         $r->addRoute('GET', '/employee/complaints', [\App\Controllers\EmployeeController::class, 'complaints']);
-        $r->addRoute('POST', '/employee/complaints/{id}/resolve', [\App\Controllers\EmployeeController::class, 'resolveComplaint']);
+        $r->addRoute('POST', '/employee/complaints/{reservationId}/resolve', [\App\Controllers\EmployeeController::class, 'resolveComplaint']);
 
         // ==================== ESPACE ADMINISTRATEUR ====================
 

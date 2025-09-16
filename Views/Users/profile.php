@@ -3,7 +3,7 @@
 <!-- START HERO-->
 <section class="hero">
     <div class="hero-content">
-        <h1 class="dash-title mb-4">Mon profil</h1>
+        <h1 class="hero-title">Mon profil</h1>
     </div>
 </section>
 <!-- END HERO-->
@@ -125,7 +125,7 @@
                         <div class="col-md-3">
                             <div class="text-center">
                                 <h3><?php echo $user['credits'] ?></h3>
-                                <small class="text-muted">Crédits disponibles</small>
+                                <p class="text-muted">Crédits disponibles</p>
                             </div>
                         </div>
 
@@ -133,7 +133,7 @@
                         <div class="col-md-3">
                             <div class="text-center">
                                 <h3><?php echo number_format($user['rating'], 1) ?>/5</h3>
-                                <small class="text-muted">Note conducteur</small>
+                                <p class="text-muted">Note conducteur</p>
                             </div>
                         </div>
                         <?php endif; ?>
@@ -141,13 +141,13 @@
                         <div class="col-md-3">
                             <div class="text-center">
                                 <h3><?php echo ucfirst($user['status'] ?? 'active') ?></h3>
-                                <small class="text-muted">Statut du compte</small>
+                                <p class="text-muted">Statut du compte</p>
                             </div>
                         </div>
                         <div class="col-md-3">
                             <div class="text-center">
                                 <h3><?php echo date('d/m/Y', strtotime($user['created_at'])) ?></h3>
-                                <small class="text-muted">Membre depuis</small>
+                                <p class="text-muted">Membre depuis</p>
                             </div>
                         </div>
                     </div>

@@ -40,6 +40,13 @@ h1.hero-title {
     color: var(--gris);
 }
 
+.lead {
+    text-align: center;
+    font-weight: 500;
+    color: var(--gris);
+    font-size: 1.5rem;
+}
+
 .card {
     background-color: var(--gris);
     border: none;
