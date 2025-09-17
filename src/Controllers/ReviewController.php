@@ -115,7 +115,7 @@ class ReviewController extends BaseController
     }
 
     /**
-     * API pour récupérer les avis d'un conducteur (pour AJAX)
+     * API pour récupérer les avis d'un conducteur (AJAX)
      */
     public function apiDriverReviews(int $driverId)
     {

@@ -19,11 +19,10 @@ class MongoDb
      */
     private function __construct()
     {
-        // PRIORITÉ 1: Si Heroku mLab existe, on l'utilise
-        $mongoUri = Config::get('MONGOLAB_URI') ?: Config::get('MONGODB_URI');
+        $mongoUri = Config::get('MONGODB_URI');
 
         if (! empty($mongoUri)) {
-            // Mode Heroku : utilise l'URI complète
+            // utilise Atlas
             $this->client = new Client($mongoUri);
         } else {
             $mongoHost = Config::get('MONGO_HOST', 'localhost');

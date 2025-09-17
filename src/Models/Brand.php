@@ -8,9 +8,6 @@ class Brand extends BaseModel
 
     /**
      * Trouve une marque par son nom.
-     *
-     * @param string $brandName Le nom de la marque à chercher.
-     * @return array|false Retourne les données de la marque ou false si non trouvée.
      */
     public static function findByNameBrand(string $brandName): array | false
     {

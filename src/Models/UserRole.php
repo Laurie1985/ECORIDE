@@ -6,7 +6,7 @@ use App\Config\Database;
 class UserRole extends BaseModel
 {
     protected static $table      = 'user_roles';
-    protected static $primaryKey = 'user_role_id'; // Votre clé modifiée
+    protected static $primaryKey = 'user_role_id';
 
     /**
      * Assigne un rôle à un utilisateur avec type (driver/passenger/both)

@@ -23,7 +23,7 @@ class CarpoolController extends BaseController
         ];
 
         try {
-            // Recherche de base (ville + date)
+            // Recherche de base (villes + date)
             $carpools = Carpool::searchForAPI($filters);
 
             $response = [
