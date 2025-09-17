@@ -3,7 +3,6 @@ namespace App\Services;
 
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
 
 class EmailService
 {
@@ -18,7 +17,7 @@ class EmailService
     private function configure()
     {
         try {
-            // Configuration SMTP avec vos variables
+            // Configuration SMTP avec les variables
             $this->mailer->isSMTP();
             $this->mailer->Host       = $_ENV['MAIL_HOST'] ?? 'smtp.gmail.com';
             $this->mailer->SMTPAuth   = true;
@@ -35,11 +34,6 @@ class EmailService
 
             $this->mailer->CharSet = 'UTF-8';
             $this->mailer->isHTML(true);
-
-            // Debug pour le développement (à désactiver en production)
-            if ($_ENV['APP_ENV'] === 'development') {
-                $this->mailer->SMTPDebug = SMTP::DEBUG_SERVER;
-            }
 
         } catch (Exception $e) {
             error_log("Erreur configuration PHPMailer: " . $e->getMessage());
@@ -114,11 +108,11 @@ class EmailService
         <head>
             <meta charset='UTF-8'>
             <style>
-                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                body { font-family: Quicksand, sans-serif; line-height: 1.6; color: #435955; }
                 .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                .header { background: #28a745; color: white; padding: 20px; text-align: center; }
-                .content { padding: 20px; background: #f9f9f9; }
-                .trip-info { background: white; padding: 15px; border-left: 4px solid #28a745; margin: 15px 0; }
+                .header { background: #84a9bf; color: #435955; padding: 20px; text-align: center; }
+                .content { padding: 20px; background: #f2f2f0; color: #435955; }
+                .trip-info { background: #f2f2f0; color: #435955 padding: 15px; border-left: 4px solid #84a9bf; margin: 15px 0; }
             </style>
         </head>
         <body>
@@ -161,13 +155,13 @@ class EmailService
         <head>
             <meta charset='UTF-8'>
             <style>
-                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                body { font-family: Quicksand, sans-serif; line-height: 1.6; color: #435955; }
                 .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                .header { background: #007bff; color: white; padding: 20px; text-align: center; }
-                .content { padding: 20px; background: #f9f9f9; }
-                .trip-info { background: white; padding: 15px; border-left: 4px solid #007bff; margin: 15px 0; }
-                .btn { display: inline-block; background: #28a745; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin: 10px 0; }
-                .btn:hover { background: #218838; }
+                .header { background: #84a9bf; color: #435955; padding: 20px; text-align: center; }
+                .content { padding: 20px; background: #f2f2f0; color: #435955; }
+                .trip-info { background: #f2f2f0; color: #435955 padding: 15px; border-left: 4px solid #84a9bf; margin: 15px 0; }
+                .btn { display: inline-block; background: #435955; color: #f2f2f0; padding: 12px 24px; text-decoration: none; border-radius: 5px; margin: 10px 0; }
+                .btn:hover { background: #768c70; }
             </style>
         </head>
         <body>
@@ -215,11 +209,11 @@ class EmailService
         <head>
             <meta charset='UTF-8'>
             <style>
-                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                body { font-family: Quicksand, sans-serif; line-height: 1.6; color: #435955; }
                 .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                .header { background: #dc3545; color: white; padding: 20px; text-align: center; }
-                .content { padding: 20px; background: #f9f9f9; }
-                .trip-info { background: white; padding: 15px; border-left: 4px solid #dc3545; margin: 15px 0; }
+                .header { background: #dc3545; color: #f2f2f0; padding: 20px; text-align: center; }
+                .content { padding: 20px; background: #f2f2f0; }
+                .trip-info { background: #f2f2f0; padding: 15px; border-left: 4px solid #dc3545; margin: 15px 0; }
             </style>
         </head>
         <body>

@@ -14,10 +14,10 @@ class Database extends PDO// hérite de PDO
     // Constructeur privé pour empêcher l'instanciation directe de la classe
     private function __construct()
     {
-        //Si Heroku ClearDB existe, on l'utilise
-        if (! empty($_ENV['CLEARDB_DATABASE_URL'])) {
+        //Si Heroku JAWSDB existe, on l'utilise
+        if (! empty($_ENV['JAWSDB_URL'])) {
             // Mode Heroku : parse l'URL complète
-            $url      = parse_url($_ENV['CLEARDB_DATABASE_URL']);
+            $url      = parse_url($_ENV['JAWSDB_URL']);
             $dsn      = "mysql:host={$url['host']};dbname=" . ltrim($url['path'], '/');
             $username = $url['user'];
             $password = $url['pass'];

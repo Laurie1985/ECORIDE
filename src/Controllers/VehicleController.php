@@ -46,31 +46,6 @@ class VehicleController extends BaseController
     /**
      * Traite la création d'un nouveau véhicule.
      */
-    /*public function create()
-    {
-        if (! isset($_SESSION['user_id'])) {
-            $this->redirect('/login');
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || ! $this->validateCsrfToken()) {
-            $_SESSION['error'] = 'Requête invalide.';
-            $this->redirect('/vehicles');
-        }
-
-        $data            = $_POST;
-        $data['user_id'] = $_SESSION['user_id'];
-
-        // Utilise la méthode de validation et de création du modèle
-        $result = Vehicle::createWithValidation($data);
-
-        if ($result['success']) {
-            $_SESSION['success'] = 'Véhicule ajouté avec succès !';
-        } else {
-            $_SESSION['errors'] = $result['errors'];
-        }
-
-        $this->redirect('/vehicles');
-    }*/
     public function create()
     {
         if (! isset($_SESSION['user_id'])) {
@@ -107,8 +82,6 @@ class VehicleController extends BaseController
 
     /**
      * Affiche le formulaire d'édition d'un véhicule.
-     *
-     * @param int $vehicleId L'ID du véhicule à éditer.
      */
     public function showEdit(int $vehicleId)
     {
@@ -138,8 +111,6 @@ class VehicleController extends BaseController
 
     /**
      * Traite la mise à jour d'un véhicule.
-     *
-     * @param int $vehicleId L'ID du véhicule à mettre à jour.
      */
     public function update(int $vehicleId)
     {
@@ -174,8 +145,6 @@ class VehicleController extends BaseController
 
     /**
      * Supprime un véhicule.
-     *
-     * @param int $vehicleId L'ID du véhicule à supprimer.
      */
     public function delete(int $vehicleId)
     {
