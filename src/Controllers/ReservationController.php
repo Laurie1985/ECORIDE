@@ -31,7 +31,7 @@ class ReservationController extends BaseController
             return $r['status'] !== 'awaiting_passenger_confirmation';
         });
 
-        $this->render('reservations/index', [
+        $this->render('Reservations/index', [
             'title'                => 'Ecoride - Mes réservations',
             'cssFile'              => 'reservations',
             'awaitingConfirmation' => $awaitingConfirmation,
@@ -176,7 +176,7 @@ class ReservationController extends BaseController
             $this->redirect('/reservations');
         }
 
-        $this->render('reservations/confirm', [
+        $this->render('Reservations/confirm', [
             'title'       => 'Confirmation trajet',
             'cssFile'     => 'reservations',
             'jsFile'      => 'reservation-confirm',
@@ -230,7 +230,7 @@ class ReservationController extends BaseController
             $grouped[$status][] = $reservation;
         }
 
-        $this->render('reservations/history', [
+        $this->render('Reservations/history', [
             'title'               => 'Ecoride - Historique des réservations',
             'cssFile'             => 'reservations',
             'groupedReservations' => $grouped,

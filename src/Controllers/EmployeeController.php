@@ -32,7 +32,7 @@ class EmployeeController extends BaseController
         // Compter les plaintes non traitées
         $complaintsCount = Reservation::getComplaintsCount();
 
-        $this->render('employee/dashboard', [
+        $this->render('Employee/dashboard', [
             'title'               => 'Ecoride - Espace Employé',
             'cssFile'             => 'employee',
             'pendingReviewsCount' => $pendingReviewsCount,
@@ -70,7 +70,7 @@ class EmployeeController extends BaseController
             $enrichedReviews[] = $review;
         }
 
-        $this->render('employee/reviews', [
+        $this->render('Employee/reviews', [
             'title'      => 'Ecoride - Avis en attente',
             'cssFile'    => 'employee',
             'reviews'    => $pendingReviews,
@@ -130,7 +130,7 @@ class EmployeeController extends BaseController
     {
         $complaints = Reservation::getComplaints();
 
-        $this->render('employee/complaints', [
+        $this->render('Employee/complaints', [
             'title'      => 'EcoRide - Plaintes à traiter',
             'cssFile'    => 'employee',
             'complaints' => $complaints,

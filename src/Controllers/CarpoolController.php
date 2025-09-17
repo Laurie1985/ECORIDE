@@ -58,7 +58,7 @@ class CarpoolController extends BaseController
      */
     public function index()
     {
-        $this->render('carpools/search', [
+        $this->render('Carpools/search', [
             'title'   => 'Ecoride - Rechercher un covoiturage',
             'cssFile' => 'carpools',
             'jsFile'  => 'carpools-search',
@@ -79,7 +79,7 @@ class CarpoolController extends BaseController
             $this->redirect('/carpools');
         }
 
-        $this->render('carpools/details', [
+        $this->render('Carpools/details', [
             'title'      => 'Ecoride - Détails du covoiturage ',
             'cssFile'    => 'carpool-details',
             'jsFile'     => 'carpool-details',
@@ -152,7 +152,7 @@ class CarpoolController extends BaseController
             $this->redirect('/vehicles');
         }
 
-        $this->render('carpools/create', [
+        $this->render('Carpools/create', [
             'title'      => 'Ecoride - Créer un covoiturage',
             'cssFile'    => 'carpools',
             'vehicles'   => $vehicles,
@@ -237,7 +237,7 @@ class CarpoolController extends BaseController
         $userId   = $_SESSION['user_id'];
         $carpools = Carpool::findAllBy(['driver_id' => $userId]);
 
-        $this->render('carpools/my_carpools', [
+        $this->render('Carpools/my_carpools', [
             'title'      => 'Ecoride - Mes covoiturages',
             'cssFile'    => 'carpools',
             'jsFile'     => 'my-carpools',
@@ -257,7 +257,7 @@ class CarpoolController extends BaseController
         // Récupérer les covoiturages du conducteur avec leurs réservations
         $carpoolsWithPassengers = Carpool::getMyTripsWithPassengers($userId);
 
-        $this->render('carpools/my_passengers', [
+        $this->render('Carpools/my_passengers', [
             'title'                  => 'Ecoride - Mes passagers',
             'cssFile'                => 'dashboard',
             'carpoolsWithPassengers' => $carpoolsWithPassengers,

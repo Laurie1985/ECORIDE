@@ -65,7 +65,7 @@ class ReviewController extends BaseController
             $enrichedReviews[] = $review;
         }
 
-        $this->render('reviews/driver', [
+        $this->render('Reviews/driver', [
             'title' => "Ecoride - Avis sur {$driver['username']}",
             'cssFile'       => 'reviews',
             'driver'        => $driver,
@@ -104,7 +104,7 @@ class ReviewController extends BaseController
             $averageRating  = round($totalRatingSum / $totalReviews, 1);
         }
 
-        $this->render('reviews/my_reviews', [
+        $this->render('Reviews/my_reviews', [
             'title'         => 'Ecoride - Mes avis reçus',
             'cssFile'       => 'reviews',
             'reviews'       => $enrichedReviews,

@@ -66,7 +66,7 @@ class UserController extends BaseController
         $user      = User::find($userId);
         $userRoles = User::getUserRoles($userId);
 
-        $this->render('users/profile', [
+        $this->render('Users/profile', [
             'title'      => 'Ecoride - Mon profil',
             'cssFile'    => 'profile',
             'csrf_token' => $this->generateCsrfToken(),
@@ -205,7 +205,7 @@ class UserController extends BaseController
         $userId      = $_SESSION['user_id'];
         $preferences = DriverPreference::findBy(['user_id' => $userId]);
 
-        $this->render('users/preferences', [
+        $this->render('Users/preferences', [
             'title'       => 'Ecoride - Mes préférences',
             'cssFile'     => 'preferences',
             'csrf_token'  => $this->generateCsrfToken(),
@@ -268,7 +268,7 @@ class UserController extends BaseController
         // Covoiturages en tant que passager
         $passengerReservations = Reservation::getPassengerReservations($userId);
 
-        $this->render('users/history', [
+        $this->render('Users/history', [
             'title'                 => 'Ecoride - Mon historique',
             'cssFile'               => 'history',
             'driverCarpools'        => $driverCarpools,

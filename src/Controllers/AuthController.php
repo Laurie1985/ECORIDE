@@ -15,7 +15,7 @@ class AuthController extends BaseController
             $this->redirect('/dashboard');
         }
 
-        $this->render('auth/login', [
+        $this->render('Auth/login', [
             'title'      => 'Ecoride - Connexion',
             'cssFile'    => 'auth',
             'csrf_token' => $this->generateCsrfToken(),
@@ -89,7 +89,7 @@ class AuthController extends BaseController
             $this->redirect('/dashboard');
         }
 
-        $this->render('auth/register', [
+        $this->render('Auth/register', [
             'title'      => 'Ecoride - Inscription',
             'cssFile'    => 'auth',
             'jsFile'     => 'auth',

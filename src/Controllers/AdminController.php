@@ -41,7 +41,7 @@ class AdminController extends BaseController
         // Réservations par statut
         $reservationsByStatus = Reservation::getReservationsByStatus();
 
-        $this->render('admin/dashboard', [
+        $this->render('Admin/dashboard', [
             'title'                => 'Ecoride - Administration',
             'cssFile'              => 'admin',
             'totalUsers'           => $totalUsers,
@@ -102,7 +102,7 @@ class AdminController extends BaseController
     {
         $users = User::all();
 
-        $this->render('admin/users', [
+        $this->render('Admin/users', [
             'title'      => 'Ecoride - Gestion des utilisateurs',
             'cssFile'    => 'admin',
             'jsFile'     => 'admin-users',
@@ -178,7 +178,7 @@ class AdminController extends BaseController
         // Récupérer tous les employés
         $employees = User::getUsersByRole('employee');
 
-        $this->render('admin/employees', [
+        $this->render('Admin/employees', [
             'title'      => 'Ecoride - Gestion des employés',
             'cssFile'    => 'admin',
             'jsFile'     => 'admin-users',
@@ -192,7 +192,7 @@ class AdminController extends BaseController
      */
     public function showCreateEmployee()
     {
-        $this->render('admin/create_employee', [
+        $this->render('Admin/create_employee', [
             'title'      => 'Ecoride - Créer un employé',
             'cssFile'    => 'admin',
             'js'         => 'create-employee',
@@ -330,7 +330,7 @@ class AdminController extends BaseController
      */
     public function stats()
     {
-        $this->render('admin/stats', [
+        $this->render('Admin/stats', [
             'title'   => 'Ecoride - Statistiques',
             'cssFile' => 'admin',
             'jsFile'  => 'admin-charts',

@@ -10,7 +10,7 @@ class HomeController extends BaseController
             'cssFile' => 'home',
         ];
 
-        $this->render('home/index', $data);
+        $this->render('Home/index', $data);
     }
     public function contact()
     {

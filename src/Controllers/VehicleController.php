@@ -34,7 +34,7 @@ class VehicleController extends BaseController
         // Récupère toutes les marques pour le formulaire d'ajout/édition
         $brands = Brand::all();
 
-        $this->render('users/vehicles', [
+        $this->render('Users/vehicles', [
             'title'      => 'Mes véhicules',
             'cssFile'    => 'vehicles',
             'vehicles'   => $vehicles,
@@ -100,7 +100,7 @@ class VehicleController extends BaseController
 
         $brands = Brand::all();
 
-        $this->render('users/vehicles_edit', [
+        $this->render('Users/vehicles_edit', [
             'title'      => 'Modifier un véhicule',
             'cssFile'    => 'vehicles',
             'vehicle'    => $vehicle,
