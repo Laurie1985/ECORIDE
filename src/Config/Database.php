@@ -28,7 +28,7 @@ class Database extends PDO// hérite de PDO
             $password = $_ENV['DB_PASSWORD'];
         }
 
-        parent::__construct($dsn, $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);   //Appel du constructeur parent de la class pdo avec les informations de connexion
+        parent::__construct($dsn, $username, $password);                     //Appel du constructeur parent de la class pdo avec les informations de connexion
         $this->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC); //Définition du mode de récupération des données par défaut à FETCH_ASSOC (tableau associatif)
         $this->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);      //Définition du mode de gestion des erreurs pour lancer des exceptions
     }
