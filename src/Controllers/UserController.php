@@ -38,16 +38,16 @@ class UserController extends BaseController
         // Choisir la vue selon le type d'utilisateur
         switch ($userType) {
             case 'driver':
-                $view          = 'users/dashboard-driver';
+                $view          = 'Users/dashboard-driver';
                 $data['title'] = 'Ecoride - Espace Conducteur';
                 break;
             case 'both':
-                $view          = 'users/dashboard-both';
+                $view          = 'Users/dashboard-both';
                 $data['title'] = 'Ecoride - Mon espace';
                 break;
             case 'passenger':
             default:
-                $view          = 'users/dashboard-passenger';
+                $view          = 'Users/dashboard-passenger';
                 $data['title'] = 'Ecoride - Espace Passager';
                 break;
         }
