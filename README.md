@@ -18,7 +18,7 @@ Front-end :
 
 Back-end : 
 
-- PHP 8.4 (vanilla) avec architecture MVC et design pattern Singleton
+- PHP 8.4 (vanilla) avec architecture MVC et pattern Singleton
 - Composer pour la gestion des dépendances
 - FastRoute pour le routage
 - PHPMailer pour l'envoi d'emails
@@ -59,7 +59,7 @@ Pour les visiteurs :
 - Création de compte utilisateur
 
 Pour les utilisateurs connectés :
-- Profil utilisateur avec chois du rôle (passager/conducteur/les deux)
+- Profil utilisateur avec choix du rôle (passager/conducteur/les deux)
 - Participation à des covoiturages
 - Création et gestion de trajets pour les conducteurs
 - Historique des covoiturages
