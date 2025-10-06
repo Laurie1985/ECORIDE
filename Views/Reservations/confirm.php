@@ -1,4 +1,4 @@
-<!-- VUE DE CONFIRMATION POST-TRAJET (US 11) -->
+<!-- VUE DE CONFIRMATION POST-TRAJET -->
 
 <!-- START HERO-->
 <section class="hero">

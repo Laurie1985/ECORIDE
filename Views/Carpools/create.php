@@ -170,7 +170,7 @@ echo $energyTypes[$vehicle['energy_type']] ?? $vehicle['energy_type'];
                             </div>
                         </div>
 
-                        <!-- Préférences (optionnel) -->
+                        <!-- Préférences -->
                         <div class="row mb-4">
                             <div class="col-12">
                                 <h4 class="mb-3">Préférences de voyage (optionnel)</h4>

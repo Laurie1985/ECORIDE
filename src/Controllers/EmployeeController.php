@@ -59,7 +59,7 @@ class EmployeeController extends BaseController
             $reviewedUser                     = User::find($review['reviewed_user_id']);
             $review['reviewed_user_username'] = $reviewedUser ? $reviewedUser['username'] : 'Utilisateur inconnu';
 
-            // Récupérer les infos du covoiturage pour plus de contexte
+            // Récupérer les infos du covoiturage
             $carpool = Carpool::getWithDetails($review['carpool_id']);
             if ($carpool) {
                 $review['carpool_departure'] = $carpool['departure'];

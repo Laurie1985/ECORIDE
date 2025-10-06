@@ -96,7 +96,7 @@ class UserController extends BaseController
         $phone     = trim($_POST['phone'] ?? '');
         $address   = trim($_POST['address'] ?? '');
 
-        // Validation basique
+        // Validation
         if (empty($name) || empty($firstname)) {
             $_SESSION['error'] = 'Les nom et prénom sont obligatoires';
             $this->redirect('/profile');

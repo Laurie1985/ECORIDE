@@ -1,4 +1,4 @@
-<!-- VUE DE RECHERCHE DES COVOITURAGES (US 3) -->
+<!-- VUE DE RECHERCHE DES COVOITURAGES -->
 
 <!-- START HERO-->
 <section class="hero">
@@ -94,7 +94,7 @@
             </div>
         </div>
 
-        <!-- Zone d'affichage des résultats - Colonne de droite -->
+        <!-- Zone d'affichage des résultats -->
         <div class="col-lg-9">
             <!-- Message initial -->
             <div id="initialMessage" class="card text-center">
@@ -139,7 +139,7 @@
                     </div>
                     <div class="card-body p-0">
                         <div id="carpoolsList">
-                            <!-- Les résultats seront générés par JavaScript -->
+                            <!-- Les résultats sont générés par JavaScript -->
                         </div>
                     </div>
                 </div>

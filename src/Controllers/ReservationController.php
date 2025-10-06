@@ -238,7 +238,7 @@ class ReservationController extends BaseController
     }
 
     /**
-     * API pour obtenir le statut d'une réservation (AJAX)
+     * API pour obtenir le statut d'une réservation
      */
     public function apiStatus(int $reservationId)
     {

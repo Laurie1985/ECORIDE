@@ -82,7 +82,7 @@ function createReviewHtml(review) {
                 <div>
                     <div class="text-warning"><strong>${ratingDisplay}</strong></div>
                     <p class="mb-1">${escapeHtml(review.comment)}</p>
-                    <small class="text-muted">Par un passager • ${reviewDate}</small>
+                    <small class="text-muted">Par un passager - ${reviewDate}</small>
                 </div>
             </div>
         </div>

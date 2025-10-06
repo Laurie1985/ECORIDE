@@ -508,7 +508,7 @@ VALUES (
 
 -- === COMPTES ADMINISTRATEUR ET EMPLOYÉS ===
 
--- Insertion de l'administrateur (mot de passe: AdminEcoRide2025)
+-- Insertion de l'administrateur
 INSERT INTO
     `users` (
         `name`,
@@ -533,7 +533,7 @@ VALUES (
         'active'
     );
 
--- Insertion des employés (mot de passe: EmployeeEco2025)
+-- Insertion des employés
 INSERT INTO
     `users` (
         `name`,

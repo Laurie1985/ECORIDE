@@ -1,4 +1,4 @@
-<!-- VUE DÉTAILLÉE D'UN COVOITURAGE (US 5) -->
+<!-- VUE DÉTAILLÉE D'UN COVOITURAGE -->
 
 <!-- START HERO-->
 <section class="hero">
@@ -399,7 +399,7 @@
         </div>
     </div>
 
-    <!-- Modal de confirmation minimale -->
+    <!-- Modal de confirmation -->
     <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
