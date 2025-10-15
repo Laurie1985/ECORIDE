@@ -21,8 +21,7 @@
                         <div class="col-md-4">
                             <?php if ($totalReviews > 0): ?>
                                 <div class="mb-2">
-                                    <span class="display-4 text-warning"><?php echo $averageRating ?></span>
-                                    <span class="text-muted">/5</span>
+                                    <h3><?php echo $averageRating ?>/5</h3>
                                 </div>
                                 <p><strong>Note moyenne</strong></p>
                             <?php else: ?>

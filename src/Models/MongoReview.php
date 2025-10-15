@@ -3,6 +3,7 @@ namespace App\Models;
 
 use App\Config\Config;
 use App\Config\MongoDb;
+use App\Models\User;
 
 class MongoReview
 {
@@ -78,6 +79,23 @@ class MongoReview
                 ]
             );
 
+            if ($result->getModifiedCount() > 0) {
+                // Récupérer l'avis pour connaître l'utilisateur concerné
+                $review = $this->collection->findOne(['_id' => new \MongoDB\BSON\ObjectId($reviewId)]);
+
+                if ($review) {
+                    // Recalculer la note moyenne
+                    $ratingData = $this->calculateAverageRating($review['reviewed_user_id']);
+
+                    // Mettre à jour la colonne rating dans MySQL
+                    User::update($review['reviewed_user_id'], [
+                        'rating' => $ratingData['average'],
+                    ]);
+
+                    error_log("Note mise à jour pour utilisateur {$review['reviewed_user_id']}: {$ratingData['average']}");
+                }
+            }
+
             return $result->getModifiedCount() > 0;
         } catch (\Exception $e) {
             error_log("Erreur approbation avis: " . $e->getMessage());
@@ -91,6 +109,8 @@ class MongoReview
     public function rejectReview($reviewId, $employeeId, $reason)
     {
         try {
+            $review = $this->collection->findOne(['_id' => new \MongoDB\BSON\ObjectId($reviewId)]);
+
             $result = $this->collection->updateOne(
                 ['_id' => new \MongoDB\BSON\ObjectId($reviewId)],
                 [
