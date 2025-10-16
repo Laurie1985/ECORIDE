@@ -39,10 +39,22 @@
                     </ul>
                     <div class="d-flex align-items-center flex-nowrap">
                         <?php if (isset($_SESSION['user_id'])): ?>
-                            <a href="/dashboard" class="btn me-4">Compte</a>
+                            <?php if ($_SESSION['user_role'] == 'admin'): ?>
+                            <a href="/admin/dashboard" class="btn me-4">Tableau de bord</a>
                             <form method="POST" action="/logout" class="d-inline">
                                 <button class="btn" type="submit">Déconnexion</button>
                             </form>
+                            <?php elseif ($_SESSION['user_role'] == 'employee'): ?>
+                                <a href="/employee" class="btn me-4">Tableau de bord</a>
+                            <form method="POST" action="/logout" class="d-inline">
+                                <button class="btn" type="submit">Déconnexion</button>
+                            </form>
+                            <?php else: ?>
+	                            <a href="/dashboard" class="btn me-4">compte</a>
+	                        <form method="POST" action="/logout" class="d-inline">
+	                            <button class="btn" type="submit">Déconnexion</button>
+	                        </form>
+	                        <?php endif; ?>
                         <?php else: ?>
                             <a href="/login" class="btn me-4">Connexion</a>
                             <a href="/register" class="btn">Inscription</a>
