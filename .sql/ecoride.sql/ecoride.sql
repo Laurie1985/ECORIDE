@@ -137,13 +137,13 @@ CREATE TABLE IF NOT EXISTS `reservation` (
 CREATE TABLE IF NOT EXISTS `transactions` (
     `transaction_id` INT AUTO_INCREMENT PRIMARY KEY,
     `user_id` INT NOT NULL,
-    `reservation_id` INT NULL,
+    `reservation_id` INT NOT NULL,
     `amount` INT NOT NULL,
     `transaction_type` ENUM('credit', 'debit') NOT NULL,
     `description` TEXT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
-    FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`reservation_id`) ON DELETE SET NULL
+    FOREIGN KEY (`reservation_id`) REFERENCES `reservation` (`reservation_id`) ON DELETE RESTRICT
 );
 
 -- Insertion des rôles par défaut

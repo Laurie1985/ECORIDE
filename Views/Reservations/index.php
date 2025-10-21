@@ -43,7 +43,7 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="card">
-                <div class="card-header bg-warning">
+                <div class="card-header">
                     <h3 class="mb-0">Trajets à confirmer</h3>
                 </div>
                 <div class="card-body">
@@ -52,7 +52,8 @@
                     <div class="alert alert-info">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <strong><?php echo htmlspecialchars($reservation['departure']) ?> -><?php echo htmlspecialchars($reservation['arrival']) ?></strong>
+                                <strong><?php echo htmlspecialchars($reservation['departure']) ?> ->
+                                <?php echo htmlspecialchars($reservation['arrival']) ?></strong>
                                 <br><small>Trajet du
                                     <?php echo date('d/m/Y', strtotime($reservation['departure_time'])) ?></small>
                             </div>
@@ -178,22 +179,22 @@
                             <!-- Actions -->
                             <div class="col-md-3 text-end">
                                 <?php if ($reservation['status'] === 'confirmed'): ?>
-                                    <?php
-                                        $now           = new DateTime();
-                                        $departureTime = new DateTime($reservation['departure_time']);
-                                        $canCancel     = $departureTime > $now->add(new DateInterval('PT2H')); // 2h avant
-                                    ?>
+                                <?php
+                                    $now           = time();
+                                    $departureTime = strtotime($reservation['departure_time']);
+                                    $canCancel     = $departureTime > $now; //Annulation possible tant que pas encore parti
+                                ?>
 
-                                    <?php if ($canCancel): ?>
-                                        <button type="button"
-                                                class="btn mb-2"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#cancelModal<?php echo $reservation['reservation_id'] ?>">
-                                            Annuler
-                                        </button>
-                                    <?php else: ?>
-                                        <small class="text-muted">Annulation impossible<br>(moins de 2h avant le départ)</small>
-                                    <?php endif; ?>
+                                <?php if ($canCancel): ?>
+                                    <button type="button"
+                                            class="btn mb-2"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#cancelModal<?php echo $reservation['reservation_id'] ?>">
+                                        Annuler
+                                    </button>
+                                <?php else: ?>
+                                    <small class="text-muted">Annulation impossible<br>(le trajet est déjà commencé)</small>
+                                <?php endif; ?>
 
                                 <?php elseif ($reservation['status'] === 'awaiting_passenger_confirmation'): ?>
                                     <a href="/reservations/confirm/<?php echo $reservation['reservation_id'] ?>" class="btn">
@@ -290,7 +291,7 @@
                                     $stats[$reservation['status']]++;
                                 }
                                 //Compter tous les crédits dépensés sauf les annulations qui sont remboursées
-                                if ($reservation['status'] !== 'cancelled') {
+                                if ($reservation['status'] !== 'canceled') {
                                     $stats['total_spent'] += $reservation['amount_paid'];
                                 }
                             }

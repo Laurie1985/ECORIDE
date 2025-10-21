@@ -25,22 +25,20 @@
                             <?php echo htmlspecialchars($driver['username']) ?>"class="rounded-circle" width="60" height="60">
                             <?php endif; ?>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 text-center text-md-start">
                             <h3 class="mb-2"><?php echo htmlspecialchars($driver['username']) ?></h3>
-                            <p class="text-muted mb-1">
-                                Membre depuis :<?php echo date('M Y', strtotime($driver['created_at'])) ?>
+                            <p>Membre depuis :
+                                <?php echo date('M Y', strtotime($driver['created_at'])) ?>
                             </p>
                         </div>
                         <div class="col-md-4 text-center">
                             <?php if ($totalReviews > 0): ?>
                                 <div class="mb-2">
-                                    <span class="display-4 text-warning"><?php echo $averageRating ?></span>
-                                    <span class="text-muted">/5</span>
+                                    <h3 class="mb-2"><?php echo $averageRating ?>/5</h3>
+
                                 </div>
-                                <div class="mb-2">
-                                    <strong>Note moyenne</strong>
-                                </div>
-                                <small class="text-muted"><?php echo $totalReviews ?> avis</small>
+
+                                <p ><?php echo $totalReviews ?> avis</p>
                             <?php else: ?>
                                 <div class="text-muted">
                                     <span class="h2">-</span>

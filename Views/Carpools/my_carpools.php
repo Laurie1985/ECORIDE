@@ -120,7 +120,7 @@
                     <?php if ($seatsBooked > 0): ?>
                     <div class="alert alert-info py-2">
                         <small>
-                            <strong>Revenus actuels :</strong>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         <?php echo $driverRevenue ?> crédits
+                            <strong>Revenus actuels :</strong>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <?php echo $driverRevenue ?> crédits
                             <br><span class="text-muted">(<?php echo $totalRevenue ?> -<?php echo $commission ?> commission)</span>
                         </small>
                     </div>
@@ -166,7 +166,7 @@
                         <?php elseif ($carpool['status'] === 'finished'): ?>
                             <!-- Trajet terminé -->
                             <span class="badge bg-success">Trajet terminé</span>
-                            <a href="/reviews" class="btn">
+                            <a href="/reviews/about-me" class="btn">
                                 Voir les avis
                             </a>
 

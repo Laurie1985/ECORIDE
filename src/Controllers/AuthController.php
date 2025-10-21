@@ -184,8 +184,18 @@ class AuthController extends BaseController
             // Attribution du rôle 'user' par défaut avec type 'passenger'
             User::assignUserRole($userId, 'user', 'passenger');
 
-            $_SESSION['success'] = 'Compte créé avec succès ! Vous pouvez vous connecter.';
-            $this->redirect('/login');
+            //Connexion automatique après insription
+            $_SESSION['user_id']    = $userId;
+            $_SESSION['username']   = $username;
+            $_SESSION['user_email'] = $email;
+
+            // Récupérer le rôle de l'utilisateur
+            $this->setUserRole($userId);
+
+            $_SESSION['success'] = 'Bienvenue ' . htmlspecialchars($firstname) . ' ! Votre compte a été créé avec succès.';
+
+            // Redirection selon le rôle (/dashboard pour un nouveau user)
+            $this->redirectByRole();
 
         } catch (\Exception $e) {
             error_log("Erreur inscription: " . $e->getMessage());
