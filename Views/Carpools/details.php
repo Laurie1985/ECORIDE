@@ -399,7 +399,7 @@
         </div>
     </div>
 
-    <!-- Modal de confirmation minimale -->
+    <!-- Modal de confirmation -->
     <div class="modal fade" id="bookingModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

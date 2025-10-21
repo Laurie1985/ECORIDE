@@ -9,6 +9,19 @@ let currentFilters = {};
 document.addEventListener('DOMContentLoaded', function () {
     initializeSearch();
     initializeFilters();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const departure = urlParams.get('departure');
+    const arrival = urlParams.get('arrival');
+    const date = urlParams.get('date');
+
+    if (departure && arrival && date) {
+        document.getElementById('departure').value = departure;
+        document.getElementById('arrival').value = arrival;
+        document.getElementById('date').value = date;
+
+        performSearch();
+    }
 });
 
 /**
@@ -143,7 +156,7 @@ function createCarpoolElement(carpool) {
     clone.querySelector('.rating-value').textContent = `${carpool.driver_rating}/5`;
 
     // Détails du trajet
-    clone.querySelector('.trip-route').textContent = `${carpool.departure} → ${carpool.arrival}`;
+    clone.querySelector('.trip-route').textContent = `${carpool.departure} -> ${carpool.arrival}`;
     clone.querySelector('.departure-time').textContent = formatDateTime(carpool.departure_time);
     clone.querySelector('.arrival-time').textContent = formatDateTime(carpool.arrival_time);
     clone.querySelector('.duration').textContent = `${carpool.duration_hours}h`;

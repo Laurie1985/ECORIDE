@@ -18,6 +18,10 @@ class ReservationController extends BaseController
      */
     public function index()
     {
+
+        // Mettre à jour les statuts des trajets terminés
+        Reservation::markCompletedTripsAwaitingConfirmation();
+
         $userId       = $_SESSION['user_id'];
         $user         = User::find($userId);
         $reservations = Reservation::getPassengerReservations($userId);

@@ -37,7 +37,7 @@ class Reservation extends BaseModel
                 'passenger_id' => $passengerId,
                 'seats_booked' => $seatsBooked,
                 'amount_paid'  => $totalPrice,
-                'status'       => 'awaiting_passenger_confirmation',
+                'status'       => 'confirmed',
             ]);
 
             // Déduire les crédits du passager
@@ -62,6 +62,22 @@ class Reservation extends BaseModel
             error_log("Erreur création réservation: " . $e->getMessage());
             return ['success' => false, 'message' => 'Erreur lors de la réservation'];
         }
+    }
+
+    // Marquer les réservations terminées comme "en attente de confirmation"
+    public static function markCompletedTripsAwaitingConfirmation(): void
+    {
+        $db = Database::getInstance();
+
+        $stmt = $db->prepare("
+        UPDATE reservation r
+        JOIN carpools c ON r.carpool_id = c.carpool_id
+        SET r.status = 'awaiting_passenger_confirmation'
+        WHERE r.status = 'confirmed'
+        AND c.arrival_time < NOW()
+    ");
+
+        $stmt->execute();
     }
 
     // le passager confirme que le trajet s'est bien passé

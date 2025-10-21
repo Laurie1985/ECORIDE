@@ -14,16 +14,16 @@
         <div class="form-container">
             <h3>Où voulez-vous aller ?</h3>
             <div class="form-carpool d-flex justify-content-center align-items-center flex-column">
-                <form id="searchForm" class="form needs-validation row g-3" novalidate>
+                <form id="searchForm" action="/carpools" method="GET" class="form needs-validation row g-3" novalidate>
                     <div class="inputs-group">
                         <div>
-                            <input type="text" name="departure" placeholder="Départ" class="form-control" id="departure" required>
+                            <input type="text" name="departure" placeholder="Départ" class="form-control" id="departure" value="<?php echo htmlspecialchars($_GET['departure'] ?? ''); ?>" required>
                         </div>
                         <div>
-                            <input type="text" name="arrival" placeholder="Arrivée" class="form-control" id="arrival" required>
+                            <input type="text" name="arrival" placeholder="Arrivée" class="form-control" id="arrival" value="<?php echo htmlspecialchars($_GET['arrival'] ?? ''); ?>" required>
                         </div>
                         <div>
-                            <input type="date" name="date" class="form-control" min="<?php echo date('Y-m-d') ?>" id="date" required>
+                            <input type="date" name="date" class="form-control" min="<?php echo date('Y-m-d') ?>" id="date" value="<?php echo htmlspecialchars($_GET['date'] ?? ''); ?>" required>
                         </div>
                     </div>
                     <div>
