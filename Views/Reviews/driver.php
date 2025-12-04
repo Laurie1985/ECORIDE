@@ -18,7 +18,7 @@
                     <div class="row align-items-center">
                         <div class="col-md-2 text-center">
                             <?php if (! empty($driver['photo'])): ?>
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($driver['photo']) ?>"alt="Photo de
+                            <img src="<?php echo htmlspecialchars($driver['photo']) ?>"alt="Photo de
                             <?php echo htmlspecialchars($driver['username']) ?>"class="rounded-circle" width="60" height="60">
                             <?php else: ?>
                             <img src="/assets/images/default.jpeg"alt="Photo de

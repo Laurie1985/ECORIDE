@@ -117,15 +117,61 @@ class UserController extends BaseController
             ];
 
             // Gestion de la photo de profil
-            if (isset($_FILES['photo']) && $_FILES['photo']['error'] === 0) {
-                // Validation du fichier
-                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-                if (in_array($_FILES['photo']['type'], $allowedTypes)) {
-                    $updateData['photo'] = file_get_contents($_FILES['photo']['tmp_name']);
+            if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+                // Validation de la taille (5 MB max)
+                $maxSize = 5 * 1024 * 1024;
+                if ($_FILES['photo']['size'] > $maxSize) {
+                    $_SESSION['error'] = 'La photo ne doit pas dépasser 5 MB';
+                    $this->redirect('/profile');
+                }
+
+                // Validation du type MIME
+                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+                $finfo        = new \finfo(FILEINFO_MIME_TYPE);
+                $mimeType     = $finfo->file($_FILES['photo']['tmp_name']);
+
+                if (! in_array($mimeType, $allowedTypes)) {
+                    $_SESSION['error'] = 'Format de fichier non autorisé (JPG, PNG, GIF ou WEBP uniquement)';
+                    $this->redirect('/profile');
+                }
+
+                // Générer un nom unique
+                $extension = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
+                $filename  = 'profile_' . $userId . '_' . time() . '.' . $extension;
+
+                // Définir le chemin d'upload
+                $uploadDir = __DIR__ . '/../../public/uploads/profiles/';
+
+                // Créer le dossier s'il n'existe pas
+                if (! is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0755, true);
+                }
+
+                // Déplacer le fichier uploadé
+                $destination = $uploadDir . $filename;
+                if (move_uploaded_file($_FILES['photo']['tmp_name'], $destination)) {
+                    // Supprimer l'ancienne photo si elle existe
+                    $user = User::find($userId);
+                    if ($user && ! empty($user['photo'])) {
+                        $oldPhotoPath = __DIR__ . '/../../public' . $user['photo'];
+                        if (file_exists($oldPhotoPath)) {
+                            unlink($oldPhotoPath);
+                        }
+                    }
+
+                    // Stocker le chemin relatif dans la base de données
+                    $updateData['photo'] = '/uploads/profiles/' . $filename;
+                } else {
+                    throw new \Exception("Erreur lors du déplacement du fichier uploadé");
                 }
             }
 
-            User::update($userId, $updateData);
+            // Mise à jour en base de données
+            $result = User::update($userId, $updateData);
+
+            if (! $result) {
+                throw new \Exception("La mise à jour en base de données a échoué");
+            }
 
             // Mise à jour de la session
             $_SESSION['user_name']      = $name;

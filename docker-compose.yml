@@ -9,6 +9,7 @@ services:
       - "8080:80" # Accéder à l'application via le port 8080
     volumes:
       - .:/var/www/html #permet de synchroniser le code source sans refaire un build
+      - ./php.ini:/usr/local/etc/php/conf.d/uploads.ini
     depends_on:
       - db
       - mongodb

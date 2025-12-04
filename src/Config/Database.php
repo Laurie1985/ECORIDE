@@ -22,7 +22,7 @@ class Database extends PDO// hérite de PDO
             $username = $url['user'];
             $password = $url['pass'];
         } else {
-                                                                                          // Mode local : utilise vos variables Docker actuelles
+                                                                                          // Mode local : utilise les variables Docker
             $dsn      = 'mysql:host=' . $_ENV['DB_HOST'] . ';dbname=' . $_ENV['DB_NAME']; //Connexion à la base de données avec les variables d'environnement
             $username = $_ENV['DB_USER'];
             $password = $_ENV['DB_PASSWORD'];

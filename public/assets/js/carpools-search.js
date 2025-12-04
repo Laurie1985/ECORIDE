@@ -144,12 +144,16 @@ function createCarpoolElement(carpool) {
 
     // Photo du conducteur
     const driverImage = clone.querySelector('.driver-image');
-    if (carpool.driver_photo) {
-        driverImage.src = `data:image/jpeg;base64,${carpool.driver_photo}`;
-    } else {
-        driverImage.src = '/assets/images/default.jpeg';
+    if (driverImage) {
+        // Nettoyer le chemin au cas où il serait pollué
+        let photoPath = carpool.driver_photo || '/assets/images/default.jpeg';
+
+        // Supprimer data:image/jpeg;base64, si présent
+        photoPath = photoPath.replace(/^data:image\/[^;]+;base64,/, '');
+
+        driverImage.src = photoPath;
+        driverImage.alt = `Photo de ${carpool.driver_username}`;
     }
-    driverImage.alt = `Photo de ${carpool.driver_username}`;
 
     // Informations du conducteur
     clone.querySelector('.driver-name').textContent = carpool.driver_username;

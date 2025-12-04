@@ -1,2 +1,5 @@
 .env
 /vendor
+
+# Ignorer tous les fichiers uploadés
+public/uploads/**/*

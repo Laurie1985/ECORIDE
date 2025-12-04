@@ -155,7 +155,7 @@
             <!-- Photo et infos conducteur -->
             <div class="col-md-2 text-center">
                 <div class="driver-photo mb-2">
-                    <img src="" alt="Photo conducteur" class="rounded-circle driver-image" width="60" height="60">
+                    <img src="" alt="" class="rounded-circle driver-image" width="60" height="60">
                 </div>
                 <h4 class="driver-name mb-1"></h4>
                 <div class="driver-rating">

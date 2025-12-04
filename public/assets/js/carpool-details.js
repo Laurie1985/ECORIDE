@@ -74,13 +74,24 @@ function displayReviews(data, driverId, reviewsSection) {
  */
 function createReviewHtml(review) {
     const ratingDisplay = `${review.rating}/5`;
-    const reviewDate = new Date(review.created_at).toLocaleDateString('fr-FR');
+
+    let reviewDate = 'Date inconnue';
+
+    if (review.created_at && review.created_at.$date) {
+        // Extraire le timestamp depuis l'objet MongoDB
+        const timestamp = parseInt(review.created_at.$date.$numberLong);
+        const date = new Date(timestamp);
+
+        if (!isNaN(date.getTime())) {
+            reviewDate = date.toLocaleDateString('fr-FR');
+        }
+    }
 
     return `
         <div class="border-bottom pb-3 mb-3">
             <div class="d-flex justify-content-between align-items-start">
                 <div>
-                    <div class="text-warning"><strong>${ratingDisplay}</strong></div>
+                    <h4><strong>${ratingDisplay}</strong></h4>
                     <p class="mb-1">${escapeHtml(review.comment)}</p>
                     <small class="text-muted">Par un passager • ${reviewDate}</small>
                 </div>
