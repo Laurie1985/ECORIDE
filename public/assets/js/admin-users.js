@@ -1,5 +1,5 @@
 /**
- * Script pour la gestion des utilisateurs admin
+ * gestion des utilisateurs admin
  */
 document.addEventListener('DOMContentLoaded', function () {
     const searchInput = document.getElementById('searchUsers'); //champ de recherche

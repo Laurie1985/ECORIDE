@@ -113,7 +113,7 @@
                     <div class="d-flex align-items-center mb-3">
                         <div class="me-3">
                             <?php if (! empty($carpool['photo'])): ?>
-                            <img src="data:image/jpeg;base64,<?php echo base64_encode($carpool['photo']) ?>"alt="Photo de
+                            <img src="<?php echo htmlspecialchars($carpool['photo'])?>"alt="Photo de
                             <?php echo htmlspecialchars($carpool['username']) ?>"class="rounded-circle" width="60" height="60">
                             <?php else: ?>
                             <img src="/assets/images/default.jpeg"alt="Photo de

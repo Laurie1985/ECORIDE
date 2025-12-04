@@ -129,7 +129,7 @@ input.form-control {
     }
 }
 
-/* Styles additionnels pour les filtres et résultats */
+/* Styles pour les filtres et résultats */
 .sticky-filters {
     position: sticky;
     top: 20px;
