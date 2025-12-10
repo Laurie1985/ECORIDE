@@ -92,6 +92,8 @@ class CarpoolController extends BaseController
      */
     public function bookCarpool(int $carpoolId)
     {
+        // DÉBOGAGE : Logger chaque appel
+        error_log("=== APPEL bookCarpool === carpoolId: $carpoolId, timestamp: " . microtime(true));
 
         $this->requireAuth();
 

@@ -276,7 +276,7 @@
                     <div class="row text-center">
                         <?php
                             $stats = [
-                                'total'       => count($reservations),
+                                'total'       => count($reservations) + count($awaitingConfirmation),
                                 'confirmed'   => 0,
                                 'completed'   => 0,
                                 'canceled'    => 0,
@@ -284,42 +284,46 @@
                                 'total_spent' => 0,
                             ];
 
+                            // Compter les réservations normales
                             foreach ($reservations as $reservation) {
-                                $stats[$reservation['status']]++;
-
+                                // Compter par statut
                                 if (isset($stats[$reservation['status']])) {
                                     $stats[$reservation['status']]++;
                                 }
-                                //Compter tous les crédits dépensés sauf les annulations qui sont remboursées
+
+                                // Compter les crédits dépensés (sauf annulations remboursées)
                                 if ($reservation['status'] !== 'canceled') {
                                     $stats['total_spent'] += $reservation['amount_paid'];
                                 }
                             }
-                        ?>
 
-                        <div class="col-md-2">
-                            <h4><?php echo $stats['total'] ?></h4>
-                            <p class="text-muted">Total réservations</p>
-                        </div>
-                        <div class="col-md-2">
-                            <h4><?php echo $stats['confirmed'] ?></h4>
-                            <p class="text-muted">En cours</p>
-                        </div>
-                        <div class="col-md-2">
-                            <h4><?php echo $stats['completed'] ?></h4>
-                            <p class="text-muted">Terminés</p>
-                        </div>
-                        <div class="col-md-2">
-                            <h4><?php echo $stats['canceled'] ?></h4>
-                            <p class="text-muted">Annulés</p>
-                        </div>
-                        <div class="col-md-2">
-                            <h4><?php echo $stats['total_spent'] ?></h4>
-                            <p class="text-muted">Crédits dépensés</p>
-                        </div>
-                        <div class="col-md-2">
-                            <h4><?php echo $user['credits']; ?></h4>
-                            <p class="text-muted">Crédits restants</p>
+                            // Ajouter les réservations en attente de confirmation au compteur "En cours"
+                        $stats['confirmed'] += count($awaitingConfirmation); ?>
+                        <div class="row text-center">
+                            <div class="col-md-2">
+                                <h4><?php echo $stats['total'] ?></h4>
+                                <p class="text-muted">Total réservations</p>
+                            </div>
+                            <div class="col-md-2">
+                                <h4><?php echo $stats['confirmed'] ?></h4>
+                                <p class="text-muted">En cours</p>
+                            </div>
+                            <div class="col-md-2">
+                                <h4><?php echo $stats['completed'] ?></h4>
+                                <p class="text-muted">Terminés</p>
+                            </div>
+                            <div class="col-md-2">
+                                <h4><?php echo $stats['canceled'] ?></h4>
+                                <p class="text-muted">Annulés</p>
+                            </div>
+                            <div class="col-md-2">
+                                <h4><?php echo $stats['total_spent'] ?></h4>
+                                <p class="text-muted">Crédits dépensés</p>
+                            </div>
+                            <div class="col-md-2">
+                                <h4><?php echo $user['credits']; ?></h4>
+                                <p class="text-muted">Crédits restants</p>
+                            </div>
                         </div>
                     </div>
                 </div>

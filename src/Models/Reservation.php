@@ -13,6 +13,9 @@ class Reservation extends BaseModel
      */
     public static function createWithPayment(int $carpoolId, int $passengerId, int $seatsBooked, int $totalPrice): array
     {
+
+        // ⚠️ LOG 1
+        error_log("=== createWithPayment DÉBUT === carpool: $carpoolId, passenger: $passengerId, seats: $seatsBooked, price: $totalPrice");
         try {
             $db = Database::getInstance();
             $db->beginTransaction(); //Désactive le mode de validation automatique
@@ -31,6 +34,9 @@ class Reservation extends BaseModel
                 return ['success' => false, 'message' => 'Places insuffisantes'];
             }
 
+            // ⚠️ LOG 2 - JUSTE AVANT LA CRÉATION
+            error_log("=== AVANT CREATE === Va créer la réservation...");
+
             // Créer la réservation
             $reservationId = self::create([
                 'carpool_id'   => $carpoolId,
@@ -39,6 +45,9 @@ class Reservation extends BaseModel
                 'amount_paid'  => $totalPrice,
                 'status'       => 'confirmed',
             ]);
+
+            // ⚠️ LOG 3 - APRÈS LA CRÉATION
+            error_log("=== APRÈS CREATE === Réservation créée avec ID: $reservationId");
 
             // Déduire les crédits du passager
             User::updateCredits($passengerId, -$totalPrice);
