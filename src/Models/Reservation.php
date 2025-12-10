@@ -60,8 +60,7 @@ class Reservation extends BaseModel
         } catch (\Exception $e) {
             $db->rollBack();
             error_log("Erreur création réservation: " . $e->getMessage());
-            error_log("Stack trace: " . $e->getTraceAsString());
-            return ['success' => false, 'message' => 'Erreur :' . $e->getMessage()];
+            return ['success' => false, 'message' => 'Erreur lors de la réservation'];
         }
     }
 
