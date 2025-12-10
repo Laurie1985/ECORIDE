@@ -113,7 +113,7 @@
                     <div class="d-flex align-items-center mb-3">
                         <div class="me-3">
                             <?php if (! empty($carpool['photo'])): ?>
-                            <img src="<?php echo htmlspecialchars($carpool['photo'])?>"alt="Photo de
+                            <img src="<?php echo htmlspecialchars($carpool['photo']) ?>"alt="Photo de
                             <?php echo htmlspecialchars($carpool['username']) ?>"class="rounded-circle" width="60" height="60">
                             <?php else: ?>
                             <img src="/assets/images/default.jpeg"alt="Photo de
@@ -292,45 +292,40 @@
                 </div>
 
                 <?php else: ?>
-                    <!-- Utilisateur connecté qui n'est pas le conducteur -->
-                <div class="card-header">
-                    <h3>Réserver ce covoiturage</h3>
+    <!-- Utilisateur connecté qui n'est pas le conducteur -->
+    <div class="card-header">
+        <h3>Réserver ce covoiturage</h3>
+    </div>
+    <div class="card-body">
+        <div class="row align-items-end">
+            <div class="col-md-4">
+                <label for="seats_booked" class="form-label">Nombre de places</label>
+                <select name="seats_booked" id="seats_booked" class="form-control" required>
+                    <?php for ($i = 1; $i <= min($carpool['seats_available'], 4); $i++): ?>
+                    <option value="<?php echo $i ?>"><?php echo $i ?> place(s)</option>
+                    <?php endfor; ?>
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Prix total</label>
+                <div class="form-control bg-light">
+                    <span id="totalPrice"><?php echo $carpool['price_per_seat'] ?> crédits</span>
                 </div>
-                <div class="card-body">
-                    <form method="POST" action="/carpools/<?php echo $carpool['carpool_id'] ?>/book" id="reservationForm">
-                        <input type="hidden" name="csrf_token" value="<?php echo $csrf_token ?>">
-                        <input type="hidden" name="carpool_id" value="<?php echo $carpool['carpool_id'] ?>">
+            </div>
+            <div class="col-md-4">
+                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#bookingModal" id="reserveBtn">
+                    Participer
+                </button>
+            </div>
+        </div>
 
-                        <div class="row align-items-end">
-                            <div class="col-md-4">
-                                <label for="seats_booked" class="form-label">Nombre de places</label>
-                                <select name="seats_booked" id="seats_booked" class="form-control" required>
-                                    <?php for ($i = 1; $i <= min($carpool['seats_available'], 4); $i++): ?>
-                                    <option value="<?php echo $i ?>"><?php echo $i ?> place(s)</option>
-                                    <?php endfor; ?>
-                                </select>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label">Prix total</label>
-                                <div class="form-control bg-light">
-                                    <span id="totalPrice"><?php echo $carpool['price_per_seat'] ?>crédits</span>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#bookingModal" id="reserveBtn">
-                                    Participer
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="mt-3">
-                            <small class="text-muted">
-                                <strong>Remarque :</strong> Une double confirmation vous sera demandée avant le paiement.
-                            </small>
-                        </div>
-                    </form>
-                </div>
-                <?php endif; ?>
+        <div class="mt-3">
+            <small class="text-muted">
+                <strong>Remarque :</strong> Une double confirmation vous sera demandée avant le paiement.
+            </small>
+        </div>
+    </div>
+<?php endif; ?>
             </div>
         </div>
     </div>
