@@ -3,6 +3,7 @@ namespace App\Controllers;
 
 use App\Models\Carpool;
 use App\Models\Reservation;
+use App\Models\User;
 use App\Models\Vehicle;
 
 class CarpoolController extends BaseController
@@ -264,6 +265,60 @@ class CarpoolController extends BaseController
         ]);
     }
 
+    /**
+     * Voir les passagers d'un covoiturage spécifique
+     */
+    public function showPassengers(int $carpoolId)
+    {
+        $this->requireAuth();
+        $userId = $_SESSION['user_id'];
+
+        // Récupérer le covoiturage
+        $carpool = Carpool::find($carpoolId);
+
+        // Vérifier que c'est bien son covoiturage
+        if (! $carpool || $carpool['driver_id'] != $userId) {
+            $_SESSION['error'] = 'Covoiturage introuvable';
+            $this->redirect('/my-carpools');
+        }
+
+        // Récupérer toutes les réservations (confirmées ET annulées)
+        $reservations = Reservation::findAllBy(['carpool_id' => $carpoolId]);
+
+        // Enrichir avec les infos passagers
+        $confirmedPassengers = [];
+        $canceledPassengers  = [];
+
+        foreach ($reservations as $reservation) {
+            $passenger = User::find($reservation['passenger_id']);
+
+            $passengerData = [
+                'reservation_id'    => $reservation['reservation_id'],
+                'seats_booked'      => $reservation['seats_booked'],
+                'amount_paid'       => $reservation['amount_paid'],
+                'status'            => $reservation['status'],
+                'cancellation_date' => $reservation['cancellation_date'] ?? null,
+                'username'          => $passenger['username'] ?? 'Utilisateur inconnu',
+                'email'             => $passenger['email'] ?? '',
+                'phone'             => $passenger['phone'] ?? '',
+            ];
+
+            if ($reservation['status'] === 'canceled') {
+                $canceledPassengers[] = $passengerData;
+            } else {
+                $confirmedPassengers[] = $passengerData;
+            }
+        }
+
+        $this->render('Carpools/carpool_passengers', [
+            'title'               => 'Ecoride - Passagers du trajet',
+            'cssFile'             => 'dashboard',
+            'carpool'             => $carpool,
+            'confirmedPassengers' => $confirmedPassengers,
+            'canceledPassengers'  => $canceledPassengers,
+            'csrf_token'          => $this->generateCsrfToken(),
+        ]);
+    }
     /**
      * Démarrer un trajet
      */

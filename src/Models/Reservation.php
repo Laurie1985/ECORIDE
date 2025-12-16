@@ -51,8 +51,11 @@ class Reservation extends BaseModel
             Transaction::createPlatformCommission($reservationId);
 
             // Mettre à jour les places disponibles
+            $newSeats = $carpool['seats_available'] - $seatsBooked;
+            error_log("=== UPDATE PLACES === Carpool: $carpoolId, Avant: {$carpool['seats_available']}, Après: $newSeats");
+
             Carpool::update($carpoolId, [
-                'seats_available' => $carpool['seats_available'] - $seatsBooked,
+                'seats_available' => $newSeats,
             ]);
 
             $db->commit(); // Valide la transaction et réactive le mode de validation automatique
