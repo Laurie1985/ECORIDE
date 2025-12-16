@@ -98,9 +98,9 @@
                                 <strong>Places :</strong><br>
                                 <small>
                                     <?php
-                                        $seatsBooked = ($carpool['seats_total'] ?? $carpool['seats_available']) - $carpool['seats_available'];
+                                        $seatsBooked = $carpool['seats_total'] - $carpool['seats_available'];
                                     echo $seatsBooked;
-                                    ?>/<?php echo($carpool['seats_total'] ?? $carpool['seats_available']) ?> réservées
+                                    ?>/<?php echo $carpool['seats_total'] ?> réservées
                                 </small>
                             </p>
                             <p class="mb-1">
@@ -120,7 +120,7 @@
                     <?php if ($seatsBooked > 0): ?>
                     <div class="alert alert-info py-2">
                         <small>
-                            <strong>Revenus actuels :</strong>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       <?php echo $driverRevenue ?> crédits
+                            <strong>Revenus actuels :</strong>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   <?php echo $driverRevenue ?> crédits
                             <br><span class="text-muted">(<?php echo $totalRevenue ?> -<?php echo $commission ?> commission)</span>
                         </small>
                     </div>

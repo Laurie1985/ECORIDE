@@ -1,4 +1,4 @@
--- Active: 1756370426129@@127.0.0.1@3307@ecoride_db
+-- Active: 1761673354690@@zpj83vpaccjer3ah.chr7pe7iynqr.eu-west-1.rds.amazonaws.com@3306@vgdkbep59pg7746w
 DROP DATABASE IF EXISTS `ecoride_db`;
 
 CREATE DATABASE IF NOT EXISTS `ecoride_db` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -575,3 +575,30 @@ INSERT INTO
 VALUES (11, 2),
     (12, 3),
     (13, 3);
+
+ALTER TABLE carpools
+ADD COLUMN seats_total INT NOT NULL DEFAULT 0 AFTER seats_available;
+
+-- Pour les covoiturages sans réservation
+UPDATE carpools
+SET
+    seats_total = seats_available
+WHERE
+    seats_total = 0;
+
+-- Pour les covoiturages avec réservations, calcule le total
+UPDATE carpools c
+SET
+    seats_total = (
+        SELECT c.seats_available + COALESCE(SUM(r.seats_booked), 0)
+        FROM reservation r
+        WHERE
+            r.carpool_id = c.carpool_id
+            AND r.status IN (
+                'confirmed',
+                'awaiting_passenger_confirmation',
+                'completed'
+            )
+    )
+WHERE
+    seats_total = 0;
