@@ -80,6 +80,9 @@ class Router
         $r->addRoute('GET', '/my-carpools', [\App\Controllers\CarpoolController::class, 'myCarpools']);
         $r->addRoute('GET', '/my-carpools/passengers', [\App\Controllers\CarpoolController::class, 'myPassengers']);
 
+        // Voir les passagers d'un covoiturage spécifique
+        $r->addRoute('GET', '/my-carpools/{carpoolId:\d+}/passengers', [\App\Controllers\CarpoolController::class, 'showPassengers']);
+
         // Gestion des trajets
         $r->addRoute('POST', '/carpools/{carpoolId:\d+}/start', [\App\Controllers\CarpoolController::class, 'startTrip']);
         $r->addRoute('POST', '/carpools/{carpoolId:\d+}/complete', [\App\Controllers\CarpoolController::class, 'completeTrip']);

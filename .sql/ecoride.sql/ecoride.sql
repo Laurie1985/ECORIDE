@@ -1,4 +1,4 @@
--- Active: 1761673354690@@zpj83vpaccjer3ah.chr7pe7iynqr.eu-west-1.rds.amazonaws.com@3306@vgdkbep59pg7746w
+-- Active: 1761036690559@@127.0.0.1@3307@ecoride_db
 DROP DATABASE IF EXISTS `ecoride_db`;
 
 CREATE DATABASE IF NOT EXISTS `ecoride_db` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -602,3 +602,10 @@ SET
     )
 WHERE
     seats_total = 0;
+
+-- Supprimer l'ancienne contrainte
+ALTER TABLE carpools DROP CHECK chk_seats_available_carpool;
+
+-- Ajouter la nouvelle contrainte (>= 0 au lieu de > 0)
+ALTER TABLE carpools
+ADD CONSTRAINT chk_seats_available_carpool CHECK (seats_available >= 0);
