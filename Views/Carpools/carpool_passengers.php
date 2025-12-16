@@ -42,7 +42,7 @@
             <div class="row">
                 <div class="col-md-6">
                     <p><strong>Trajet :</strong>
-                        <?php echo htmlspecialchars($carpool['departure']) ?> →
+                        <?php echo htmlspecialchars($carpool['departure']) ?> -
                         <?php echo htmlspecialchars($carpool['arrival']) ?>
                     </p>
                     <p><strong>Date :</strong>
@@ -62,7 +62,7 @@
                     <p><strong>Statut :</strong>
                         <?php
                             $statusLabels = [
-                                'scheduled'   => '<span class="badge bg-info">Programmé</span>',
+                                'scheduled'   => '<span class="badge bg-primary">Programmé</span>',
                                 'in_progress' => '<span class="badge bg-warning">En cours</span>',
                                 'finished'    => '<span class="badge bg-success">Terminé</span>',
                                 'canceled'    => '<span class="badge bg-danger">Annulé</span>',
