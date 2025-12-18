@@ -35,17 +35,10 @@ class ReviewController extends BaseController
         // Récupérer les avis approuvés
         $reviews = $this->reviewModel->getApprovedReviewsForDriver($driverId);
 
-        // Calculer les statistiques
-        $totalReviews  = count($reviews);
-        $averageRating = 0;
-
-        if ($totalReviews > 0) {
-            $totalRatingSum = 0;
-            foreach ($reviews as $review) {
-                $totalRatingSum += $review['rating'];
-            }
-            $averageRating = round($totalRatingSum / $totalReviews, 1);
-        }
+        // Calculer les statistiques avec MongoDB
+        $ratingData    = $this->reviewModel->calculateAverageRating($driverId);
+        $averageRating = $ratingData['average'];
+        $totalReviews  = $ratingData['count'];
 
         // Statistiques par note
         $ratingStats = [5 => 0, 4 => 0, 3 => 0, 2 => 0, 1 => 0];
@@ -96,13 +89,10 @@ class ReviewController extends BaseController
             $enrichedReviews[] = $review;
         }
 
-        // Calculer la note moyenne
-        $totalReviews  = count($reviews);
-        $averageRating = 0;
-        if ($totalReviews > 0) {
-            $totalRatingSum = array_sum(array_column($reviews, 'rating'));
-            $averageRating  = round($totalRatingSum / $totalReviews, 1);
-        }
+        // Calculer la note moyenne avec MongoDB
+        $ratingData    = $this->reviewModel->calculateAverageRating($userId);
+        $averageRating = $ratingData['average'];
+        $totalReviews  = $ratingData['count'];
 
         $this->render('Reviews/my_reviews', [
             'title'         => 'Ecoride - Mes avis reçus',
@@ -115,7 +105,7 @@ class ReviewController extends BaseController
     }
 
     /**
-     * API pour récupérer les avis d'un conducteur (AJAX)
+     * API pour récupérer les avis d'un conducteur
      */
     public function apiDriverReviews(int $driverId)
     {

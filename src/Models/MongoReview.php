@@ -209,13 +209,13 @@ class MongoReview
     {
         try {
             $pipeline = [
-                [
+                [ // filtrer les avis approuvés pour l'utilisateur
                     '$match' => [
                         'reviewed_user_id' => (int) $userId,
                         'status'           => 'approved',
                     ],
                 ],
-                [
+                [ // grouper pour calculer la moyenne et le nombre
                     '$group' => [
                         '_id'     => null,
                         'average' => ['$avg' => '$rating'],
