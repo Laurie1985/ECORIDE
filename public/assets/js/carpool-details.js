@@ -76,6 +76,7 @@ function createReviewHtml(review) {
     const ratingDisplay = `${review.rating}/5`;
 
     let reviewDate = 'Date inconnue';
+    const reviewerName = review.reviewer_name || 'Utilisateur inconnu';
 
     if (review.created_at && review.created_at.$date) {
         // Extraire le timestamp depuis l'objet MongoDB
@@ -93,7 +94,8 @@ function createReviewHtml(review) {
                 <div>
                     <h4><strong>${ratingDisplay}</strong></h4>
                     <p class="mb-1">${escapeHtml(review.comment)}</p>
-                    <small class="text-muted">Par un passager - ${reviewDate}</small>
+                    <small class="text-muted">Par ${escapeHtml(reviewerName)} - ${reviewDate}</small>
+
                 </div>
             </div>
         </div>
