@@ -11,7 +11,6 @@ class ReviewController extends BaseController
     public function __construct()
     {
         parent::__construct();
-        $this->requireAuth();
         $this->reviewModel = new MongoReview();
     }
 
@@ -74,6 +73,9 @@ class ReviewController extends BaseController
      */
     public function myReviews()
     {
+
+        $this->requireAuth();
+
         $userId  = $_SESSION['user_id'];
         $reviews = $this->reviewModel->getApprovedReviewsForDriver($userId);
 
