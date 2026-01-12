@@ -151,7 +151,7 @@ input.form-control {
 
 @media (max-width: 768px) {
     .search-form {
-        width: 90%;
+        width: 50%;
         padding: 1rem;
         top: -1rem;
     }
@@ -163,10 +163,19 @@ input.form-control {
     }
 
     .presentation,
-    .mission,
     .section {
         flex-wrap: nowrap;
         flex-direction: column;
+        margin-left: 1rem;
+        margin-right: 1rem;
+        margin-top: 1rem;
+        margin-bottom: 0.5rem;
+        column-gap: 0;
+    }
+
+    .mission {
+        flex-wrap: nowrap;
+        flex-direction: column-reverse;
         margin-left: 1rem;
         margin-right: 1rem;
         margin-top: 1rem;
