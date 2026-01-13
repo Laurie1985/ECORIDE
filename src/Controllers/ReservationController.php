@@ -94,7 +94,7 @@ class ReservationController extends BaseController
             $reviewComment = htmlspecialchars(trim($_POST['review_comment'] ?? ''), ENT_QUOTES, 'UTF-8');
         }
 
-        if ($tripWentWell && $rating && empty($comment)) {
+        if ($tripWentWell && $rating && empty($reviewComment)) {
             $_SESSION['error'] = 'Veuillez ajouter un commentaire pour le conducteur';
             $this->redirect("/reservations/confirm/{$reservationId}");
         }
