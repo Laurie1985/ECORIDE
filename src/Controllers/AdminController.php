@@ -28,6 +28,8 @@ class AdminController extends BaseController
      */
     public function dashboard()
     {
+        // Test de log
+        error_log("TEST LOG: Dashboard admin accédé par user_id: " . ($_SESSION['user_id'] ?? 'inconnu'));
         // Statistiques générales
         $totalUsers        = count(User::getActiveUsers());
         $totalCarpools     = count(Carpool::all());
