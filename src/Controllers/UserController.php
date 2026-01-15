@@ -115,7 +115,7 @@ class UserController extends BaseController
                 'phone'     => $phone,
                 'address'   => $address,
             ];
-
+/*
             // Gestion de la photo de profil
             if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
                 // Validation de la taille (5 MB max)
@@ -164,7 +164,7 @@ class UserController extends BaseController
                 } else {
                     throw new \Exception("Erreur lors du déplacement du fichier uploadé");
                 }
-            }
+            }*/
 
             // Mise à jour en base de données
             $result = User::update($userId, $updateData);
