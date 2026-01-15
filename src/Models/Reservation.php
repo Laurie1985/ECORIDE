@@ -175,6 +175,9 @@ class Reservation extends BaseModel
             //Transaction de remboursement
             Transaction::createRefund($reservation['passenger_id'], $reservationId, $reservation['amount_paid']);
 
+            // Supprimer la commission de la plateforme
+            Transaction::deletePlatformCommission($reservationId);
+
             // Remettre les places disponibles
             $carpool = Carpool::find($reservation['carpool_id']);
             if ($carpool) {
