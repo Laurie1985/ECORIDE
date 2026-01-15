@@ -52,7 +52,6 @@ class Reservation extends BaseModel
 
             // Mettre à jour les places disponibles
             $newSeats = $carpool['seats_available'] - $seatsBooked;
-            error_log("=== UPDATE PLACES === Carpool: $carpoolId, Avant: {$carpool['seats_available']}, Après: $newSeats");
 
             Carpool::update($carpoolId, [
                 'seats_available' => $newSeats,
