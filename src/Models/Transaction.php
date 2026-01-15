@@ -67,6 +67,22 @@ class Transaction extends BaseModel
     }
 
     /**
+     * Suppression de la transaction de la commission de la plateforme en cas d'annulation par le passager
+     */
+    public static function deletePlatformCommission(int $reservationId): void
+    {
+        $db   = Database::getInstance();
+        $stmt = $db->prepare("
+            DELETE FROM transactions
+            WHERE reservation_id = ?
+            AND user_id = 11
+            AND transaction_type = 'credit'
+            AND amount = 2
+        ");
+        $stmt->execute([$reservationId]);
+    }
+
+    /**
      * Historique des transactions d'un utilisateur
      */
     public static function getUserHistory(int $userId): array
