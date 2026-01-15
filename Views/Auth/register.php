@@ -50,7 +50,7 @@
                         </div>
 
                         <div class="d-flex justify-content-center">
-                            <button type="submit" class="btn">S'incrire</button>
+                            <button type="submit" class="btn">S'inscrire</button>
                         </div>
                     </form>
                 </div>
