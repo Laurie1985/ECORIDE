@@ -228,15 +228,15 @@ class AuthController extends BaseController
             foreach ($roles as $role) {
                 if ($role['role_name'] === 'admin') {
                     $_SESSION['user_role'] = 'admin';
-                    break;
+
                 } elseif ($role['role_name'] === 'employee') {
                     $_SESSION['user_role'] = 'employee';
-                    break;
+
                 }
 
-                // Si c'est un rôle 'user', récupérer le type (driver/passenger/both)
-                if ($role['role_name'] === 'user') {
-                    $_SESSION['user_type'] = $role['user_role'] ?? 'passenger';
+                // Récupérer le type (driver/passenger/both)
+                if (isset($role['user_role'])) {
+                    $_SESSION['user_type'] = $role['user_role'];
                 }
             }
         } catch (\Exception $e) {

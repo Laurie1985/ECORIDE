@@ -66,4 +66,24 @@ class UserRole extends BaseModel
         $result = $stmt->fetch();
         return $result['count'] > 0;
     }
+
+    /**
+     * Trouver une association user-role spécifique
+     * Retourne la ligne complète de user_roles ou false si elle n'existe pas
+     */
+    public static function findByUserAndRole(int $userId, int $roleId)
+    {
+        $db = Database::getInstance();
+
+        $stmt = $db->prepare("
+            SELECT *
+            FROM user_roles
+            WHERE user_id = ? AND role_id = ?
+            LIMIT 1
+        ");
+
+        $stmt->execute([$userId, $roleId]);
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
 }

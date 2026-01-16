@@ -20,6 +20,22 @@ class UserController extends BaseController
     {
         $this->requireAuth();
 
+        // Gestion de la redirection selon le rôle
+        $userRole = $_SESSION['user_role'] ?? 'user';
+        $viewAs   = $_GET['view'] ?? null;
+
+        // Si admin sans paramètre ?view=user → redirection vers dashboard admin
+        if ($userRole === 'admin' && $viewAs !== 'user') {
+            header('Location: /admin/dashboard');
+            exit;
+        }
+
+        // Si employee sans paramètre ?view=user → redirection vers dashboard employee
+        if ($userRole === 'employee' && $viewAs !== 'user') {
+            header('Location: /employee');
+            exit;
+        }
+
         $userId   = $_SESSION['user_id'];
         $user     = User::find($userId);
         $userType = $_SESSION['user_type'] ?? 'passenger';
@@ -209,15 +225,27 @@ class UserController extends BaseController
         try {
             $userId = $_SESSION['user_id'];
 
-            // Mise à jour du type dans user_roles
-            $roleId = Role::findByName('user')['role_id'];
+            // Récupérer le role_id pour 'user'
+            $userRoleId = Role::findByName('user')['role_id'];
 
-            if (UserRole::updateUserType($userId, $roleId, $userType)) {
-                $_SESSION['user_type'] = $userType;
-                $_SESSION['success']   = 'Type d\'utilisateur mis à jour';
+            // Vérifier si l'utilisateur a déjà le rôle 'user'
+            $existingUserRole = UserRole::findByUserAndRole($userId, $userRoleId);
+
+            if ($existingUserRole) {
+                // L'utilisateur a déjà le rôle 'user', on met à jour
+                UserRole::updateUserType($userId, $userRoleId, $userType);
             } else {
-                $_SESSION['error'] = 'Erreur lors de la mise à jour';
+                // L'utilisateur n'a PAS le rôle 'user', on le crée
+                UserRole::create([
+                    'user_id'   => $userId,
+                    'role_id'   => $userRoleId,
+                    'user_role' => $userType,
+                ]);
             }
+
+            // Mettre à jour la session
+            $_SESSION['user_type'] = $userType;
+            $_SESSION['success']   = 'Type d\'utilisateur mis à jour';
 
         } catch (\Exception $e) {
             error_log("Erreur updateRole: " . $e->getMessage());
