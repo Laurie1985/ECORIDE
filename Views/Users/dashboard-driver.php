@@ -47,7 +47,7 @@
             <div class="card text-center">
                 <div class="card-body">
                     <h3 class="rating-title">Ma note</h3>
-                    <h2 class="rating-number"><?php echo $averageRating > 0 ? number_format($averageRating, 1) : '-' ?>/5</h2>
+                    <h2 class="rating-number"><?php echo $averageRating ?>/5</h2>
                 </div>
             </div>
         </div>
