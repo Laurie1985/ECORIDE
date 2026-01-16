@@ -28,8 +28,6 @@ class AdminController extends BaseController
      */
     public function dashboard()
     {
-        // Test de log
-        error_log("TEST LOG: Dashboard admin accédé par user_id: " . ($_SESSION['user_id'] ?? 'inconnu'));
         // Statistiques générales
         $totalUsers        = count(User::getActiveUsers());
         $totalCarpools     = count(Carpool::all());
@@ -259,7 +257,7 @@ class AdminController extends BaseController
                 'username'      => $username,
                 'email'         => $email,
                 'password_hash' => password_hash($password, PASSWORD_DEFAULT),
-                'credits'       => 0, // Pas de crédits pour un employé
+                'credits'       => 20, // Crédits initiaux
                 'status'        => 'active',
             ]);
 
