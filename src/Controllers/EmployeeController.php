@@ -13,8 +13,9 @@ class EmployeeController extends BaseController
         parent::__construct();
         $this->requireAuth();
 
-        // Vérifier que l'utilisateur est employé
-        if (! isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'employee') {
+        // Vérifier que l'utilisateur est employé ou admin
+        if (! isset($_SESSION['user_role']) ||
+            ! in_array($_SESSION['user_role'], ['employee', 'admin'])) {
             $_SESSION['error'] = 'Accès non autorisé';
             $this->redirect('/dashboard');
         }
