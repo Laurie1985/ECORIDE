@@ -4,7 +4,6 @@ namespace App\Controllers;
 use App\Models\Brand;
 use App\Models\Carpool;
 use App\Models\DriverPreference;
-use App\Models\MongoReview;
 use App\Models\Reservation;
 use App\Models\Role;
 use App\Models\User;
@@ -44,8 +43,8 @@ class UserController extends BaseController
         $myDriverCarpools = Carpool::findAllBy(['driver_id' => $userId]);
         $myReservations   = Reservation::findAllBy(['passenger_id' => $userId]);
 
-        $reviewModel = new MongoReview();
-        $ratingData  = $reviewModel->calculateAverageRating($userId);
+        // Récupérer la note moyenne depuis MySQL
+        $averageRating = $user->rating ?? 0;
 
         $data = [
             'user'               => $user,
@@ -53,8 +52,7 @@ class UserController extends BaseController
             'driverCarpoolCount' => count($myDriverCarpools),
             'reservationCount'   => count($myReservations),
             'cssFile'            => 'dashboard',
-            'averageRating'      => $ratingData['average'],
-            'totalReviews'       => $ratingData['count'],
+            'averageRating'      => $averageRating,
         ];
 
         // Choisir la vue selon le type d'utilisateur
