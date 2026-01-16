@@ -44,7 +44,7 @@ class UserController extends BaseController
         $myReservations   = Reservation::findAllBy(['passenger_id' => $userId]);
 
         // Récupérer la note moyenne depuis MySQL
-        $averageRating = $user->rating ?? 0;
+        $averageRating = $user['rating'] ?? 0;
 
         $data = [
             'user'               => $user,
