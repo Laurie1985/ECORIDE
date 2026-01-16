@@ -77,7 +77,7 @@ class Transaction extends BaseModel
             WHERE reservation_id = ?
             AND user_id = 11
             AND transaction_type = 'credit'
-            AND amount = 2
+            AND description LIKE '%Commission plateforme%'
         ");
         $stmt->execute([$reservationId]);
     }
@@ -101,6 +101,7 @@ class Transaction extends BaseModel
             FROM transactions
             WHERE user_id = 11
             AND transaction_type = 'credit'
+            AND description LIKE '%Commission plateforme%'
         ");
         $stmt->execute();
         $result = $stmt->fetch();
@@ -120,6 +121,7 @@ class Transaction extends BaseModel
             FROM transactions
             WHERE user_id = 11
             AND transaction_type = 'credit'
+            AND description LIKE '%Commission plateforme%'
             AND created_at >= DATE_SUB(CURDATE(), INTERVAL ? DAY)
             GROUP BY DATE(created_at)
             ORDER BY date DESC
